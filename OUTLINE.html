@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: </title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="css/swc.css" />
+    <link rel="alternate" type="application/rss+xml" title="Software Carpentry Blog" href="http://software-carpentry.org/feed.xml"/>
+    <meta charset="UTF-8" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body class="lesson">
+    <div class="container card">
+      <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
+      </div>
+      <article>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+                    <h1 class="title"></h1>
+          <h1 id="gapminder-r-lesson">Gapminder R lesson</h1>
+<h2 id="rstudio-intro">01-Rstudio-intro</h2>
+<p>Learning objectives:</p>
+<ul>
+<li>To gain familiarity with the various panes in the RStudio IDE</li>
+<li>To gain familiarity with the buttons, short cuts and options in the Rstudio IDE</li>
+<li>To understand variables and how to assign to them</li>
+<li>To be able to manage your workspace in an interactive R session</li>
+<li>To be able to use mathematical and comparison operations</li>
+<li>To be able to call functions</li>
+</ul>
+<p>Section headings:</p>
+<ul>
+<li>Introduction to RStudio
+<ul>
+<li>includes layout info – screenshot?</li>
+</ul></li>
+<li>Work flow within Rstudio
+<ul>
+<li>2 workflows.</li>
+</ul></li>
+<li><p>Introduction to R</p></li>
+<li><p>Using R as a calculator</p></li>
+<li><p>Mathematical functions</p></li>
+<li><p>Comparing things</p></li>
+<li><p>Variables and assignment</p></li>
+<li><p>Managing your environment</p></li>
+</ul>
+<h2 id="project-intro">02-project-intro</h2>
+<ul>
+<li><p>Introduction</p></li>
+<li><p>A possible solution</p></li>
+<li><p>Best practices for project organisation</p></li>
+<li><p>Treat data as read only</p></li>
+<li><p>Data Cleaning</p></li>
+<li><p>Treat generated output as disposable</p></li>
+<li><p>Separate function definition and application</p></li>
+<li><p>Save the data in the data directory</p></li>
+<li><p>Version Control</p></li>
+</ul>
+<h2 id="seeking-help">03-seeking-help</h2>
+<ul>
+<li><p>Reading Help files</p></li>
+<li><p>Special Operators</p></li>
+<li><p>Getting help on packages</p></li>
+<li><p>When you kind of remember the function</p></li>
+<li><p>When you have no idea where to begin</p></li>
+<li><p>When your code doesn’t work: seeking help from your peers</p></li>
+<li><p>Other ports of call</p></li>
+</ul>
+<h2 id="data-structures-part1.md">04-data-structures-part1.md</h2>
+<ul>
+<li><p>Data Types</p></li>
+<li><p>Data Structures</p></li>
+<li><p>Vectors</p></li>
+<li><p>Matrices</p></li>
+<li><p>Factors</p></li>
+<li><p>Lists</p></li>
+</ul>
+<h2 id="data-structures-part2">05-data-structures-part2</h2>
+<ul>
+<li><p>Data frames</p></li>
+<li><p>Reading in data</p></li>
+<li><p>Using dataframes: the <code>gapminder</code> dataset</p></li>
+</ul>
+<h2 id="data-subsetting">06-data-subsetting</h2>
+<ul>
+<li><p>Accessing elements using their indices</p></li>
+<li><p>Skipping and removing elements</p></li>
+<li><p>Subsetting by name</p></li>
+<li><p>Subsetting through other logical operations</p></li>
+<li><p>Handling special values</p></li>
+<li><p>Factor subsetting</p></li>
+<li><p>Matrix subsetting</p></li>
+<li><p>List subsetting</p></li>
+<li><p>Data frames</p></li>
+</ul>
+<h2 id="functions">07-functions</h2>
+<ul>
+<li><p>Defining a function</p></li>
+<li><p>Combining functions</p></li>
+</ul>
+<h2 id="plot-ggplot2">08-plot-ggplot2</h2>
+<ul>
+<li><p>Layers</p></li>
+<li><p>Transformations and statistics</p></li>
+<li><p>Multi-panel figures</p></li>
+<li><p>Modifying text</p></li>
+</ul>
+<h2 id="vectorization">09-vectorization</h2>
+<h2 id="control-flow">10-control-flow</h2>
+<ul>
+<li><p>conditional logic</p></li>
+<li><p>control flow</p></li>
+</ul>
+<h2 id="writing-data">11-writing-data</h2>
+<ul>
+<li><p>Saving plots</p></li>
+<li><p>Writing data</p></li>
+</ul>
+<h2 id="plyr">12-plyr</h2>
+<h2 id="wrap-up">13-wrap-up</h2>
+<ul>
+<li><p>Best practices for writing nice code</p></li>
+<li><p>Make code readable</p></li>
+<li><p>Documentation: tell us what and why, not how</p></li>
+<li><p>Keep your code modular</p></li>
+<li><p>Break down problem into bite size pieces</p></li>
+<li><p>Know that your code is doing the right thing</p></li>
+<li><p>Don’t repeat yourself</p></li>
+<li><p>Remember to be stylish</p></li>
+</ul>
+        </div>
+      </div>
+      </article>
+      <div class="footer">
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/swcarpentry/lesson-template">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
+        <a class="label swc-blue-bg" href="LICENSE.html">License</a>
+      </div>
+    </div>
+    <!-- Javascript placed at the end of the document so the pages load faster -->
+    <script src="http://software-carpentry.org/v5/js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/bootstrap-js/bootstrap.js"></script>
+  </body>
+</html>
