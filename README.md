@@ -1,6 +1,9 @@
 R for Reproducible Scientific Analysis
 ======================================
 
+Modifications of Software Carpentry r-novice-gapminder  
+[https://github.com/swcarpentry/r-novice-gapminder](https://github.com/swcarpentry/r-novice-gapminder)
+
 Introduction to R for non-programmers using gapminder data.
 
 The goal of this lesson is to teach novice programmers to write modular code
