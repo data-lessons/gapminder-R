@@ -2,7 +2,7 @@
 layout: page
 title: R for reproducible scientific analysis
 subtitle: Project management with RStudio
-minutes: 30
+minutes: 20
 ---
 
 ```{r, include=FALSE}
@@ -123,14 +123,12 @@ Now we will create a good directory structure and save the data file in the `dat
 > #### Challenge -- Project Organization {.challenge}
 >
 > 1. In your project directory, either using the Project tab of RStudio or your OS' file system, create the following directories:
->
 > - data
 > - code
 > - results
 > - papers
+> 1. Files with the .RDA extension are R-Data files. Right-click on [this link](https://github.com/michaellevy/gapminder-R/raw/gh-pages/data/continents.RDA) to "save file as ..."
+> 1. Save the `continents.RDA` file to the `data/` directory in your project
 >
-> 1. Right-click on [this link](https://raw.githubusercontent.com/resbaz/r-novice-gapminder-files/master/data/gapminder-FiveYearData.csv) to "save file as ..."
-> 1. Make a mental note of the file type
-> 1. Save the file to the `data/` directory in your project
-> We will load and inspect these data later.
+> We will load and inspect this dataset next.
 

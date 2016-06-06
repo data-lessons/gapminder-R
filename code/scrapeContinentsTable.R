@@ -20,11 +20,9 @@ cont =
     as.data.frame(stringsAsFactors = FALSE)
 cont[, 2:ncol(cont)] = 
     sapply(cont[, 2:ncol(cont)], function(x) as.numeric(as.character(x)))
-cont$area_km2 = as.integer(cont$area_km2)
 
 # gapminder uses five continents -- get into that format. Probably messes up, e.g. 
 # where NZ falls.
-unique(gapminder$continent)
 comb = grep('America', cont$continent)
 cont = 
     cont[comb, -1] %>%
@@ -32,6 +30,14 @@ cont =
     c('Americas', .) %>%
     rbind(cont, .) %>%
     .[-comb, ]
+
 cont$continent[cont$continent == 'Australia'] = 'Oceania'
+cont[, 2:ncol(cont)] = 
+    sapply(cont[, 2:ncol(cont)], function(x) as.numeric(as.character(x)))
+
+# Polish and save as RDA for easy loading
 continents = cont
-save(continents, file = '~/Dropbox/Teaching/SWC/DC_Davis_2016-06-16/gapminder-R/data/continents.RDA')
+continents = continents[order(continents$continent), ]
+continents = continents[, - which(names(continents) %in% c('percent_total_landmass', 'density_people_per_km2'))]
+rownames(continents) = NULL
+save(continents, file = 'data/continents.RDA')
