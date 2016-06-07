@@ -5,9 +5,7 @@ subtitle: data.frame
 minutes: 15
 ---
 
-```{r, include=FALSE}
-source("tools/chunk-options.R")
-```
+
 
 
 > ## Learning objectives {.objectives}
@@ -21,9 +19,10 @@ source("tools/chunk-options.R")
 
 Data come in many forms, and we need to be able to load them in R. For our own use and with others who use R, there are R-specific data structures we can use, and we will see these later, but we need to be able to work with more general data types too. Comma-separated value (csv) tables are perhaps the most universal data structure. We can read csv's with the `read.csv` function:
 
-```{r, eval = FALSE}
+
+~~~{.r}
 read.csv('path/to/csv_file.csv')
-```
+~~~
 
 Note that:
 
@@ -34,15 +33,17 @@ Note that:
     
 Let's read the gapminder data we downloaded in the previous lesson:
 
-```{r, eval = FALSE}
+
+~~~{.r}
 read.csv('data/gapminder-FiveYearData.csv')
-```
+~~~
 
 Whoa! What just happened? R executed the function and printed the result, just like when you enter `log(1)`. How do you store an object to a variable?
 
-```{r}
+
+~~~{.r}
 gapminder <- read.csv('data/gapminder-FiveYearData.csv')
-```
+~~~
 
 ### Data frame basics
 
@@ -50,15 +51,43 @@ Check the Environment tab -- gapminder has appeared. It is a `data.frame` with 1
 
 It's nice to not have to point and click, and we'd like to get more information about our `data.frame`. There are many ways; `head`, `str`, and `summary` are very useful. 
 
-```{r}
+
+~~~{.r}
 head(gapminder)
-```
+~~~
+
+
+
+~~~{.output}
+      country year      pop continent lifeExp gdpPercap
+1 Afghanistan 1952  8425333      Asia  28.801  779.4453
+2 Afghanistan 1957  9240934      Asia  30.332  820.8530
+3 Afghanistan 1962 10267083      Asia  31.997  853.1007
+4 Afghanistan 1967 11537966      Asia  34.020  836.1971
+5 Afghanistan 1972 13079460      Asia  36.088  739.9811
+6 Afghanistan 1977 14880372      Asia  38.438  786.1134
+
+~~~
 
 `head` shows us a managable number of rows of what we saw in table form. 
 
-```{r}
+
+~~~{.r}
 str(gapminder)
-```
+~~~
+
+
+
+~~~{.output}
+'data.frame':	1704 obs. of  6 variables:
+ $ country  : Factor w/ 142 levels "Afghanistan",..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ year     : int  1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 ...
+ $ pop      : num  8425333 9240934 10267083 11537966 13079460 ...
+ $ continent: Factor w/ 5 levels "Africa","Americas",..: 3 3 3 3 3 3 3 3 3 3 ...
+ $ lifeExp  : num  28.8 30.3 32 34 36.1 ...
+ $ gdpPercap: num  779 821 853 836 740 ...
+
+~~~
 
 `str` tells us what type of variable each is. We'll get into the details of variable types later, but for now, note that we have four numerical variables (one, year, is integer), and two character variables, which R interprets as factors. Levels are the possible values a factor can take; here, we have 142 possible countries and five possible continents.
 

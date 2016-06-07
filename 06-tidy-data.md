@@ -5,12 +5,7 @@ subtitle: Managing & Manipulating Data
 minutes: 20
 ---
 
-```{r, include=FALSE}
-source("tools/chunk-options.R")
-opts_chunk$set(warning = FALSE, message = FALSE)
-# Silently load in the data so the rest of the lesson works
-gapminder <- read.csv("data/gapminder-FiveYearData.csv", header=TRUE)
-```
+
 
 > ## Learning objectives {.objectives}
 >
@@ -34,10 +29,22 @@ What exactly constitutes a variable can be difficult to define out of context, b
 
 An example will clarify. [Here is a dummy dataset](https://github.com/michaellevy/gapminder-R/raw/gh-pages/data/wide_eg.csv). Is this data in tidy format? Why not -- which of the three principles does it not satisfy?
 
-```{r}
+
+~~~{.r}
 eg <- read.csv('data/wide_eg.csv')
 eg
-```
+~~~
+
+
+
+~~~{.output}
+  subject sex control treatment1 treatment2
+1       1   M     7.9       12.3       10.7
+2       2   F     6.3       10.6       11.1
+3       3   F     9.5       13.1       13.8
+4       4   M    11.5       13.4       12.9
+
+~~~
 
 It looks like we've got four individuals, each subjected to three conditions -- a control and two treatments. Each observation here is a person in a treatment (we don't know what the measured value is), so each row should be defined by a person-treatment; that is, we should have 12 rows with four columns: subject, sex, condition, and the measured value. 
 
@@ -47,16 +54,56 @@ We can transform the data tidy form quite easily with the `gather` function from
 
 Arguments to `gather` include the data.frame you're gathering, which columns to gather, and names for two columns in the new data.frame: the key and the value. The key will consist of the old names of gathered columns, and the value will consist of the entries in those columns. The order of arguments is data.frame, key, value, columns-to-gather:
 
-```{r tidyr}
+
+~~~{.r}
 library(tidyr)
 gather(eg, condition, value, control, treatment1, treatment2)
-```
+~~~
+
+
+
+~~~{.output}
+   subject sex  condition value
+1        1   M    control   7.9
+2        2   F    control   6.3
+3        3   F    control   9.5
+4        4   M    control  11.5
+5        1   M treatment1  12.3
+6        2   F treatment1  10.6
+7        3   F treatment1  13.1
+8        4   M treatment1  13.4
+9        1   M treatment2  10.7
+10       2   F treatment2  11.1
+11       3   F treatment2  13.8
+12       4   M treatment2  12.9
+
+~~~
 
 You can also tell `gather` which columns not to gather -- these are the "ID variables"; that is, they identify the unit of analysis on each row.
 
-```{r tidyr 2}
+
+~~~{.r}
 gather(eg, condition, value, -subject, -sex)
-```
+~~~
+
+
+
+~~~{.output}
+   subject sex  condition value
+1        1   M    control   7.9
+2        2   F    control   6.3
+3        3   F    control   9.5
+4        4   M    control  11.5
+5        1   M treatment1  12.3
+6        2   F treatment1  10.6
+7        3   F treatment1  13.1
+8        4   M treatment1  13.4
+9        1   M treatment2  10.7
+10       2   F treatment2  11.1
+11       3   F treatment2  13.8
+12       4   M treatment2  12.9
+
+~~~
 
 
 
@@ -96,28 +143,90 @@ The different join functions control what happens to rows that exist in one tabl
 
 We will practice on our continents data.frame from module 2 and the gapminder data.frame. Note how these are tidy data: We have observations at the level of continent and at the level of country, so they go in different tables. The continent column in the gapminder data.frame allows us to link them now. If continents data.frame isn't in your Environment, load it and recall what it consists of:
 
-```{r}
+
+~~~{.r}
 load('data/continents.RDA')
 continents
-```
+~~~
+
+
+
+~~~{.output}
+   continent area_km2 population percent_total_pop
+1     Africa 30370000 1022234000              15.0
+2   Americas 42330000  934611000              14.0
+3 Antarctica 13720000       4490               0.0
+4       Asia 43820000 4164252000              60.0
+5     Europe 10180000  738199000              11.0
+6    Oceania  9008500   29127000               0.4
+
+~~~
 
 We can join the two data.frames using any of the `dplyr` functions. We will pass the results to `str` to avoid printing more than we can read, and to get more high-level information on the resulting data.frames.
 
-```{r}
+
+~~~{.r}
 library(dplyr)
 left_join(gapminder, continents) %>%
     str()
+~~~
 
+
+
+~~~{.output}
+'data.frame':	1704 obs. of  9 variables:
+ $ country          : Factor w/ 142 levels "Afghanistan",..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ year             : int  1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 ...
+ $ pop              : num  8425333 9240934 10267083 11537966 13079460 ...
+ $ continent        : chr  "Asia" "Asia" "Asia" "Asia" ...
+ $ lifeExp          : num  28.8 30.3 32 34 36.1 ...
+ $ gdpPercap        : num  779 821 853 836 740 ...
+ $ area_km2         : num  43820000 43820000 43820000 43820000 43820000 ...
+ $ population       : num  4.16e+09 4.16e+09 4.16e+09 4.16e+09 4.16e+09 ...
+ $ percent_total_pop: num  60 60 60 60 60 60 60 60 60 60 ...
+
+~~~
+
+
+
+~~~{.r}
 right_join(gapminder, continents) %>% 
     str()
-```
+~~~
+
+
+
+~~~{.output}
+'data.frame':	1705 obs. of  9 variables:
+ $ country          : Factor w/ 142 levels "Afghanistan",..: 3 3 3 3 3 3 3 3 3 3 ...
+ $ year             : int  1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 ...
+ $ pop              : num  9279525 10270856 11000948 12760499 14760787 ...
+ $ continent        : chr  "Africa" "Africa" "Africa" "Africa" ...
+ $ lifeExp          : num  43.1 45.7 48.3 51.4 54.5 ...
+ $ gdpPercap        : num  2449 3014 2551 3247 4183 ...
+ $ area_km2         : num  30370000 30370000 30370000 30370000 30370000 ...
+ $ population       : num  1.02e+09 1.02e+09 1.02e+09 1.02e+09 1.02e+09 ...
+ $ percent_total_pop: num  15 15 15 15 15 15 15 15 15 15 ...
+
+~~~
 
 These operations produce slightly different results, either 1704 or 1705 observations. Can you figure out why? Antarctica contains no countries so doesn't appear in the gapminder data.frame. When we use `left_join` it gets filtered from the results, but when we use `right_join` it appears, with missing values for all of the country-level variables:
 
-```{r}
+
+~~~{.r}
 right_join(gapminder, continents) %>% 
     filter(continent == "Antarctica")
-```
+~~~
+
+
+
+~~~{.output}
+  country year pop  continent lifeExp gdpPercap area_km2 population
+1    <NA>   NA  NA Antarctica      NA        NA 13720000       4490
+  percent_total_pop
+1                 0
+
+~~~
 
 > #### Challenge -- Putting the pieces together {.challenge}
 > 
@@ -135,7 +244,8 @@ right_join(gapminder, continents) %>%
 > #### Solution to Challenge -- Putting the pieces together {.challenge}
 >
 >
-> ```{r, Putting the pieces together - solution}
+> 
+> ~~~{.r}
 > library(ggplot2)
 > 
 > # Calculate country-level GDP
@@ -154,5 +264,7 @@ right_join(gapminder, continents) %>%
 >     geom_point() +  
 > # And label them
 >     geom_text(aes(label = continent), nudge_y = 5e3)  
-> ```
+> ~~~
+> 
+> <img src="fig/Putting the pieces together - solution-1.png" title="plot of chunk Putting the pieces together - solution" alt="plot of chunk Putting the pieces together - solution" style="display: block; margin: auto;" />
 >

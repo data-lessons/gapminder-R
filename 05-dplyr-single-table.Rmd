@@ -7,8 +7,6 @@ minutes: 45
 
 ```{r, include=FALSE}
 source("tools/chunk-options.R")
-# Silently load in the data so the rest of the lesson works
-gapminder <- read.csv("data/gapminder-FiveYearData.csv", header=TRUE)
 ```
 
 > ## Learning objectives {.objectives}
@@ -54,7 +52,7 @@ Suppose we want to see just the gapminder data for the USA. First, we need to kn
 unique(gapminder$country)
 ```
 
-Okay, now we want to see just the rows of the data.frame where country is "United States". The synatx for all `dplyr` functions is the same: The first argument is the data.frame, the rest of the arguments are whatever you want to do in that data.frame. 
+Okay, now we want to see just the rows of the data.frame where country is "United States". The syntax for all `dplyr` functions is the same: The first argument is the data.frame, the rest of the arguments are whatever you want to do in that data.frame. 
 
 ```{r filter}
 filter(gapminder, country == "United States")
@@ -66,7 +64,7 @@ We can also apply multiple conditions, e.g. the US after 2000:
 filter(gapminder, country == "United States" & year > 2000)
 ```
 
-We can also use "or" conditions with the verticle pipe: `|`. Notice that the variable (column) names don't go in quotes, but values of character variables do. 
+We can also use "or" conditions with the vertical pipe: `|`. Notice that the variable (column) names don't go in quotes, but values of character variables do. 
 
 ```{r filter or}
 filter(gapminder, country == "United States" | country == "Mexico")
@@ -76,13 +74,13 @@ filter(gapminder, country == "United States" | country == "Mexico")
 
 `filter` returned a subset of the data.frame's rows. `select` returns a subset of the data.frame's columns.
 
-Suppose we only want to see country and life expectency. 
+Suppose we only want to see country and life expectancy. 
 
 ```{r select, eval = FALSE}
 select(gapminder, country, lifeExp)
 ```
 
-Hmm, we can't really see all 1704 rows. We can just look at the top of the data.frame with the `head` function. We could assign the output of our `select` command to a new variable and display the head of that, or we can wrap our select function in `head`. Note that if we don't assign the output of a function to a variable, the output is printed, but nothing changes. E.g. the last command didn't remove the other columns from the gapminder data.frame, it just printed the results of that function call. Understand how the latter works: `head` expects a data.frame as its argument, and `select` returns a data.frame. So the output of `select` becomes the input to `head`.
+Hmm, we can't really see all 1704 rows. We can just look at the top of the data.frame with the `head` function. We could assign the output of our `select` command to a new variable and display the head of that, or we can wrap our select function in `head`. Note that if we don't assign the output of a function to a variable, the output is printed, but nothing changes. E.g. the last command didn't remove the other columns from the gapminder data.frame, it just printed the results of that function call. Understand how the nesting functions works: `head` expects a data.frame as its argument, and `select` returns a data.frame. The output of `select` becomes the input to `head`.
 
 ```{r select head}
 gapCountryExp <- select(gapminder, country, lifeExp)
@@ -92,33 +90,56 @@ head(select(gapminder, country, lifeExp))
 
 #### `arrange()`
 
-You can order the rows of a data.frame by a variable using `arrange`. Suppose we want to see the most populus countries. Again, we wrap the results in `head` to just print the first few rows: 
+You can order the rows of a data.frame by a variable using `arrange`. Suppose we want to see the most populous countries. Again, we wrap the results in `head` to just print the first few rows: 
 
 ```{r arrange}
 head(arrange(gapminder, pop))
 ```
 
-Hmm, we didn't get the most populus countries. By default, `arrange` sorts the variable in *increasing* order. We could see the most populus countries by examining the `tail` of the last command, or we can sort the data.frame by descending population by wrapping the variable in `desc()`:
+Hmm, we didn't get the most populous countries. By default, `arrange` sorts the variable in *increasing* order. We could see the most populous countries by examining the `tail` of the last command, or we can sort the data.frame by descending population by wrapping the variable in `desc()`:
 
 ```{r arrange desc}
 head(arrange(gapminder, desc(pop)))
 ```
 
+`arrange` can also sort by multiple variables. It will sort the data.frame by the first variable, and if there are any ties in that variable, they will be sorted by the next variable, and so on. Here we sort from newest to oldest, and within year from richest to poorest:
+
+```{r arrange multi}
+head(arrange(gapminder, desc(year), desc(gdpPercap)))
+```
+
+**Shoutout Q: Would we get the same output if we switched the order of `desc(year)` and `desc(gdpPercap)` in the last line?**
+
 #### C'est ne pas une pipe
 
-Suppose we want to look at all the countries where life expectency is greater than 80 years, sorted from poorest to richest. First, we `filter`, then we `arrange`. Each function expects a data.frame as its first argument and returns a data.frame as its output. So we could wrap them like we did with `head(select( ... ))` above, or we could assign the intermediate data.frame to a varaible.
+Suppose we want to look at all the countries where life expectancy is greater than 80 years, sorted from poorest to richest. First, we `filter`, then we `arrange`. Each function expects a data.frame as its first argument and returns a data.frame as its output. So we could wrap them like we did with `head(select( ... ))` above: 
 
 ```{r filter and arrange}
 arrange(filter(gapminder, lifeExp > 80), gdpPercap)
 ```
 
-That line of code is pretty difficult to read. There is a better way, which makes both writing and reading the code easier. The pipe from the `magrittr` package (which is automatically installed and loaded with `dplyr`) takes whatever is on its left and makes it sends it to whatever is on its right. 
+Or, we could assign the intermediate data.frame to a variable:
+
+```{r filter and arrange assign}
+lifeExpGreater80 <- filter(gapminder, lifeExp > 80)
+arrange(lifeExpGreater80, gdpPercap)
+```
+
+The first option is difficult to read, and the second option clutters our Environment with a data.frame that we will only use once. There is a better way, which makes both writing and reading the code easier. The pipe from the `magrittr` package (which is automatically installed and loaded with `dplyr`) takes the output of first line, and plugs it in as the first argument of the next line.
+
+```{r filter and arrange pipe}
+filter(gapminder, lifeExp > 80) %>%
+    arrange(gdpPercap)
+```
+
+To demonstrate how it works, here are some examples where it's unnecessary. 
 
 ```{r pipe simple}
 4 %>% sqrt()
+2 ^ 2 %>% sum(1)
 ```
 
-More specifically, whatever goes through the pipe becomes the first argument of the function after the pipe. This is convenient, because all `dplyr` functions produce a data.frame as their output and take a data.frame as the first argument. Since R ignores white-space, we can put each function on a new line, which RStudio will automatically indent, making everything easy to read. Now each line represents a step in a sequential operation. You can read this as "Take the gapminder data.frame, filter to the rows where lifeExp is greater than 80, and arrange by gdpPercap." 
+Whatever goes through the pipe becomes the first argument of the function after the pipe. This is convenient, because all `dplyr` functions produce a data.frame as their output and take a data.frame as the first argument. Since R ignores white-space, we can put each function on a new line, which RStudio will automatically indent, making everything easy to read. Now each line represents a step in a sequential operation. You can read this as "Take the gapminder data.frame, filter to the rows where lifeExp is greater than 80, and arrange by gdpPercap." 
 
 
 ```{r pipe}
@@ -128,7 +149,7 @@ gapminder %>%
 ```
 
 
-Making your code easier for humans to read will save you lots of time. The human reading it is usually future-you, and operations that seem simple when you're writing them will look like jibberish when you're three weeks removed from them, let alone three months or three years or another person. Make your code as easy to read as possible by using the pipe where appropriate, leaving white space, using descriptive variable names, being consistent with spacing and naming, and liberally commenting code.
+Making your code easier for humans to read will save you lots of time. The human reading it is usually future-you, and operations that seem simple when you're writing them will look like gibberish when you're three weeks removed from them, let alone three months or three years or another person. Make your code as easy to read as possible by using the pipe where appropriate, leaving white space, using descriptive variable names, being consistent with spacing and naming, and liberally commenting code.
 
 > #### MCQ: Data Reduction {.challenge}
 >
@@ -153,7 +174,7 @@ mutate(gapminder, total_income = gdpPercap * pop) %>%
     head()
 ```
 
-You can create multiple columns in the same function call, separating them by a comma. E.g. suppose we want the base-10 logarithm of each country's population and per-capita income:
+You can create multiple columns in the same function call, separating them by commas. E.g. suppose we want the base-10 logarithm of each country's population and per-capita income:
 
 ```{r mutate 2}
 gapminder %>%
@@ -172,9 +193,9 @@ gapminder %>%
     summarize(mean_income = mean(gdpPercap), median_income = median(gdpPercap))
 ```
 
-Note that `summarize` eleminates any other columns. Why? What else can it do? E.g. What country should it list for the year 1952!?
+Note that `summarize` eliminates any other columns. Why? What else can it do? E.g. What country should it list for the year 1952!?
 
-You can also do multiple groupings. Suppose we want the average life expectency by continent and year. 
+You can also do multiple groupings. Suppose we want the average life expectancy in each continent for each year. We group by continent and year:
 
 ```{r multiple groups}
 gapminder %>%
@@ -192,7 +213,7 @@ gapminder
 > #### Challenge -- Part 1 {.challenge}
 >
 > - Calculate a new column: the total GDP of each country in each year. 
-> - Calculate the variance -- `var()` of countries' incomes at each year.
+> - Calculate the variance -- `var()` of countries' incomes in each year.
 > - Is country-level GDP getting more or less equal over time?
 > - Plot your findings.
 > 
@@ -205,10 +226,11 @@ gapminder
 
 > #### Challenge -- Part 3 (Advanced) {.challenge}
 > 
-> The above plotting exercise asked you to plot summarized information, but it is generally preferable to avoid summarizing before plotting. Can you generate a plot that shows the information you calculated in Part 1 without summarizing?
->       - Hint: `ggplot` interprets the `gapminder$year` as a numeric variable, which may be okay, but there are some plot types for which you need `ggplot` to see `gapminder$year` as a category. You can accomplish this by wrapping it in `factor` -- e.g. `ggplot(gapminder, aes(x = factor(year) ...`
+> The above plotting exercise asked you to plot summarized information, but it is generally preferable to avoid summarizing before plotting. Can you generate a plot that shows the information you calculated in Part 1 without summarizing?  
+>
+> - Hint: `ggplot` interprets the `gapminder$year` as a numeric variable, which may be okay, but there are some plot types for which you need `ggplot` to see `gapminder$year` as a category. You can accomplish this by wrapping it in `factor` -- e.g. `ggplot(gapminder, aes(x = factor(year) ...`
 >
 
 #### Resources
 
-That is the core of `dplyr`'s functionality, but it does more. RStudio makes a great [cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) that covers all the `dplyr` functions we just learned, plus what we will learn in the next two lessons: keeping data tidy and merging multiple data.frames.
+That is the core of `dplyr`'s functionality, but it does more. RStudio makes a great [cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) that covers all the `dplyr` functions we just learned, plus what we will learn in the next lesson: keeping data tidy.

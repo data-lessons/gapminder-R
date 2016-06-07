@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: R for reproducible scientific analysis</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="css/swc.css" />
+    <link rel="alternate" type="application/rss+xml" title="Software Carpentry Blog" href="http://software-carpentry.org/feed.xml"/>
+    <meta charset="UTF-8" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body class="lesson">
+    <div class="container card">
+      <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
+      </div>
+      <article>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+                    <a href="index.html"><h1 class="title">R for reproducible scientific analysis</h1></a>
+          <h2 class="subtitle">data.frame</h2>
+          <section class="objectives panel panel-warning">
+<div class="panel-heading">
+<h2 id="learning-objectives"><span class="glyphicon glyphicon-certificate"></span>Learning objectives</h2>
+</div>
+<div class="panel-body">
+<ul>
+<li>Be able to load a saved .rda object</li>
+<li>Understand <code>data.frame</code> as common R object, composed of vectors</li>
+<li>Understand basic R data classes</li>
+<li>Be able to query the structure of an R object and its component parts.</li>
+<li>Be able to subset a data.frame and vector</li>
+</ul>
+</div>
+</section>
+<h3 id="loading-data">Loading data</h3>
+<p>We can load the dataset we just saved with the <code>load</code> function. Load needs the location of the saved file, provided as character string filepath, starting with the working directory. We won’t get into working directories now, except to say that when your project’s root directory will usually be your working directory. It is displayed at the top of your console pane in RStudio. Filepaths should be provided relative to that location. So, to load the file we just saved:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">&#39;data/continents.RDA&#39;</span>)</code></pre></div>
+<h3 id="intro-to-data.frames">Intro to data.frames</h3>
+<p>Check your “Environment” tab – a new object called <code>continents</code> has appeared. If your environment is in “list” mode, switch to “grid” as it’s more informative. We can see that <code>continents</code> has Type data.frame and contains 6 observations of 4 variables. Click on the spreadsheet icon at far-right to view it.</p>
+<p>This is a <code>data.frame</code> – the type of object most of us work with most of the time in R. In a <code>data.frame</code> each column represents a variable, and each row is an observation. This is the basic data organizational scheme – one column per variable, one row per observation. You might recognize this form from from a statistics class or your own data analysis.</p>
+<h4 id="inspecting-a-data.frame">Inspecting a data.frame</h4>
+<p>Rather than pulling up the spreadsheet form of a data.frame, we’d like to use R to get more information about it. In this case, our <code>data.frame</code> is so small that we can print the whole thing and inspect it:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents</code></pre></div>
+<pre class="output"><code>   continent area_km2 population percent_total_pop
+1     Africa 30370000 1022234000              15.0
+2   Americas 42330000  934611000              14.0
+3 Antarctica 13720000       4490               0.0
+4       Asia 43820000 4164252000              60.0
+5     Europe 10180000  738199000              11.0
+6    Oceania  9008500   29127000               0.4
+</code></pre>
+<p>When we start working with more-realistic datasets, let alone big data, that won’t work. We can get the first few rows of a <code>data.frame</code> with <code>head</code> (in this case all the rows!).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(continents)</code></pre></div>
+<pre class="output"><code>   continent area_km2 population percent_total_pop
+1     Africa 30370000 1022234000              15.0
+2   Americas 42330000  934611000              14.0
+3 Antarctica 13720000       4490               0.0
+4       Asia 43820000 4164252000              60.0
+5     Europe 10180000  738199000              11.0
+6    Oceania  9008500   29127000               0.4
+</code></pre>
+<p><code>str</code> provides richer information about a <code>data.frame</code> and each element in it. It is generally a good first-step inspection of an R object.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(continents)</code></pre></div>
+<pre class="output"><code>&#39;data.frame&#39;:   6 obs. of  4 variables:
+ $ continent        : chr  &quot;Africa&quot; &quot;Americas&quot; &quot;Antarctica&quot; &quot;Asia&quot; ...
+ $ area_km2         : num  30370000 42330000 13720000 43820000 10180000 ...
+ $ population       : num  1.02e+09 9.35e+08 4.49e+03 4.16e+09 7.38e+08 ...
+ $ percent_total_pop: num  15 14 0 60 11 0.4
+</code></pre>
+<p>We get some summary information on <code>continents</code>: it’s type and dimensions, and we get some information on each variable in the <code>data.frame</code>. We’ll get into the details of variable types later, but for now, note that <code>continent</code> is a character-type variable and the rest are numeric.</p>
+<section class="challenge panel panel-success">
+<div class="panel-heading">
+<h4 id="shoutout"><span class="glyphicon glyphicon-pencil"></span>Shoutout</h4>
+</div>
+<div class="panel-body">
+<p>There is another function like <code>head()</code> and <code>str()</code> that provides information on a <code>data.frame</code>: <code>summary()</code><br />
+- Call the <code>summary</code> function on the <code>continent</code> data.<br />
+- What is the average (mean) area of a continent?</p>
+</div>
+</section>
+<h3 id="vectors">Vectors</h3>
+<p>We can extract a single variable from a data.frame with <code>$</code> operator.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents$population</code></pre></div>
+<pre class="output"><code>[1] 1022234000  934611000       4490 4164252000  738199000   29127000
+</code></pre>
+<p>Note that you can use tab-completion to see what variables are available.</p>
+<p>That just printed the six values of population. We are going to work with them some more, so extract them from the data.frame and store them to a new object, called <code>pop</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop &lt;-<span class="st"> </span>continents$population</code></pre></div>
+<p>Now we have a new object in our environment: a numeric “vector” with six entries. R is built around vectors. In data analysis and statistics, we don’t often work with inidvidual numbers, but multiple observations. This is baked into R and helps it give it its power.</p>
+<p>Another core R concept is the idea that when you manipulate an object, the original object doesn’t change. Note that the <code>continents</code> data.frame still has the population variable. R didn’t “take it out” of <code>continents</code>; instead, it made a copy of it and stored it to a variable called <code>pop</code>. They are now two separate things. If we make a change to one, it will not affect the other. There is a powerful computational paradigm here that may not be apparent yet, but keep in mind that anything you do in R, if you want to keep the results, you need to assign them to a new object.</p>
+<h4 id="vectorization">Vectorization</h4>
+<p>We just said that R is built around vectors. Most functions that accept a single value can also accept a vector of values. E.g. we can find the logarithm of each continent’s population:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">log</span>(<span class="dt">x =</span> pop, <span class="dt">base =</span> <span class="dv">10</span>)</code></pre></div>
+<pre class="output"><code>[1] 9.009550 8.970631 3.652246 9.619537 8.868173 7.464296
+</code></pre>
+<p>R went over each item in <code>pop</code> and took the base-10 logarithm. Some functions take a vector but rather than returning a result for each item, operate on all of them together. E.g. we can find the mean and standard deviation of populations:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(pop)</code></pre></div>
+<pre class="output"><code>[1] 1148071248
+</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sd</span>(pop)</code></pre></div>
+<pre class="output"><code>[1] 1542519717
+</code></pre>
+<p>Many functions will also operate element-wise over multiple vectors. E.g. to calculate the population density of each continent, we need to divide the population by the land area for each continent. We can do that with a single command:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents$population /<span class="st"> </span>continents$area_km2</code></pre></div>
+<pre class="output"><code>[1] 3.365933e+01 2.207916e+01 3.272595e-04 9.503085e+01 7.251464e+01
+[6] 3.233280e+00
+</code></pre>
+<p>Note that we didn’t have to take those vectors out of the data.frame to use them. We can do vectorized operations right in the data.frame, which helps keep everything organized: recall that each row of a data.frame is a particular observation (in this case a continent), so we often want to do operations with each row.</p>
+<p>Just like we can extract a column from a data.frame with <code>$</code>, we can make a new column:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents$pop_density &lt;-<span class="st"> </span>continents$population /<span class="st"> </span>continents$area_km2
+continents</code></pre></div>
+<pre class="output"><code>   continent area_km2 population percent_total_pop  pop_density
+1     Africa 30370000 1022234000              15.0 3.365933e+01
+2   Americas 42330000  934611000              14.0 2.207916e+01
+3 Antarctica 13720000       4490               0.0 3.272595e-04
+4       Asia 43820000 4164252000              60.0 9.503085e+01
+5     Europe 10180000  738199000              11.0 7.251464e+01
+6    Oceania  9008500   29127000               0.4 3.233280e+00
+</code></pre>
+<h3 id="subsetting">Subsetting</h3>
+<h4 id="subsetting-vectors">Subsetting vectors</h4>
+<p>R uses square brackets (<code>[ ]</code>) to subset data. To get the first element out of our <code>pop</code> vector, we do:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop[<span class="dv">1</span>]</code></pre></div>
+<pre class="output"><code>[1] 1022234000
+</code></pre>
+<p>To get the first three elements, we need to put 1, 2, and 3 inside the <code>[ ]</code>, but we need a way to group them together. The function “combine”, <code>c</code> does that. This makes a vector of the numbers 1, 2, and 3:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</code></pre></div>
+<pre class="output"><code>[1] 1 2 3
+</code></pre>
+<p>We could assign that vector to a new variable, like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">firstThree &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</code></pre></div>
+<p>And then we can get the first three elements in <code>pop</code> like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop[firstThree]</code></pre></div>
+<pre class="output"><code>[1] 1022234000  934611000       4490
+</code></pre>
+<p>We didn’t have to store 1-2-3 to a new variable, we could use that vector to subset directly, but it often makes things easier to think about to store intermediate variables, especially as things get more complex.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)]</code></pre></div>
+<pre class="output"><code>[1] 1022234000  934611000       4490
+</code></pre>
+<p>We can also tell R which elements we <em>don’t</em> want with a <code>-</code>. This returns each element in <code>pop</code> except the first one:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop[-<span class="dv">1</span>]</code></pre></div>
+<pre class="output"><code>[1]  934611000       4490 4164252000  738199000   29127000
+</code></pre>
+<p>If we try to ask for an element that doesn’t exist, R returns <code>NA</code>. <code>NA</code> is a special value in R that means “missing”.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop[<span class="dv">100</span>]</code></pre></div>
+<pre class="output"><code>[1] NA
+</code></pre>
+<h4 id="subsetting-data.frames">Subsetting data.frames</h4>
+<p>Vectors are one-dimensional objects. data.frames are two-dimensional objects.</p>
+<p>We can subset a 2-D object by providing an index for each dimension. Rows come first, then columns, separated by a comma. E.g. this returns the 3rd entry in the 2nd column of <code>continents</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents[<span class="dv">3</span>, <span class="dv">2</span>]</code></pre></div>
+<pre class="output"><code>[1] 13720000
+</code></pre>
+<p>Leaving a dimension empty returns all the values for that dimension. So if we want all of the columns for the first row, we use:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents[<span class="dv">1</span>, ]</code></pre></div>
+<pre class="output"><code>  continent area_km2 population percent_total_pop pop_density
+1    Africa 30370000 1022234000                15    33.65933
+</code></pre>
+<p>And if we want all the rows for the 2nd and 4th columns:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents[, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)]</code></pre></div>
+<pre class="output"><code>  area_km2 percent_total_pop
+1 30370000              15.0
+2 42330000              14.0
+3 13720000               0.0
+4 43820000              60.0
+5 10180000              11.0
+6  9008500               0.4
+</code></pre>
+<section class="challenge panel panel-success">
+<div class="panel-heading">
+<h4 id="challenge-subsetting-two-ways"><span class="glyphicon glyphicon-pencil"></span>Challenge – subsetting two ways</h4>
+</div>
+<div class="panel-body">
+<p>Can you think of another way to extraact the entry in the third row and second column of <code>continents</code>?</p>
+<p>Hint: - We recently saw how to extract a vector (column) from a data.frame. - What vector does the value you want reside in? - Once you have that vector, how can you extract a single value?</p>
+</div>
+</section>
+<h3 id="boolean-type-and-subsetting">Boolean type and subsetting</h3>
+<p>In <code>continents</code> we saw two of the three most common data types: characters and numeric. You saw the third when making logical comparisons like <code>1 &gt; 0</code>: Logical data. Logical data can only be TRUE or FALSE (or <code>NA</code> for missing). We can make vectorized logical comparisons too. Let’s find the sparcely-populated continents, those with fewer than ten people per square kilometer:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents$pop_density &lt;<span class="st"> </span><span class="dv">10</span></code></pre></div>
+<pre class="output"><code>[1] FALSE FALSE  TRUE FALSE FALSE  TRUE
+</code></pre>
+<p>That went over each element in <code>pop_density</code> and compared it with 10. We say that R “recycled” 10 to compare it with each element in <code>pop_density</code>.</p>
+<p>In the same way that we subset by index before, we can subset by a logical vector, and we can do this in one or more dimensional subsetting.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents$continent[continents$pop_density &lt;<span class="st"> </span><span class="dv">10</span>]</code></pre></div>
+<pre class="output"><code>[1] &quot;Antarctica&quot; &quot;Oceania&quot;   
+</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents[continents$pop_density &lt;<span class="st"> </span><span class="dv">10</span>, ]</code></pre></div>
+<pre class="output"><code>   continent area_km2 population percent_total_pop  pop_density
+3 Antarctica 13720000       4490               0.0 0.0003272595
+6    Oceania  9008500   29127000               0.4 3.2332796803
+</code></pre>
+<section class="challenge panel panel-success">
+<div class="panel-heading">
+<h4 id="mcq-subset-and-vectorize"><span class="glyphicon glyphicon-pencil"></span>MCQ – Subset and vectorize</h4>
+</div>
+<div class="panel-body">
+<p>What is the total land area of continents that have at least 10% of the world’s population?</p>
+<ul>
+<li>Use subsetting to get the areas you want</li>
+<li>Use the <code>sum</code> function to find the total land area</li>
+</ul>
+<ol style="list-style-type: lower-alpha">
+<li>149428500</li>
+<li>126700000</li>
+<li>22728500</li>
+<li>100</li>
+</ol>
+</div>
+</section>
+<h3 id="reading-csv-data">Reading csv data</h3>
+<p>The <code>continents</code> data.frame was useful for learning because it was so small, but it’s time to graduate to something more interesting and realistic. Data come in many forms, and we need to be able to load them in R. For our own use and with others who use R, there are R-specific data structures we can use, like the .RDA filetype we just saw, but we need to be able to work with more general data types too. Comma-separated value (csv) tables are perhaps the most universal data structure.</p>
+<p>The gapminder dataset provides country-by-year level data on income, population, and longevity. I downloaded it and put it in the data directory of my project. You will do the same in a minute.</p>
+<p>We can read csv’s with the <code>read.csv</code> function. The argument to <code>read.csv</code> is the location of the file, relative to your working directory. Since I saved the gapminder data to the <code>data</code> directory of my project, I can load it with this. Note the use of tab-completion to find the file and get it exactly right without typos.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read.csv</span>(<span class="st">&#39;data/gapminder-FiveYearData.csv&#39;</span>)</code></pre></div>
+<p>Whoa! What just happened? R executed the function and printed the result, just like when you enter <code>log(1)</code>. How do you store an object to a variable?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapminder &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&#39;data/gapminder-FiveYearData.csv&#39;</span>)</code></pre></div>
+<p>Now, a data.frame called <code>gapminder</code> is in my Environment, and I can see that it is a data.frame with 1704 rows and 6 columns.</p>
+<section class="challenge panel panel-success">
+<div class="panel-heading">
+<h4 id="challenge-read-csv-data"><span class="glyphicon glyphicon-pencil"></span>Challenge – read csv data</h4>
+</div>
+<div class="panel-body">
+<p>The gapminder data are available at <a href="https://raw.githubusercontent.com/resbaz/r-novice-gapminder-files/master/data/gapminder-FiveYearData.csv">this link</a>. - Right click on the link to “save file as…” - Save the .csv file in the <code>/data</code> directory of your project. - Read the data with the <code>read.csv</code> function and assign it to the variable <code>gapminder</code>. - Inspect the data.frame using the <code>summary</code> function. What is the most recent year for which we have data?</p>
+<p><strong>Advanced challenge</strong></p>
+<p>Suppose you get a .csv file from a colleague in Europe. Because they use “,” (comma) as a decimal separator, they use “;” (semi-colons) to separate fields. How can you read it into R?</p>
+<p>Feel free to use the web and/or R’s helpfiles.</p>
+</div>
+</section>
+        </div>
+      </div>
+      </article>
+      <div class="footer">
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/swcarpentry/lesson-template">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
+        <a class="label swc-blue-bg" href="LICENSE.html">License</a>
+      </div>
+    </div>
+    <!-- Javascript placed at the end of the document so the pages load faster -->
+    <script src="http://software-carpentry.org/v5/js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/bootstrap-js/bootstrap.js"></script>
+  </body>
+</html>

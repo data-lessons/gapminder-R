@@ -103,13 +103,14 @@ head(cors)
 ~~~{.output}
 Source: local data frame [6 x 4]
 
-  year gdpPercap.lifeExp gdpPercap.pop  pop.lifeExp
-1 1952         0.2780236   -0.02526041 -0.002724782
-2 1957         0.3037445   -0.02807342  0.014492716
-3 1962         0.3832211   -0.03165089 -0.031299202
-4 1967         0.4801398   -0.03795448  0.032447402
-5 1972         0.4597014   -0.04367936  0.046951951
-6 1977         0.6198638   -0.05587981  0.042456753
+   year gdpPercap.lifeExp gdpPercap.pop  pop.lifeExp
+  (int)             (dbl)         (dbl)        (dbl)
+1  1952         0.2780236   -0.02526041 -0.002724782
+2  1957         0.3037445   -0.02807342  0.014492716
+3  1962         0.3832211   -0.03165089 -0.031299202
+4  1967         0.4801398   -0.03795448  0.032447402
+5  1972         0.4597014   -0.04367936  0.046951951
+6  1977         0.6198638   -0.05587981  0.042456753
 
 ~~~
 
@@ -117,39 +118,24 @@ This is interesting, but it's now in a form that's hard to give to ggplot. We ca
 
 ~~~{.r}
 library(tidyr)
-~~~
-
-
-
-~~~{.output}
-Error in library(tidyr): there is no package called 'tidyr'
-
-~~~
-
-
-
-~~~{.r}
 tidy.cors <- cors %>%
   gather(variables, correlation, gdpPercap.lifeExp, gdpPercap.pop, pop.lifeExp)
-~~~
-
-
-
-~~~{.output}
-Error in function_list[[k]](value): could not find function "gather"
-
-~~~
-
-
-
-~~~{.r}
 head(tidy.cors)
 ~~~
 
 
 
 ~~~{.output}
-Error in head(tidy.cors): object 'tidy.cors' not found
+Source: local data frame [6 x 3]
+
+   year         variables correlation
+  (int)             (chr)       (dbl)
+1  1952 gdpPercap.lifeExp   0.2780236
+2  1957 gdpPercap.lifeExp   0.3037445
+3  1962 gdpPercap.lifeExp   0.3832211
+4  1967 gdpPercap.lifeExp   0.4801398
+5  1972 gdpPercap.lifeExp   0.4597014
+6  1977 gdpPercap.lifeExp   0.6198638
 
 ~~~
 
@@ -162,12 +148,7 @@ ggplot(tidy.cors, aes(x = year, y = correlation, colour = variables)) +
   theme_bw()
 ~~~
 
-
-
-~~~{.output}
-Error in ggplot(tidy.cors, aes(x = year, y = correlation, colour = variables)): object 'tidy.cors' not found
-
-~~~
+<img src="fig/year-cors-1.png" title="plot of chunk year-cors" alt="plot of chunk year-cors" style="display: block; margin: auto;" />
 
 Just a few minutes with R, and we have learned that our data set contains a string and interesting relationship between GDP per capita and life expectancy.
 
