@@ -1,3 +1,5 @@
+old-lessons/
+cache/
 README.html
 LAYOUT.html
 FAQ.html
@@ -9,3 +11,4 @@ CONDUCT.html
 _site
 .DS_Store
 .Rproj.user
+.httr-oauth

@@ -1,0 +1,411 @@
+---
+layout: page
+title: R for reproducible scientific analysis
+subtitle: Introduction to R and RStudio
+minutes: 45
+---
+
+```{r setup, include=FALSE}
+source("tools/chunk-options.R")
+```
+
+> ## Learning objectives {.objectives}
+>
+> * To gain familiarity with the various panes in the RStudio IDE
+> * To gain familiarity with the buttons, short cuts and options in the Rstudio IDE
+> * To understand variables and how to assign to them
+> * To be able to use mathematical and comparison operations
+> * To be able to call functions
+> * To be able to manage your workspace in an interactive R session
+> * Understand errors and warnings
+> * To be able to seek help via `?` and Google
+>
+
+Welcome to the R portion of the workshop.
+
+In this lesson, you'll become familiar with the R langauge, the RStudio environment, and some best practices that will make your life easier and your science more reliable.
+
+#### Why R?
+
+R is a free, open-source programming language. It can do most things that any programming language can do, but it was designed for data analysis and statistics, which is why we teach it. It has a huge user-community and is highly extensible, with over 7,000 packages that build extra functionality at the official Comprehensive R Archive Network. For almost anything you want to do, there is an R package to help.
+
+#### Why RStudio?
+
+RStudio is an IDE (integrated development environment) which we use to manage and execute R code. It is also free and open-source, it works on all platforms (e.g. you can interface to Amazon Web Services using RStudio), and it integrates version control and project management.
+
+#### Why script?
+
+- Power
+- Flexibility
+- Editability: Error fixing, tweaks
+- Traceability: Return and know what was done
+- Reproducability: Cornerstone of science
+- Communication: No ambiguity
+    - Literate programming, `knitr`
+
+### Introduction to RStudio
+
+Open RStudio: 3 panels:
+
+- The interactive R console (entire left)
+- Workspace/History (tabbed in upper right)
+- Files/Plots/Packages/Help (tabbed in lower right)
+
+#### Workflow within Rstudio
+
+Console vs. script
+
+1. Console
+    - The R console is where all of your code gets run. This console in RStudio is the
+same as the one you would get if you just typed in `R` in your command line.
+    - When you start RStudio, you'll see a bunch of information, followed by 
+a ">" and a blinking cursor. This is a "Read, evaluate, print loop": you 
+type in commands, R executes them and returns a result.
+    - *Demo R-as-calculator in console*
+    - History is saved, but this is laborsome
+1. Script
+    - Preserve work in a plain-text file (with .R extension)
+    - *Create new R script*
+    - Fourth RStudio panel.
+    - Command/ctrl-enter to push current line
+    - Mixes interactivity and preservation
+    - Save just text and get same results
+    - Building preservable flow of operations
+    
+
+> #### Tip: Pushing to the interactive R console {.callout}
+> To run the current line click on the `Run` button just above the file pane. 
+> Or use the short cut which can be seen by hovering the mouse over the button.
+>
+> To run a block of code, select it and then `Run`. 
+>
+> Select-all and `Run` -- moving toward a model where we run whole script.
+
+### Introduction to R
+
+The simplest thing you could do with R is do arithmetic:
+
+```{r}
+1 + 100
+```
+
+And R will print out the answer, with a preceding "[1]". Don't worry about this
+for now, we'll explain that later. For now think of it as indicating ouput.
+
+If you type in an incomplete command, R will wait for you to
+complete it:
+
+~~~ {.r}
+> 1 -
+~~~
+
+~~~ {.output}
++
+~~~
+
+Any time you hit return and the R session shows a "+" instead of a ">", it
+means it's waiting for you to complete the command. If you want to cancel
+a command you can simply hit "Esc" and RStudio will give you back the ">"
+prompt.
+
+> #### Tip: Cancelling commands {.callout}
+>
+> If you're using R from the commandline instead of from within RStudio,
+> you need to use `Ctrl+C` instead of `Esc` to cancel the command. This
+> applies to Mac users as well!
+>
+> Cancelling a command isn't just useful for killing incomplete commands:
+> you can also use it to tell R to stop running code (for example if its
+> taking much longer than you expect), or to get rid of the code you're
+> currently writing.
+>
+
+Order of operations, same as in algebra class. From highest to lowest precedence:
+
+ * Parentheses: `(`, `)`
+ * Exponents: `^`
+ * Divide: `/`
+ * Multiply: `*`
+ * Add: `+`
+ * Subtract: `-`
+
+```{r}
+3 + 5 * 2
+```
+
+Use parentheses to group to force the order of evaluation, and/or to make
+code easier to read.
+
+```{r}
+(3 + 5) * 2
+```
+
+Speaking of being easy to read:
+- Whitespace is ignored by R. Use it consistently to make code readable.
+    - Spaces around operators
+- Comment liberally
+
+```{r, eval=FALSE}
+(3 + (5 * (2 ^ 2))) # hard to read
+3 + 5 * 2 ^ 2       # easier to read, once you know rules
+3+5*2^2             # very hard to read
+3 + 5 * (2 ^ 2)     # if you forget some rules, this might help
+```
+
+The text I've typed after each line of code is called a comment. Anything that
+follows the hash symbol `#` is ignored by R.
+
+Really small or large numbers get a scientific notation:
+
+```{r}
+2/10000
+```
+
+Which is shorthand for "multiplied by `10^XX`". So `2e-4`
+is shorthand for `2 * 10^(-4)`.
+
+You can write numbers in scientific notation too:
+
+```{r}
+5e3  # Note the lack of minus here
+```
+
+#### Mathematical functions
+
+R has many built in mathematical functions. To call a function,
+we simply type its name, follow by and open and closing parentheses.
+Anything we type inside those parentheses is called the function's
+arguments:
+
+```{r}
+sin(3.14159)  # trigonometry functions
+```
+
+```{r}
+log(3)  # natural logarithm
+```
+
+```{r}
+log10(100)  # base-10 logarithm
+```
+
+```{r}
+exp(0.5) # e^(1/2)
+```
+
+Don't need to remember function names. There are many ways to discover or rediscover them when you need them. We will discuss soon.
+
+#### Comparing things
+
+We can also do comparison in R:
+
+```{r}
+1 == 1  # equality (note two equals signs, read as "is equal to")
+```
+
+```{r}
+1 != 2  # inequality (read as "is not equal to")
+```
+
+```{r}
+1 <  2  # less than
+```
+
+```{r}
+1 <= 1  # less than or equal to
+```
+
+```{r}
+1 > 0  # greater than
+```
+
+```{r}
+1 >= -9 # greater than or equal to
+```
+
+
+#### Variables and assignment
+
+We can store values in variables using the assignment operator `<-` or equals sign `=`, like this:
+
+```{r}
+x <- 1/4
+```
+
+Notice that nothing was printed. Instead, we stored it for later
+in a **variable**, `x`. `x` now contains the **value** `0.25`:
+
+```{r}
+x
+```
+
+Look for the `Environment` tab in one of the panes of RStudio, and you will see that `x` and its value
+have appeared. Our variable `x` can be used in place of a number in any calculation that expects a number:
+
+```{r}
+x + 1
+```
+
+Notice also that variables can be reassigned:
+
+```{r}
+x <- 99
+```
+
+`x` used to contain the value 0.25 and and now it has the value 99.
+
+Assignment values can contain the variable being assigned to:
+
+```{r}
+x <- x + 1 
+```
+
+> #### MCQ -- Variable Assignment {.challenge}
+>
+> What does the following code print?
+> ```
+> a <- 1
+> b <- 2
+> c <- a + b
+> b <- 4
+> a <- b
+> c <- a
+> c 
+> ```
+>
+> a. a
+> b. 3
+> c. 4
+> d. ::nothing::
+
+
+#### Variable name conventions
+
+Variable names can contain letters, numbers, underscores and periods. They
+cannot start with a number nor contain spaces at all. Different people use
+different conventions for long variable names, these include
+
+  * periods.between.words
+  * underscores\_between_words
+  * camelCaseToSeparateWords
+
+What you use is up to you, but **be consistent**.
+
+##### Tab completion
+
+Use descriptive variable names, as they make your code easier to understand. It doesn't take any extra time because you can use tab-completion to avoid typing long names.
+
+*Demo tab completion*
+
+### Understanding functions & getting help
+
+#### R help files
+
+Once you figure out what function you want, you need to figure out how to use it. Every function has an associated helpfile. They can be hard to read, especially at first, but it is important to learn how to make sense of them.
+
+`?function` brings up helpfile. E.g.
+
+```{r getting help, eval = FALSE}
+?log
+```
+
+Each helpfile contains the following components.
+
+- Description: An extended description of what the function does.
+- Usage: The arguments of the function and their default values.
+- Arguments: An explanation of the data each argument is expecting.
+- Details: Any important details to be aware of.
+- Value: The data the function returns.
+- See Also: Any related functions you might find useful.
+- Examples: Some examples for how to use the function.
+
+
+#### Other ways to get help
+
+- `??` if you're not sure exactly what, e.g. `??base`
+- Google
+- Stack Overflow
+- [Cookbook for R](http://www.cookbook-r.com/)
+- [RStudio cheat sheets](http://www.rstudio.com/resources/cheatsheets/)
+
+
+#### Arguments to functions
+
+- Can be specified by order or by name
+- Before, when we entered `log(3)`, `log` knew `3` was `x` because it was in the first position, but we could have also told `log` explicitly that `3` is the value `x` should take. These are the same:
+
+```{r named-args}
+log(3)  
+log(x = 3)
+```
+
+- Some arguments have default values, e.g. `log`'s `base` defaults to `exp(1)`, *e*, unless you tell it otherwise. So these are identical:
+
+```{r arg-defaults}
+log(x = 3)
+log(x = 3, base = exp(1))
+```
+
+To get the base 10 logrithm of 3, you could do
+
+```{r changing-default-args}
+log(x = 3, base = 10)
+```
+
+If you provide a function with arguments by name, they can go in any order. Otherwise, they have to appear in the order specified by the function. These are all the same:
+
+```{r ordering-args}
+log(3, 10)
+log(x = 3, base = 10)
+log(base = 10, x = 3)
+```
+
+
+> #### MCQ -- Which of these things is not like the other ones? {.challenge}
+>
+> Three of the following lines produce the same result. Without running the code, which one will produce a different result than the others? The helpfile for `log` (`?log`) may be helpful.
+>
+> ```
+> a. log(x = 1000, base = 10)
+> b. log10(1000)
+> c. log(base = 10, x = 1000)
+> d. log(10, 1000)
+> ```
+
+
+### Errors and warnings
+
+```{r, eval = FALSE}
+aNegativeNumber <- -1
+log(aNegativeNumber)
+log(negativeNumber)
+```
+
+> #### Tip: Warnings vs. Errors {.callout}
+>
+> Pay attention when R does something unexpected! Errors, like above,
+> are thrown when R cannot proceed with a calculation. Warnings on the
+> other hand usually mean that the function has run, but it probably
+> hasn't worked as expected.
+>
+> In both cases, the message that R prints out usually give you clues
+> how to fix a problem.
+>
+
+
+
+
+> #### Challenge -- Assignment & Comparison {.challenge}
+>
+> What are the values of `mass` and `age` after each line of code?
+>
+> ```{r, eval=FALSE}
+> mass <- 40
+> age <- 100
+> mass <- mass * 2.2
+> age <- age - 10
+> ```
+>
+> Run the above four lines, and write a command to
+> compare mass to age. Is mass larger than age?
+>

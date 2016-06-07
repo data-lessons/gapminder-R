@@ -1,0 +1,70 @@
+---
+layout: page
+title: R for reproducible scientific analysis
+subtitle: data.frame
+minutes: 15
+---
+
+```{r, include=FALSE}
+source("tools/chunk-options.R")
+```
+
+
+> ## Learning objectives {.objectives}
+>
+> - Be able to read a csv file and store it to a variable
+> - Understand data.frame as foundational object
+> - Be able to ask questions about the structure of a data.frame and its component parts.
+>
+
+### Read a csv
+
+Data come in many forms, and we need to be able to load them in R. For our own use and with others who use R, there are R-specific data structures we can use, and we will see these later, but we need to be able to work with more general data types too. Comma-separated value (csv) tables are perhaps the most universal data structure. We can read csv's with the `read.csv` function:
+
+```{r, eval = FALSE}
+read.csv('path/to/csv_file.csv')
+```
+
+Note that:
+
+- `read.csv` is a function. That's how R works: everything is a function.
+- Argument to `read.csv` is the location of the csv file, relative to the working directory
+    - Point to the working directory above the console. Theirs should be the root of their project. 
+    - File name goes in quotes. Otherwise R will look for a variable called `path/to/csv_file.csv` and get confused when it hits the `/`
+    
+Let's read the gapminder data we downloaded in the previous lesson:
+
+```{r, eval = FALSE}
+read.csv('data/gapminder-FiveYearData.csv')
+```
+
+Whoa! What just happened? R executed the function and printed the result, just like when you enter `log(1)`. How do you store an object to a variable?
+
+```{r}
+gapminder <- read.csv('data/gapminder-FiveYearData.csv')
+```
+
+### Data frame basics
+
+Check the Environment tab -- gapminder has appeared. It is a `data.frame` with 1704 observations of 6 variables. *Click on it to show the data table format of a data.frame. Clarify variables versus observations.* 
+
+It's nice to not have to point and click, and we'd like to get more information about our `data.frame`. There are many ways; `head`, `str`, and `summary` are very useful. 
+
+```{r}
+head(gapminder)
+```
+
+`head` shows us a managable number of rows of what we saw in table form. 
+
+```{r}
+str(gapminder)
+```
+
+`str` tells us what type of variable each is. We'll get into the details of variable types later, but for now, note that we have four numerical variables (one, year, is integer), and two character variables, which R interprets as factors. Levels are the possible values a factor can take; here, we have 142 possible countries and five possible continents.
+
+> #### Challenge 1 {.challenge}
+>
+> There is another function like `head()` and `str()` that provides information on a `data.frame`: `summary()`  
+> - Call the `summary` function on the `gapminder` data.  
+> - What is the most recent year for which we have data?
+>

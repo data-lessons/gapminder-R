@@ -2,7 +2,7 @@
 layout: page
 title: R for reproducible scientific analysis
 subtitle: Project management with RStudio
-minutes: 30
+minutes: 20
 ---
 
 
@@ -10,7 +10,7 @@ minutes: 30
 > ## Learning objectives {.objectives}
 >
 > * To be able to create self-contained projects in RStudio
-> * To be able to use git from within RStudio
+> * Create workshop project and download gapminder data
 >
 
 ### Introduction
@@ -53,16 +53,16 @@ functionality. We'll be using this today to create a self-contained, reproducibl
 project.
 
 
-> #### Challenge: Creating a self-contained project {.challenge}
+> #### Challenge -- Creating a Project {.challenge}
 >
 > We're going to create a new project in RStudio:
 >
 > 1. Click the "File" menu button, then "New Project".
 > 2. Click "New Directory".
 > 3. Click "Empty Project".
-> 4. Type in the name of the directory to store your project, e.g. "my_project".
-> 5. Make sure that the checkbox for "Create a git repository" is selected.
-> 6. Click the "Create Project" button.
+> 4. Type a descriptive directory name: This is the title of yoru project, e.g. "DC_Workshop".
+> 5. Store the new directory in a sensable place in your computer's organizational scheme.
+> 6. Click "Create Project".
 >
 
 Now when we start R in this project directory, or open this project with RStudio,
@@ -73,21 +73,13 @@ all of our work on this project will be entirely self-contained in this director
 Although there is no "best" way to lay out a project, there are some general
 principles to adhere to that will make project management easier:
 
-#### Treat data as read only
+#### Treat raw data as read only
 
 This is probably the most important goal of setting up a project. Data is
 typically time consuming and/or expensive to collect. Working with them
 interactively (e.g., in Excel) where they can be modified means you are never
 sure of where the data came from, or how it has been modified since collection.
 It is therefore a good idea to treat your data as "read-only".
-
-#### Data Cleaning
-
-In many cases your data will be "dirty": it will need significant preprocessing
-to get into a format R (or any other programming language) will find useful. This
-task is sometimes called "data munging". I find it useful to store these scripts
-in a separate folder, and create a second "read-only" data folder to hold the
-"cleaned" data sets.
 
 #### Treat generated output as disposable
 
@@ -99,29 +91,6 @@ have an output folder with different sub-directories for each separate
 analysis. This makes it easier later, as many of my analyses are exploratory
 and don't end up being used in the final project, and some of the analyses
 get shared between projects.
-
-> #### Tip: ProjectTemplate - a possible solution {.callout}
->
-> One way to automate the management of projects is to install the third-party package, `ProjectTemplate`.
-> This package will set up an ideal directory structure for project management.
-> This is very useful as it enables you to have your analysis pipeline/workflow organised and structured.
-> Together with the default RStudio project functionality and Git you will be able to keep track of your
-> work as well as be able to share your work with collaborators.
->
-> 1. Install `ProjectTemplate`.
-> 2. Load the library
-> 3. Initialise the project:
->
-> 
-> ~~~{.r}
-> install.packages("ProjectTemplate")
-> library(ProjectTemplate)
-> create.project("../my_project", merge.strategy = "allow.non.conflict")
-> ~~~
->
-> For more information on ProjectTemplate and its functionality visit the
-> home page [ProjectTemplate](http://projecttemplate.net/index.html)
->
 
 #### Separate function definition and application
 
@@ -137,59 +106,27 @@ own functions. It's a good idea to separate these into separate folders; one
 to store useful functions that you'll reuse across analyses and projects, and
 one to store the analysis scripts.
 
-> #### Tip: avoiding duplication {.callout}
->
-> You may find yourself using data or analysis scripts across several projects.
-> Typically you want to avoid duplication to save space and avoid having to
-> make updates to code in multiple places.
->
-> In this case I find it useful to make "symbolic links", which are essentially
-> shortcuts to files somewhere else on a filesystem. On Linux and OS X you can
-> use the `ln -s` command, and on windows you can either create a shortcut or
-> use the `mklink` command from the windows terminal.
->
+#### A possible organization scheme
 
-### Save the data in the data directory
+- data
+- code
+- results
+- papers
 
-Now we have a good directory structure we will now place/save the data file in the `data/` directory.
 
-> #### Challenge 1 {.challenge}
-> Download the gapminder data from [here](https://github.com/resbaz/r-novice-gapminder-files).
->
-> 1. Use the `Download ZIP` located on the right hand side menu, last option. To download the `.zip` file to
-> your downloads folder.
-> 2. Unzip the file.
-> 3. Create a data directory within your project
-> 4. Move the file to the `data/` within your project.
->
-> We will load and inspect these data later.
+### Download gapminder data to the data directory
 
-#### Version Control
+Now we will create a good directory structure and save the data file in the `data/` directory.
 
-We also set up our project to integrate with git, putting it under version control.
-RStudio has a nicer interface to git than shell, but is very limited in what it can
-do, so you will find yourself occasionally needing to use the shell. Let's go
-through and make an initial commit of our template files.
+> #### Challenge -- Project Organization {.challenge}
+>
+> 1. In your project directory, either using the Project tab of RStudio or your OS' file system, create the following directories:
+> - data
+> - code
+> - results
+> - papers
+> 1. Files with the .RDA extension are R-Data files. Right-click on [this link](https://github.com/michaellevy/gapminder-R/raw/gh-pages/data/continents.RDA) to "save file as ..."
+> 1. Save the `continents.RDA` file to the `data/` directory in your project
+>
+> We will load and inspect this dataset next.
 
-The workspace/history pane has a tab for "Git". We can stage each file by checking the box:
-you will see a Green "A" next to stage files and folders, and yellow question marks next to
-files or folders git doesn't know about yet. RStudio also nicely shows you the difference
-between files from different commits.
-
-> #### Tip: versioning disposable output {.callout}
->
-> Generally you do not want to version disposable output (or read-only data).
-> You should modify the `.gitignore` file to tell git to ignore these files
-> and directories.
->
-
-> #### Challenge 2 {.challenge}
->
-> 1. Create a directory within your project called `graphs`.
-> 2. Modify the `.gitignore` file to contain `graphs/`
-> so that this disposable output isn't versioned.
->
-> Add the newly created folders to version control using
-> the git interface.
->
->
