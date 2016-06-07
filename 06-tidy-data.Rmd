@@ -1,0 +1,142 @@
+---
+layout: page
+title: R for reproducible scientific analysis
+subtitle: Managing & Manipulating Data
+minutes: 20
+---
+
+```{r, include=FALSE}
+source("tools/chunk-options.R")
+opts_chunk$set(warning = FALSE, message = FALSE)
+# Silently load in the data so the rest of the lesson works
+gapminder <- read.csv("data/gapminder-FiveYearData.csv", header=TRUE)
+```
+
+> ## Learning objectives {.objectives}
+>
+> - Understand what it means for data to be tidy
+>     - Each variable forms a column.
+>     - Each observation forms a row.
+>     - Each type of observational unit forms a table.
+> - Be able to use `tidyr::gather` to make "wide" data "long"
+> - By able to use `dplyr`'s join functions to merge tables
+>
+
+### Tidy data
+
+Data can be organized many ways. While there may be times that call for other organizational schemes, in general it is best to organize data thus:
+
+1. Each variable forms a column
+1. Each observation forms a row
+1. Each observational type forms a table
+
+What exactly constitutes a variable can be difficult to define out of context, but as a general rule, if observations are measured in the same units, they should be in different columns, and if they are measured in the same units, there is a good chance they should be in the same column.
+
+An example will clarify. [Here is a dummy dataset](https://github.com/michaellevy/gapminder-R/raw/gh-pages/data/wide_eg.csv). Is this data in tidy format? Why not -- which of the three principles does it not satisfy?
+
+```{r}
+eg <- read.csv('data/wide_eg.csv')
+eg
+```
+
+It looks like we've got four individuals, each subjected to three conditions -- a control and two treatments. Each observation here is a person in a treatment (we don't know what the measured value is), so each row should be defined by a person-treatment; that is, we should have 12 rows with four columns: subject, sex, condition, and the measured value. 
+
+#### `gather()` 
+
+We can transform the data to that form with the `gather` function from the `tidyr` package. Of course, if you haven't yet installed `tidyr`, you'll need to do that using `install.packages(tidyr)`, and we need to load it.
+
+Arguments to `gather` include the data.frame you're gathering, which columns to gather, and names for two columns in the new data.frame: the key and the value. The key will consist of the old names of gathered columns, and the value will consist of the entries in those columns. The order of arguments is data.frame, key, value, columns-to-gather:
+
+```{r tidyr}
+library(tidyr)
+gather(eg, condition, value, control, treatment1, treatment2)
+```
+
+You can also tell `gather` which columns not to gather -- these are the "ID variables".
+
+```{r tidyr 2}
+gather(eg, condition, value, -subject, -sex)
+```
+
+
+
+> #### Challenge -- Gather and plot {.challenge}
+>
+> The following code produces a data.frame with the annual relative standard deviation of income among countries, both by per-capita income and country-total income. Run the code. Is the resulting dataset in tidy form? 
+> 
+> ```
+> gapminder %>%
+>     mutate(gdpCountry = gdpPercap * pop) %>%
+>     group_by(year) %>%
+>     summarize(RSD_individual = sd(gdpPercap) / mean(gdpPercap),
+>               RSD_country = sd(gdpCountry) / mean(gdpCountry))
+> ```
+>
+> You could argue that it is or is not in tidy form, but go ahead and `gather` it so that each measurement of RSD is on its own row.
+> 
+> Then, make a line plot with two lines, one for each measure of relative variance in income, by year. To make the plot black-and-white-printer friendly, distinguish the lines using the `linetype` **aes**thetic.
+>
+
+### Joins
+
+The third tidy data maxim states that each observation type gets its own table. This will be familiar to anyone who has worked with a relational database but may seem foreign to those who have not. 
+
+The idea is this: Suppose we conduct a behavioral experiment that puts individuals in groups and measure individual- and group-level variables. We should have a table for the individual-level variables and a separate table for the group-level variables. Then, should we need to merge them, we can do so using the `join` functions of `dplyr`. 
+
+The join functions are nicely illustrated in RStudio's [Data wrangling cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf). Each function takes two data.frames and, optionally, the name(s) of columns on which to match. If no column names are provided, the functions match on all shared column names.
+
+![dplyr joins, via RStudio](fig/dplyr-joins.png)
+
+We will practice on our continents data.frame from module 2 and the gapminder data.frame. Note that these are tidy data: We have observations at the level of continent and at the level of country, so they go in different tables. The continent column in the gapminder data.frame allows us to link them now. If it isn't in your Environment, load it and remember what it consists of:
+
+```{r}
+load('data/continents.RDA')
+continents
+```
+
+We can join the two data.frames using any of the `dplyr` functions. 
+
+```{r}
+library(dplyr)
+left_join(gapminder, continents) %>%
+    str()
+
+right_join(gapminder, continents) %>% 
+    str()
+```
+
+These operations produce slightly different results, either 1704 or 1705 observations. Can you figure out why? Antarctica contains no countries so doesn't appear in the gapminder data.frame. When we use `left_join` it gets filtered from the results, but when we use `right_join` it appears, with missing values for all of the country-level variables:
+
+```{r}
+right_join(gapminder, continents) %>% 
+    filter(continent == "Antarctica")
+```
+
+> #### Challenge -- Putting the pieces together {.challenge}
+> 
+> A colleague suggests that the more land area an individual has, the greater their income will be and that this relationship will be observable at any scale of observation. You chuckle and mutter "Not at the continental scale," but your colleague insists. Test your colleague's hypothesis by:
+> 
+> - Calculating the total GDP of each continent, 
+> - Joining the resulting data.frame to the `continents` data.frame, 
+> - Calculating the per-capita GDP for each continent, and 
+> - Plotting per-capita income versus population density. 
+>
+
+## Challenge solutions
+
+> #### Solution to Challenge -- Putting the pieces together {.challenge}
+>
+>
+> ```{r, Putting the pieces together - solution}
+> library(ggplot2)
+> 
+> mutate(gapminder, GDP = gdpPercap * pop) %>%  # Calculate country-level GDP
+>     group_by(continent) %>%  # Group by continent
+>     summarize(cont_income = sum(GDP)) %>%  # Calculate continent-level GDP
+>     left_join(continents) %>%  # Join the continent-GDP data.frame to the continents data.frame
+>     mutate(per_cap = cont_income / population) %>%  # Calculate continent-level per-capita GDP
+>     ggplot(aes(x = area_km2, y = per_cap)) +  # Plot income versus land area
+>     geom_point() +  # Draw points
+>     geom_text(aes(label = continent), nudge_y = 5e3)  # And label them
+> ```
+>
