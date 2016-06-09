@@ -1,11 +1,11 @@
 R for Reproducible Scientific Analysis 
 ======================================
 
-Modifications of Software Carpentry r-novice-gapminder [https://github.com/swcarpentry/r-novice-gapminder](https://github.com/swcarpentry/r-novice-gapminder) for [a pilot Data Carpentry workshop for Social Scientists](michaellevy.name/2016-06-16-ucdavis/)
+Modifications of Software Carpentry [r-novice-gapminder](https://github.com/swcarpentry/r-novice-gapminder) for a pilot Data Carpentry [workshop for Social Scientists](michaellevy.name/2016-06-16-ucdavis/)
 
 ### Introduction to R for non-programmers using gapminder data
 
-The goal of this lesson is to introduce novice programmers to R tools and syntax, as well as best practices in data management and analysis. The emphasis of these materials is to give attendees a strong motivation to continue learning R, to introduce some of the most commonly used packages in basic data manipulation and analysis, and to teach best practices for scientific computing: breaking down analyses into modular units, task automation, and encapsulation.
+The goal of this lesson is to introduce novice programmers to R tools and syntax, as well as best practices in data management and analysis. The emphasis of these materials is to give attendees a strong motivation to continue learning R, to introduce some common, powerful packages for data manipulation and analysis, and to teach best practices for scientific computing.
 
 Note that this workshop focuses on teaching the fundamentals of the programming language R, and while it introduces statistical functions, does not teach statistical analysis.
 
