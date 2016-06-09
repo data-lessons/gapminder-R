@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: R for reproducible scientific analysis</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="css/swc.css" />
+    <link rel="alternate" type="application/rss+xml" title="Software Carpentry Blog" href="http://software-carpentry.org/feed.xml"/>
+    <meta charset="UTF-8" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body class="lesson">
+    <div class="container card">
+      <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
+      </div>
+      <article>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+                    <a href="index.html"><h1 class="title">R for reproducible scientific analysis</h1></a>
+          <h2 class="subtitle">Statistical Models</h2>
+          <section class="objectives panel panel-warning">
+<div class="panel-heading">
+<h2 id="learning-objectives"><span class="glyphicon glyphicon-certificate"></span>Learning Objectives</h2>
+</div>
+<div class="panel-body">
+<ul>
+<li>Understand how to execute and interpret basic statistical models.</li>
+</ul>
+</div>
+</section>
+<h3 id="linear-models">Linear models</h3>
+<p>This workshop can’t and won’t teach you statistical modeling, but here is the syntax you need to know to use R’s basic statistical modeling infrastructure.</p>
+<p><code>lm</code> is the function for a linear model. <code>lm</code> expects a formula as its first argument. Formulas in R are specified with a tilde separating the left and right hand sides: <code>DV ~ IV1 + IV2 + ...</code>. The second argument to <code>lm</code> is the name of the data.frame in which the variables are to be found. For example, to model life expectancy as a function of income:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(lifeExp ~<span class="st"> </span>gdpPercap, gapminder)</code></pre></div>
+<pre class="output"><code>
+Call:
+lm(formula = lifeExp ~ gdpPercap, data = gapminder)
+
+Coefficients:
+(Intercept)    gdpPercap  
+  5.396e+01    7.649e-04  
+</code></pre>
+<p>We can include additional predictors by separating them with a <code>+</code>. Now we will assign the results of the model to a variable called <code>model</code> and then get a more detailed description of the results by calling the <code>summary</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model &lt;-<span class="st"> </span><span class="kw">lm</span>(lifeExp ~<span class="st"> </span>gdpPercap +<span class="st"> </span>year, gapminder)
+<span class="kw">summary</span>(model)</code></pre></div>
+<pre class="output"><code>
+Call:
+lm(formula = lifeExp ~ gdpPercap + year, data = gapminder)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-67.262  -6.954   1.219   7.759  19.553 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -4.184e+02  2.762e+01  -15.15   &lt;2e-16 ***
+gdpPercap    6.697e-04  2.447e-05   27.37   &lt;2e-16 ***
+year         2.390e-01  1.397e-02   17.11   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 9.694 on 1701 degrees of freedom
+Multiple R-squared:  0.4375,    Adjusted R-squared:  0.4368 
+F-statistic: 661.4 on 2 and 1701 DF,  p-value: &lt; 2.2e-16
+</code></pre>
+<p>Notice that the same <code>summary</code> function gives summary information of a different type depending on whether its argument is a data.frame, a linear model, or something else. That’s handy.</p>
+<p>We can specify interaction effects by separating variables with <code>*</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model2 &lt;-<span class="st"> </span><span class="kw">lm</span>(lifeExp ~<span class="st"> </span>gdpPercap *<span class="st"> </span>continent, gapminder)
+<span class="kw">summary</span>(model2)</code></pre></div>
+<pre class="output"><code>
+Call:
+lm(formula = lifeExp ~ gdpPercap * continent, data = gapminder)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-36.928  -4.312   0.308   5.042  21.202 
+
+Coefficients:
+                              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)                 45.8442668  0.4127085 111.081  &lt; 2e-16 ***
+gdpPercap                    0.0013771  0.0001154  11.937  &lt; 2e-16 ***
+continentAmericas           12.9933944  0.8169417  15.905  &lt; 2e-16 ***
+continentAsia               11.6704021  0.6252438  18.665  &lt; 2e-16 ***
+continentEurope             19.4982172  0.8924238  21.849  &lt; 2e-16 ***
+continentOceania            17.8506916  5.2591340   3.394 0.000704 ***
+gdpPercap:continentAmericas -0.0005614  0.0001369  -4.102 4.29e-05 ***
+gdpPercap:continentAsia     -0.0010544  0.0001190  -8.860  &lt; 2e-16 ***
+gdpPercap:continentEurope   -0.0009237  0.0001242  -7.438 1.61e-13 ***
+gdpPercap:continentOceania  -0.0008062  0.0002909  -2.772 0.005639 ** 
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 8.143 on 1694 degrees of freedom
+Multiple R-squared:  0.6047,    Adjusted R-squared:  0.6026 
+F-statistic: 287.9 on 9 and 1694 DF,  p-value: &lt; 2.2e-16
+</code></pre>
+<h3 id="glm-and-beyond">glm and beyond</h3>
+<p>Finally, the specification of generalized linear models such as logistic or Poisson regressions is very similar via the <code>glm</code> command. See <code>?glm</code> and the web for help. Beyond glm’s, the statistical capabilities of R are extensive. A Google search for whatever you are interested in will get you started.</p>
+<section class="challenge panel panel-success">
+<div class="panel-heading">
+<h2 id="challenge---a-plot-and-a-model"><span class="glyphicon glyphicon-pencil"></span>Challenge - A plot and a model</h2>
+</div>
+<div class="panel-body">
+<ul>
+<li>Make a scatterplot of gdpPercap versus year.</li>
+<li>Add a smoother and specify <code>method = lm</code> to get a linear fit.</li>
+<li>Run a linear regression of gpdPercap on year.</li>
+<li>Do your plot and model point to the same conclusions? Which do you find easier to interpret?</li>
+</ul>
+</div>
+</section>
+        </div>
+      </div>
+      </article>
+      <div class="footer">
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/swcarpentry/lesson-template">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
+        <a class="label swc-blue-bg" href="LICENSE.html">License</a>
+      </div>
+    </div>
+    <!-- Javascript placed at the end of the document so the pages load faster -->
+    <script src="http://software-carpentry.org/v5/js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/bootstrap-js/bootstrap.js"></script>
+  </body>
+</html>

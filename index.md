@@ -10,8 +10,7 @@ scripts to manage data, conduct analyses, produce visualizations, and
 write up the results in a reproducible manner. The lessons take
 seriously the idea that motivation comes before detailed understanding, so
 some details are omitted for the sake of introducing more, and more-powerful
-tools, including ggplot, dplyr, tidyr, and knitr. Note that this workshop 
-focuses on data management and analysis but does not teach statistical analysis.
+tools, including ggplot, dplyr, tidyr, and knitr.
 
 A variety of third party packages are used throughout this workshop. These
 are not necessarily the best, nor are they comprehensive, but they are 
@@ -33,4 +32,5 @@ usability.
 6.  [Tidy Data & Joins](06-tidy-data.html)
 7.  [Functions](07-functions.html)
 8.  [Dynamic Documents](08-knitr.html)
-9.  Capstone
+9.  [Statistical Modeling](09-regression.html)
+10. [Capstone Project](10-capstone.html)

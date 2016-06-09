@@ -137,13 +137,7 @@ continents</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</code></pre></div>
 <pre class="output"><code>[1] 1 2 3
 </code></pre>
-<p>We could assign that vector to a new variable, like this:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">firstThree &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</code></pre></div>
-<p>And then we can get the first three elements in <code>pop</code> like this:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop[firstThree]</code></pre></div>
-<pre class="output"><code>[1] 1022234000  934611000       4490
-</code></pre>
-<p>We didn’t have to store 1-2-3 to a new variable, we could use that vector to subset directly, but it often makes things easier to think about to store intermediate variables, especially as things get more complex.</p>
+<p>Then we can get the first three elements in <code>pop</code> like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)]</code></pre></div>
 <pre class="output"><code>[1] 1022234000  934611000       4490
 </code></pre>
@@ -199,6 +193,15 @@ continents</code></pre></div>
 <pre class="output"><code>   continent area_km2 population percent_total_pop  pop_density
 3 Antarctica 13720000       4490               0.0 0.0003272595
 6    Oceania  9008500   29127000               0.4 3.2332796803
+</code></pre>
+<h4 id="two-ways-to-subset">Two ways to subset</h4>
+<p>To be really clear, there are two similar ways to subset in R. Both use square-brackets. In one, you provide the indices of the elements you want:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents$continent[<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>)]</code></pre></div>
+<pre class="output"><code>[1] &quot;Americas&quot; &quot;Asia&quot;     &quot;Oceania&quot; 
+</code></pre>
+<p>In the other, you provide TRUE or FALSE for each element, TRUE if you want it, FALSE if you don’t.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents$continent[<span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>, <span class="ot">TRUE</span>)]</code></pre></div>
+<pre class="output"><code>[1] &quot;Americas&quot; &quot;Asia&quot;     &quot;Oceania&quot; 
 </code></pre>
 <section class="challenge panel panel-success">
 <div class="panel-heading">

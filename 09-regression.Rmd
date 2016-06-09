@@ -1,0 +1,56 @@
+---
+layout: page
+title: R for reproducible scientific analysis
+subtitle: Statistical Models
+minutes: 30
+---
+
+```{r setup, include = FALSE}
+source("tools/chunk-options.R")
+gapminder <- read.csv('data/gapminder-FiveYearData.csv')
+```
+
+> ## Learning Objectives {.objectives}
+>
+> * Understand how to execute and interpret basic statistical models. 
+> 
+
+### Linear models
+
+This workshop can't and won't teach you statistical modeling, but here is the syntax you need to know to use R's basic statistical modeling infrastructure.
+
+`lm` is the function for a linear model. `lm` expects a formula as its first argument. Formulas in R are specified with a tilde separating the left and right hand sides: `DV ~ IV1 + IV2 + ...`. The second argument to `lm` is the name of the data.frame in which the variables are to be found. For example, to model life expectancy as a function of income:
+
+```{r}
+lm(lifeExp ~ gdpPercap, gapminder)
+```
+
+We can include additional predictors by separating them with a `+`. Now we will assign the results of the model to a variable called `model` and then get a more detailed description of the results by calling the `summary` function.
+
+```{r}
+model <- lm(lifeExp ~ gdpPercap + year, gapminder)
+summary(model)
+```
+
+Notice that the same `summary` function gives summary information of a different type depending on whether its argument is a data.frame, a linear model, or something else. That's handy.
+
+We can specify interaction effects by separating variables with `*`:
+
+```{r}
+model2 <- lm(lifeExp ~ gdpPercap * continent, gapminder)
+summary(model2)
+```
+
+### glm and beyond
+
+Finally, the specification of generalized linear models such as logistic or Poisson regressions is very similar via the `glm` command. See `?glm` and the web for help. Beyond glm's, the statistical capabilities of R are extensive. A Google search for whatever you are interested in will get you started.
+
+
+
+> ## Challenge - A plot and a model {.challenge}
+>
+> - Make a scatterplot of gdpPercap versus year.
+> - Add a smoother and specify `method = lm` to get a linear fit.
+> - Run a linear regression of gpdPercap on year.
+> - Do your plot and model point to the same conclusions? Which do you find easier to interpret?
+>

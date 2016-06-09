@@ -195,12 +195,13 @@ gapminder %>%
 
 Note that `summarize` eliminates any other columns. Why? What else can it do? E.g. What country should it list for the year 1952!?
 
-You can also do multiple groupings. Suppose we want the average life expectancy in each continent for each year. We group by continent and year:
+We often want to calculate the number of entries within a group. E.g. we might wonder if our dataset is balanced by country. We can do this with the `n()` function, or `dplyr` provides a `count` function as a convenience:
 
-```{r multiple groups}
+```{r count}
 gapminder %>%
-    group_by(continent, year) %>%
-    summarize(mean_income = mean(gdpPercap))
+    group_by(country) %>%
+    summarize(number_entries = n())
+count(gapminder, country)
 ```
 
 The highly observant will notice the output of this looks a little different than most of our data.frames -- why didn't it print out all 60 rows, and what's with that header info at the top? `dplyr` converted the data.frame to a table-data.frame, or `tbl_df` object. The most salient difference between them is that `tbl_df`s never print more than a few rows, which can be nice. If you like this behavior, you can convert any data.frame to a tbl_df like so. Now it prints nicely, so we don't need to use `head`.
@@ -209,6 +210,32 @@ The highly observant will notice the output of this looks a little different tha
 gapminder <- tbl_df(gapminder)
 gapminder
 ```
+
+We can also do multiple groupings. Suppose we want the maximum life expectancy in each continent for each year. We group by continent and year and calculate the maximum with the `max` function:
+
+```{r multiple groups}
+gapminder %>%
+    group_by(continent, year) %>%
+    summarize(longest_life = max(lifeExp))
+```
+
+Hmm, we got the longest life expectancy for each continent-year, but we didn't get the country. To get the country, we have to ask R "Where lifeExp is at a maximum, what is the entry in country?" For that we use the `which.max` function. `max` returns the maximum value; `which.max` returns the location of the maximum value.
+
+```{r which.max}
+max(c(1, 7, 4))
+which.max(c(1, 7, 4))
+```
+
+Now, back to the question: Where lifeExp is at a maximum, what is the entry in country? 
+
+```{r which.max lifeExp}
+gapminder %>%
+    group_by(continent, year) %>%
+    summarize(longest_life = max(lifeExp), country = country[which.max(lifeExp)])
+```
+
+
+
 
 > #### Challenge -- Part 1 {.challenge}
 >

@@ -245,28 +245,7 @@ c(1, 2, 3)
 
 ~~~
 
-We could assign that vector to a new variable, like this:
-
-
-~~~{.r}
-firstThree <- c(1, 2, 3)
-~~~
-
-And then we can get the first three elements in `pop` like this:
-
-
-~~~{.r}
-pop[firstThree]
-~~~
-
-
-
-~~~{.output}
-[1] 1022234000  934611000       4490
-
-~~~
-
-We didn't have to store 1-2-3 to a new variable, we could use that vector to subset directly, but it often makes things easier to think about to store intermediate variables, especially as things get more complex.
+Then we can get the first three elements in `pop` like this:
 
 
 ~~~{.r}
@@ -307,6 +286,8 @@ pop[100]
 [1] NA
 
 ~~~
+
+
 
 
 #### Subsetting data.frames
@@ -418,6 +399,38 @@ continents[continents$pop_density < 10, ]
 6    Oceania  9008500   29127000               0.4 3.2332796803
 
 ~~~
+
+#### Two ways to subset
+
+To be really clear, there are two similar ways to subset in R. Both use square-brackets. In one, you provide the indices of the elements you want:
+
+
+~~~{.r}
+continents$continent[c(2, 4, 6)]
+~~~
+
+
+
+~~~{.output}
+[1] "Americas" "Asia"     "Oceania" 
+
+~~~
+
+In the other, you provide TRUE or FALSE for each element, TRUE if you want it, FALSE if you don't.
+
+
+~~~{.r}
+continents$continent[c(FALSE, TRUE, FALSE, TRUE, FALSE, TRUE)]
+~~~
+
+
+
+~~~{.output}
+[1] "Americas" "Asia"     "Oceania" 
+
+~~~
+
+
 
 > #### MCQ -- Subset and vectorize {.challenge}
 >
