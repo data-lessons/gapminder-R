@@ -1,7 +1,7 @@
 ---
 layout: page
 title: R for reproducible scientific analysis
-subtitle: Managing & Manipulating Data
+subtitle: Tidy Data & Joins
 minutes: 20
 ---
 

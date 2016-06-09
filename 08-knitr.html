@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: R for reproducible scientific analysis</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="css/swc.css" />
+    <link rel="alternate" type="application/rss+xml" title="Software Carpentry Blog" href="http://software-carpentry.org/feed.xml"/>
+    <meta charset="UTF-8" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body class="lesson">
+    <div class="container card">
+      <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
+      </div>
+      <article>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+                    <a href="index.html"><h1 class="title">R for reproducible scientific analysis</h1></a>
+          <h2 class="subtitle">Dynamic reports with knitr</h2>
+          <section class="objectives panel panel-warning">
+<div class="panel-heading">
+<h2 id="learning-objectives"><span class="glyphicon glyphicon-certificate"></span>Learning Objectives</h2>
+</div>
+<div class="panel-body">
+<ul>
+<li>Understand the value of <code>knitr</code>: Generate dynamic documents that include text, code, and results.</li>
+<li>Control basic formatting using markdown syntax.</li>
+<li>Be able to create, edit, and compile an .Rmd document including code chunks and inline code.</li>
+</ul>
+</div>
+</section>
+<h3 id="the-what-and-why-of-rmarkdown">The What and Why of RMarkdown</h3>
+<p>Rmarkdown is a way to keep our notes, code, and results organized in a single document. It is a great tool for “literate programming” – the idea that your code should be readable by humans as well as computers. It keeps your writing and results together, so if you collect some new data or change how you clean the data, you just have to re-compile the document and you’re up to date.</p>
+<p>RMarkdown uses a simple syntax, which is then converted by the R package <code>knitr</code> and the utility pandoc, to html, pdf (if you have LaTeX on your machine), or Word files. You can write websites in RMarkdown, articles that conform to publishing standards, CVs, presentations… People have even written dissertations in RMarkdown. The syntax of the language is designed to be super simple, but you still get high quality output.</p>
+<h3 id="organization-of-an-rmarkdown-document">Organization of an Rmarkdown document</h3>
+<p>To get started, install the <code>knitr</code> package and create a new RMarkdown document.</p>
+<section class="challenge panel panel-success">
+<div class="panel-heading">
+<h2 id="challenge---create-and-render-an-rmarkdown-document"><span class="glyphicon glyphicon-pencil"></span>Challenge - Create and render an Rmarkdown document</h2>
+</div>
+<div class="panel-body">
+<ul>
+<li>Install <code>knitr</code> via <code>install.packages(&quot;knitr&quot;)</code></li>
+<li>Click on File -&gt; New File, and select the “R Markdown…” option.</li>
+<li>Accept the default options in the dialog box that follows.</li>
+<li>Save the file as <code>firstRMarkdown.Rmd</code> in the <code>papers</code> directory of your project.</li>
+<li>Click on the “Knit HTML” button at the top of the script (or press ctrl-shift-k/cmd-shift-k) and compare the output to the source.</li>
+</ul>
+</div>
+</section>
+<p>The top of the source (.Rmd) file has some header material in YAML format (enclosed by triple dashes). Some of this gets displayed in the output header, other of it provides formatting information to the conversion engine. This is the only required part of an RMarkdown document.</p>
+<p>After the header, there is a mix of plain-text, formatted with markdown syntax, and R-code chunks.</p>
+<h4 id="markdown-syntax">Markdown syntax</h4>
+<p>This page – <a href="http://rmarkdown.rstudio.com/authoring_basics.html" class="uri">http://rmarkdown.rstudio.com/authoring_basics.html</a> – covers the basics of formatting text in RMarkdown. You can create section headers and sub-headers with <code>#</code>, <code>##</code>, etc. Emphasis is achieved by surrounding text with one or two astericks: *italics* and **bold**. Lists via <code>-</code> and numbered lists using <code>1.</code>, <code>2.</code>, etc. Even creating a table is simple.</p>
+<p>Markdown also supports LaTeX equation editing. We can display pretty equations by enclosing them in <code>$</code>. E.g. <code>$\alpha = \dfrac{1}{(1 - \beta)^2}$</code> renders as: <span class="math inline">$\alpha = \dfrac{1}{(1 - \beta)^2}$</span>.</p>
+<h4 id="code-chunks">Code chunks</h4>
+<p>To distinguish R code from text, RMarkdown uses three back-ticks followed by <code>{r}</code> to distinguish a “code chunk”. In RStudio, the keyboard shortcut to create a code chunk is command-option-i or control-alt-i. You can set options for how that code chunk renders after the <code>r</code>. For example, <code>echo = FALSE</code> will prevent the code from being displayed, but its output will still be rendered. <code>fig.height = 8</code> will make plots generated in that code chunk 8 inches in height. You can set the options for the entire document by including this in a code chunk in your document: <code>opts_chunk$set( ... )</code>. Check out the full suite of code-chunk options at <a href="http://yihui.name/knitr/options/">Yihui’s (the author of <code>knitr</code>) website</a>.</p>
+<p>A code chunk will set off the code and its results in the output document, but you can also print the results of code within a text block by enclosing code like so: <code>`r code-here`</code>. For example, this:</p>
+<p><code>There were `r length(unique(gapminder$country))` countries in the dataset with a mean per-capita income of $`r round(mean(gapminder$gdpPercap), 1)`.</code></p>
+<p>Renders to:</p>
+<p>There were 142 countries in the dataset with a mean per-capita income of $7215.33.</p>
+<h4 id="rmarkdown-documents-are-self-contained">RMarkdown documents are self-contained</h4>
+<p>Any data or package you use in an RMarkdown document must be loaded in that document. <code>knitr</code> will not look in the Environment for data or functions. It is sometimes useful to include a code-chunk at the beginning of your document where you load data and packages and perhaps set <code>knitr</code> options for the whole document. You may or may not want to include this code in the output. If not, you can give it the option <code>include = FALSE</code>.</p>
+<section class="challenge panel panel-success">
+<div class="panel-heading">
+<h2 id="challenge---use-knitr-to-produce-a-report"><span class="glyphicon glyphicon-pencil"></span>Challenge - Use knitr to produce a report</h2>
+</div>
+<div class="panel-body">
+<ol style="list-style-type: decimal">
+<li>Open an new .Rmd script and save it as life_expectancy.Rmd</li>
+<li>Create a plot of life_expectancy versus year. Start simple, when you’re finished with the rest of this challenge, return to this to improve it.</li>
+<li>Add a few notes describing what the code does and what the main findings are. Include an in-line calculation of the global average life expectancy over the whole dataset.</li>
+<li><code>knit</code> the document and view the html result.</li>
+</ol>
+</div>
+</section>
+        </div>
+      </div>
+      </article>
+      <div class="footer">
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/swcarpentry/lesson-template">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
+        <a class="label swc-blue-bg" href="LICENSE.html">License</a>
+      </div>
+    </div>
+    <!-- Javascript placed at the end of the document so the pages load faster -->
+    <script src="http://software-carpentry.org/v5/js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/bootstrap-js/bootstrap.js"></script>
+  </body>
+</html>

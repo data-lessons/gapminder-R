@@ -432,6 +432,76 @@ continents[continents$pop_density < 10, ]
 > d. 100
 >
 
+### Checking data.type
+
+You can ask R what kind of data is assigned to a variable name with the `class` function:
+
+
+~~~{.r}
+class(continents)
+~~~
+
+
+
+~~~{.output}
+[1] "data.frame"
+
+~~~
+
+
+
+~~~{.r}
+class(continents$continent)
+~~~
+
+
+
+~~~{.output}
+[1] "character"
+
+~~~
+
+
+
+~~~{.r}
+class(continents$population[1])
+~~~
+
+
+
+~~~{.output}
+[1] "numeric"
+
+~~~
+
+You can also ask specifically whether data is a particular type:
+
+
+~~~{.r}
+is.numeric(3)
+~~~
+
+
+
+~~~{.output}
+[1] TRUE
+
+~~~
+
+
+
+~~~{.r}
+is.numeric("three")
+~~~
+
+
+
+~~~{.output}
+[1] FALSE
+
+~~~
+
+
 ### Reading csv data
 
 The `continents` data.frame was useful for learning because it was so small, but it's time to graduate to something more interesting and realistic. Data come in many forms, and we need to be able to load them in R. For our own use and with others who use R, there are R-specific data structures we can use, like the .RDA filetype we just saw, but we need to be able to work with more general data types too. Comma-separated value (csv) tables are perhaps the most universal data structure. 
