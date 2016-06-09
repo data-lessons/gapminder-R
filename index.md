@@ -5,9 +5,10 @@ title: R for reproducible scientific analysis
 
 Introduction to R for non-programmers using gapminder data.
 
-The goal of this lesson is to teach novice R users to effeciently write
-scripts to manage, analyze, visualize, and writeup data. The lessons take
-seriously the idea that motivation comes before detailed understaind, so
+The goal of this lesson is to teach novice R users to efficiently write
+scripts to manage data, conduct analyses, produce visualizations, and 
+write up the results in a reproducible manner. The lessons take
+seriously the idea that motivation comes before detailed understanding, so
 some details are omitted for the sake of introducing more, and more-powerful
 tools, including ggplot, dplyr, tidyr, and knitr. Note that this workshop 
 focuses on data management and analysis but does not teach statistical analysis.
@@ -32,3 +33,4 @@ usability.
 6.  [Tidy Data & Joins](06-tidy-data.html)
 7.  [Functions](07-functions.html)
 8.  [Dynamic Documents](08-knitr.html)
+9.  Capstone

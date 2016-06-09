@@ -16,7 +16,7 @@ minutes: 45
 > * Explain why we should divide programs into small, single-purpose functions.
 >
 
-Any operation you will perform more than once can be put into a function. That way, rather than retyping all the commands (and potentially making errors), you can simply call the function, passing it a new dataset or parameters. This may seem combersome at first, but writing functions to automate repatitive tasks is incredibly powerful. E.g. each time you call `ggplot` you are calling a function that someone wrote. Imagine if each time you wanted to make a plot you had to copy and paste or write that code from scratch!
+Any operation you will perform more than once can be put into a function. That way, rather than retyping all the commands (and potentially making errors), you can simply call the function, passing it a new dataset or parameters. This may seem cumbersome at first, but writing functions to automate repetitive tasks is incredibly powerful. E.g. each time you call `ggplot` you are calling a function that someone wrote. Imagine if each time you wanted to make a plot you had to copy and paste or write that code from scratch!
 
 ### Defining a function
 
@@ -172,7 +172,7 @@ into ever large chunks to get the effect we want.
 
 ### A more-useful function
 
-Let's write a function to find the GPD of a country for a given year. Our data will be the same gapminder data.frame we have been working with, but we want to keep our function flexible, so that if we get a new data.frame with the same information, say updated with 2012 data, we can pass it to the same function. So, we will pass the gapminder data.frame to the function as an arguement rather than "hard-coding" the `gapminder` data.frame, and we will set `gapminder` as the default value for ease of use. The other arguments our function needs are the country and year for which to calculate GDP. For clarity, we will call these `the_country` and `the_year`. Here is the function definition, without any body. Currently it won't do anything.
+Let's write a function to find the GPD of a country for a given year. Our data will be the same gapminder data.frame we have been working with, but we want to keep our function flexible, so that if we get a new data.frame with the same information, say updated with 2012 data, we can pass it to the same function. So, we will pass the gapminder data.frame to the function as an argument rather than "hard-coding" the `gapminder` data.frame, and we will set `gapminder` as the default value for ease of use. The other arguments our function needs are the country and year for which to calculate GDP. For clarity, we will call these `the_country` and `the_year`. Here is the function definition, without any body. Currently it won't do anything.
 
 
 ~~~{.r}
@@ -182,7 +182,7 @@ calcGDP <- function(the_country, the_year, dat = gapminder) {
 ~~~
 
 When we call the function we will use a syntax like 
-`calcGDP(the_country = 'China', the_year = 2007)`. Then, inside the body of calcGDP, everywhere `the_country` appears, 'China' will be substituted, and everywhere `the_year` appears, 2007 will be substituted. With that in mind, we filter to the country and year we want just like we would using "China" and 2007 directly, and assign the new data.frame to `filteredDF`. Note that `filteredDF` only exists inside the funciton. It will be created when we call `calcGDP`, but it won't appear in our Environment, and it will be gone as soon as `calcGDP` returns its return value.
+`calcGDP(the_country = 'China', the_year = 2007)`. Then, inside the body of calcGDP, everywhere `the_country` appears, 'China' will be substituted, and everywhere `the_year` appears, 2007 will be substituted. With that in mind, we filter to the country and year we want just like we would using "China" and 2007 directly, and assign the new data.frame to `filteredDF`. Note that `filteredDF` only exists inside the function. It will be created when we call `calcGDP`, but it won't appear in our Environment, and it will be gone as soon as `calcGDP` returns its return value.
 
 
 ~~~{.r}
@@ -241,7 +241,7 @@ Okay, but what if we want that information for multiple years or multiple countr
 
 ~~~
 
-We can replace the `==` tests in our function with `%in%` to allow it to take multiple years and continents. We will also change the names of `calcGDP`'s arguements to make it more intuitive that they can take multiple values. We should also add some comments to our code to make it easy to understand what it does.
+We can replace the `==` tests in our function with `%in%` to allow it to take multiple years and continents. We will also change the names of `calcGDP`'s arguments to make it more intuitive that they can take multiple values. We should also add some comments to our code to make it easy to understand what it does.
 
 
 ~~~{.r}

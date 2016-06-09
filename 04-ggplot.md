@@ -75,7 +75,7 @@ ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
 
 <img src="fig/04-plot-ggplot2/lifeExp-vs-gdpPercap-scatter-1.png" title="plot of chunk lifeExp-vs-gdpPercap-scatter" alt="plot of chunk lifeExp-vs-gdpPercap-scatter" style="display: block; margin: auto;" />
 
-The first thing we do is call the `ggplot` function. This function tells ggplot what dataset we're using (gapminder) and how to map variables in gapminder to the plotting "canvas" (gdp to the x-axis, life expectency to the y-axis). That **mapping** of variables to plot elements is done through the `aes` function. Arguments to `aes` will be variable names from the `data.frame` passed to `ggplot`. If you need a reminder of what's in our data.frame, use `str(gapminder)`.
+The first thing we do is call the `ggplot` function. This function tells ggplot what dataset we're using (gapminder) and how to map variables in gapminder to the plotting "canvas" (gdp to the x-axis, life expectancy to the y-axis). That **mapping** of variables to plot elements is done through the `aes` function. Arguments to `aes` will be variable names from the `data.frame` passed to `ggplot`. If you need a reminder of what's in our data.frame, use `str(gapminder)`.
 
 By itself, the call to `ggplot` isn't enough to draw a figure. This sets up the canvas correctly, but it doesn't draw anything on it.
 
@@ -124,7 +124,7 @@ ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
 
 ### Layers
 
-Using a scatterplot probably isn't the best for visualising change over time.
+Using a scatterplot probably isn't the best for visualizing change over time.
 Let's add another layer to the plot -- lines connecting the points representing
 each country:
 
@@ -183,7 +183,7 @@ The plots we have done so far have plotted numeric variables to both axes. What 
 
 > NB: A barchart (or, less likely, a dotchart) is suboptimal because it requires summarizing the data to the mean or median or whatever -- we'd rather preserve the information present in the full distribution.
 
-One possibility is a boxplot. In a boxplot, the distribution of values for each cateogry is displayed, with the central line at the median value, the box representing the inner-50%, etc.
+One possibility is a boxplot. In a boxplot, the distribution of values for each category is displayed, with the central line at the median value, the box representing the inner-50%, etc.
 
 
 ~~~{.r}
@@ -366,7 +366,7 @@ ggplot(gapminder, aes(x = year, y = lifeExp, by = country)) +
 This is just a taste of what you can do with `ggplot2`. RStudio provides a
 really useful [cheat sheet][cheat] of the different layers available, and more
 extensive documentation is available on the [ggplot2 website][ggplot-doc].
-Finally, if you have no idea how to change something, a quick google search will
+Finally, if you have no idea how to change something, a quick Google search will
 usually send you to a relevant question and answer on Stack Overflow with reusable
 code to modify!
 

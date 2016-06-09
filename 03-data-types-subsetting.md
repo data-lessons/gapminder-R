@@ -20,7 +20,7 @@ minutes: 30
 
 ### Loading data 
 
-We can load the dataset we just saved with the `load` function. Load needs the location of the saved file, provided as character string filepath, starting with the working directory. We won't get into working directories now, except to say that when your project's root directory will usually be your working directory. It is displayed at the top of your console pane in RStudio. Filepaths should be provided relative to that location. So, to load the file we just saved:
+We can load the dataset we just saved with the `load` function. Load needs the location of the saved file, provided as character string file-path, starting with the working directory. We won't get into working directories now, except to say that when your project's root directory will usually be your working directory. It is displayed at the top of your console pane in RStudio. File-paths should be provided relative to that location. So, to load the file we just saved:
 
 
 ~~~{.r}
@@ -127,7 +127,7 @@ That just printed the six values of population. We are going to work with them s
 pop <- continents$population
 ~~~
 
-Now we have a new object in our environment: a numeric "vector" with six entries. R is built around vectors. In data analysis and statistics, we don't often work with inidvidual numbers, but multiple observations. This is baked into R and helps it give it its power. 
+Now we have a new object in our environment: a numeric "vector" with six entries. R is built around vectors. In data analysis and statistics, we don't often work with individual numbers, but multiple observations. This is baked into R and helps it give it its power. 
 
 Another core R concept is the idea that when you manipulate an object, the original object doesn't change. Note that the `continents` data.frame still has the population variable. R didn't "take it out" of `continents`; instead, it made a copy of it and stored it to a variable called `pop`. They are now two separate things. If we make a change to one, it will not affect the other. There is a powerful computational paradigm here that may not be apparent yet, but keep in mind that anything you do in R, if you want to keep the results, you need to assign them to a new object.
 
@@ -374,7 +374,7 @@ continents[, c(2, 4)]
 
 ### Boolean type and subsetting 
 
-In `continents` we saw two of the three most common data types: characters and numeric. You saw the third when making logical comparisons like `1 > 0`: Logical data. Logical data can only be TRUE or FALSE (or `NA` for missing). We can make vectorized logical comparisons too. Let's find the sparcely-populated continents, those with fewer than ten people per square kilometer:
+In `continents` we saw two of the three most common data types: characters and numeric. You saw the third when making logical comparisons like `1 > 0`: Logical data. Logical data can only be TRUE or FALSE (or `NA` for missing). We can make vectorized logical comparisons too. Let's find the sparsely-populated continents, those with fewer than ten people per square kilometer:
 
 
 ~~~{.r}
@@ -504,7 +504,7 @@ is.numeric("three")
 
 ### Reading csv data
 
-The `continents` data.frame was useful for learning because it was so small, but it's time to graduate to something more interesting and realistic. Data come in many forms, and we need to be able to load them in R. For our own use and with others who use R, there are R-specific data structures we can use, like the .RDA filetype we just saw, but we need to be able to work with more general data types too. Comma-separated value (csv) tables are perhaps the most universal data structure. 
+The `continents` data.frame was useful for learning because it was so small, but it's time to graduate to something more interesting and realistic. Data come in many forms, and we need to be able to load them in R. For our own use and with others who use R, there are R-specific data structures we can use, like the .RDA file-type we just saw, but we need to be able to work with more general data types too. Comma-separated value (csv) tables are perhaps the most universal data structure. 
 
 The gapminder dataset provides country-by-year level data on income, population, and longevity. I downloaded it and put it in the data directory of my project. You will do the same in a minute.
 
