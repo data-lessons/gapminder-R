@@ -1,7 +1,7 @@
 ---
 layout: page
 title: R for reproducible scientific analysis
-subtitle: Managing & Manipulating Data
+subtitle: Manipulating data.frames
 minutes: 45
 ---
 

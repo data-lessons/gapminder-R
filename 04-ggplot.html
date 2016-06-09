@@ -72,16 +72,16 @@
 <p>Let’s start off with an example, longevity as a function of income:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> gdpPercap, <span class="dt">y =</span> lifeExp)) +
 <span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-lifeExp-vs-gdpPercap-scatter-1.png" title="plot of chunk lifeExp-vs-gdpPercap-scatter" alt="plot of chunk lifeExp-vs-gdpPercap-scatter" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/lifeExp-vs-gdpPercap-scatter-1.png" title="plot of chunk lifeExp-vs-gdpPercap-scatter" alt="plot of chunk lifeExp-vs-gdpPercap-scatter" style="display: block; margin: auto;" /></p>
 <p>The first thing we do is call the <code>ggplot</code> function. This function tells ggplot what dataset we’re using (gapminder) and how to map variables in gapminder to the plotting “canvas” (gdp to the x-axis, life expectency to the y-axis). That <strong>mapping</strong> of variables to plot elements is done through the <code>aes</code> function. Arguments to <code>aes</code> will be variable names from the <code>data.frame</code> passed to <code>ggplot</code>. If you need a reminder of what’s in our data.frame, use <code>str(gapminder)</code>.</p>
 <p>By itself, the call to <code>ggplot</code> isn’t enough to draw a figure. This sets up the canvas correctly, but it doesn’t draw anything on it.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> gdpPercap, <span class="dt">y =</span> lifeExp))</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-unnamed-chunk-4-1.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/unnamed-chunk-4-1.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" style="display: block; margin: auto;" /></p>
 <p>Now we need to tell <code>ggplot</code> how to draw the data. For that, we add another layer: a <strong>geom</strong>. In our example, we used <code>geom_point</code>, which tells <code>ggplot</code> we want to draw a point for each row in the dataset.</p>
 <p>Note that we tell R that multiple lines belong to <code>ggplot</code> by including a <code>+</code> at the end of each line except the last.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> gdpPercap, <span class="dt">y =</span> lifeExp)) +
 <span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-lifeExp-vs-gdpPercap-scatter2-1.png" title="plot of chunk lifeExp-vs-gdpPercap-scatter2" alt="plot of chunk lifeExp-vs-gdpPercap-scatter2" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/lifeExp-vs-gdpPercap-scatter2-1.png" title="plot of chunk lifeExp-vs-gdpPercap-scatter2" alt="plot of chunk lifeExp-vs-gdpPercap-scatter2" style="display: block; margin: auto;" /></p>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
 <h4 id="challenge-changing-a-variable"><span class="glyphicon glyphicon-pencil"></span>Challenge – Changing a variable</h4>
@@ -106,24 +106,24 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> lifeExp, <span class="dt">color =</span> continent)) +
 <span class="st">    </span><span class="kw">geom_point</span>() +
 <span class="st">    </span><span class="kw">geom_line</span>()</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-lifeExp-line-bad-1.png" title="plot of chunk lifeExp-line-bad" alt="plot of chunk lifeExp-line-bad" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/lifeExp-line-bad-1.png" title="plot of chunk lifeExp-line-bad" alt="plot of chunk lifeExp-line-bad" style="display: block; margin: auto;" /></p>
 <p>Hmm, that’s not quite right. What has happened there? How many lines are there?</p>
 <p>The lines are grouped by continent. We wanted one line per country, but we got one line per continent because we mapped continent to color and <code>ggplot</code> assumes we want to group by the coloring variable unless we tell it otherwise. To get one line per country we tell ggplot explicitly to group by country. Just like the other aesthetic mappings, that goes in the <code>aes()</code> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, 
        <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> lifeExp, <span class="dt">color =</span> continent, <span class="dt">group =</span> country)) +
 <span class="st">    </span><span class="kw">geom_point</span>() +
 <span class="st">    </span><span class="kw">geom_line</span>()</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-lifeExp-line-1.png" title="plot of chunk lifeExp-line" alt="plot of chunk lifeExp-line" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/lifeExp-line-1.png" title="plot of chunk lifeExp-line" alt="plot of chunk lifeExp-line" style="display: block; margin: auto;" /></p>
 <p>Note that aesthetic mappings in the top-line <code>ggplot</code> call apply to all layers, but you can also map variables just within a single layer. For example, if we want colored lines but black points, we can move the mapping of continent-to-color from the <code>ggplot</code> line to the <code>geom_line</code>, so that it no longer applies to <code>geom_point</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> lifeExp, <span class="dt">group =</span> country)) +
 <span class="st">    </span><span class="kw">geom_point</span>() +
 <span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">color =</span> continent))</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-lifeExp-line-2-1.png" title="plot of chunk lifeExp-line-2" alt="plot of chunk lifeExp-line-2" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/lifeExp-line-2-1.png" title="plot of chunk lifeExp-line-2" alt="plot of chunk lifeExp-line-2" style="display: block; margin: auto;" /></p>
 <p>Note that each layer is drawn on top of the previous layer. If we want the points on top of the lines, we can move <code>geom_point</code> to after <code>geom_line</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y=</span>lifeExp, <span class="dt">by=</span>country)) +
 <span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">color =</span> continent)) +<span class="st"> </span>
 <span class="st">    </span><span class="kw">geom_point</span>()</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-lifeExp-layer-example-1-1.png" title="plot of chunk lifeExp-layer-example-1" alt="plot of chunk lifeExp-layer-example-1" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/lifeExp-layer-example-1-1.png" title="plot of chunk lifeExp-layer-example-1" alt="plot of chunk lifeExp-layer-example-1" style="display: block; margin: auto;" /></p>
 <h3 id="continuous-vs.discrete-variables">Continuous vs. discrete variables</h3>
 <p>The plots we have done so far have plotted numeric variables to both axes. What if we want to plot a numeric variable against a categorical variable, such as continent.</p>
 <p><strong>Shoutout Q: What kind of plot can we use to plot a continuous variable versus a categorical variable, say life expectency by continent?</strong></p>
@@ -133,7 +133,7 @@
 <p>One possibility is a boxplot. In a boxplot, the distribution of values for each cateogry is displayed, with the central line at the median value, the box representing the inner-50%, etc.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> continent, <span class="dt">y =</span> lifeExp)) +
 <span class="st">    </span><span class="kw">geom_boxplot</span>()</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" style="display: block; margin: auto;" /></p>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
 <h4 id="challenge-a-new-geom"><span class="glyphicon glyphicon-pencil"></span>Challenge – A new geom</h4>
@@ -154,20 +154,20 @@
 <p>The grammar of graphics makes it easy to transform the scales on which the data are presented. To demonstrate we’ll go back to our first example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> gdpPercap, <span class="dt">y =</span> lifeExp)) +
 <span class="st">    </span><span class="kw">geom_point</span>() </code></pre></div>
-<p><img src="fig/08-plot-ggplot2-lifeExp-vs-gdpPercap-scatter3-1.png" title="plot of chunk lifeExp-vs-gdpPercap-scatter3" alt="plot of chunk lifeExp-vs-gdpPercap-scatter3" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/lifeExp-vs-gdpPercap-scatter3-1.png" title="plot of chunk lifeExp-vs-gdpPercap-scatter3" alt="plot of chunk lifeExp-vs-gdpPercap-scatter3" style="display: block; margin: auto;" /></p>
 <p>Currently it’s hard to see the relationship between the points due to some strong outliers in GDP per capita. We can change the scale of units on the x-axis using the <em>scale</em> functions. These control the mapping between the data values and visual values of an aesthetic.</p>
 <p>The <code>log10</code> function applies a transformation to the values of the <code>gdpPercap</code> column before rendering them on the plot, so that each multiple of 10 now only corresponds to an increase in 1 on the transformed scale, e.g. a GDP per capita of 1,000 is now 3 on the x-axis, a value of 10,000 corresponds to 4 on the x-axis and so on. This makes it easier to visualize the spread of data on the x-axis.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> gdpPercap, <span class="dt">y =</span> lifeExp)) +
 <span class="st">    </span><span class="kw">geom_point</span>() +<span class="st"> </span>
 <span class="st">    </span><span class="kw">scale_x_log10</span>()</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-axis-scale-1.png" title="plot of chunk axis-scale" alt="plot of chunk axis-scale" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/axis-scale-1.png" title="plot of chunk axis-scale" alt="plot of chunk axis-scale" style="display: block; margin: auto;" /></p>
 <h3 id="adding-models">Adding models</h3>
 <p>We can fit a simple, linear relationship to the data by adding another layer, <code>geom_smooth</code>, which adds a summary of a fit model to the plot. <code>method = 'lm'</code> tells <code>geom_smooth</code> to fit a <strong>l</strong>inear <strong>m</strong>odel. We could also fit other, more flexible smoothers by specifying different methods in <code>geom_smooth</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> gdpPercap, <span class="dt">y =</span> lifeExp)) +
 <span class="st">    </span><span class="kw">geom_point</span>() +<span class="st"> </span>
 <span class="st">    </span><span class="kw">scale_x_log10</span>() +
 <span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&#39;lm&#39;</span>)</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-lm-fit-1.png" title="plot of chunk lm-fit" alt="plot of chunk lm-fit" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/lm-fit-1.png" title="plot of chunk lm-fit" alt="plot of chunk lm-fit" style="display: block; margin: auto;" /></p>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
 <h4 id="challenge-the-power-of-money-by-continent"><span class="glyphicon glyphicon-pencil"></span>Challenge – The power of money, by continent</h4>
@@ -189,7 +189,7 @@
 <span class="st">    </span><span class="kw">scale_x_log10</span>() +
 <span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&#39;lm&#39;</span>) +
 <span class="st">    </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-themes-1.png" title="plot of chunk themes" alt="plot of chunk themes" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/themes-1.png" title="plot of chunk themes" alt="plot of chunk themes" style="display: block; margin: auto;" /></p>
 <p>There are a variety of themes in a separate package called <code>ggthemes</code>, e.g. we can mimic The Economist <a href="https://github.com/jrnold/ggthemes">or many others</a>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggthemes)
 <span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> gdpPercap, <span class="dt">y =</span> lifeExp)) +
@@ -197,7 +197,7 @@
 <span class="st">    </span><span class="kw">scale_x_log10</span>() +
 <span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&#39;lm&#39;</span>) +
 <span class="st">    </span><span class="kw">theme_economist</span>()</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-ggthemes-1.png" title="plot of chunk ggthemes" alt="plot of chunk ggthemes" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/ggthemes-1.png" title="plot of chunk ggthemes" alt="plot of chunk ggthemes" style="display: block; margin: auto;" /></p>
 <h4 id="changing-fixed-aspects-of-plots">Changing fixed aspects of plots</h4>
 <p>Of course, rather than changing the theme of an entire plot, we often want to changes some specific aspect of it. Let’s make our linear model line black instead of blue and dashed instead of solid, and let’s make our points smaller.</p>
 <p>Note that when aesthetics are mapped from a variable, they go in <code>aes()</code>, but to set them to a fixed value, they go outside <code>aes()</code>.</p>
@@ -206,7 +206,7 @@
 <span class="st">    </span><span class="kw">scale_x_log10</span>() +
 <span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&#39;lm&#39;</span>, <span class="dt">color =</span> <span class="st">&#39;black&#39;</span>, <span class="dt">linetype =</span> <span class="st">&#39;dashed&#39;</span>) +
 <span class="st">    </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" style="display: block; margin: auto;" /></p>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
 <h4 id="challenge-sizing-points"><span class="glyphicon glyphicon-pencil"></span>Challenge – sizing points</h4>
@@ -219,12 +219,12 @@
 <p>Earlier we visualized the change in life expectancy over time across all countries in one plot.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> lifeExp, <span class="dt">by =</span> country)) +
 <span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">color =</span> continent))</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" style="display: block; margin: auto;" /></p>
 <p>That’s a mess! It’s hard to see patterns because there is so much information on top of itself. We can split this out over multiple panels by adding another layer: <strong>facet</strong> panels. The <code>facet_wrap</code> layer takes a “formula” as its argument, denoted by the tilde (~). You can read this as “by country”. It tells R to draw a panel for each unique value in the country variable in the gapminder dataset.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> lifeExp, <span class="dt">by =</span> country)) +
 <span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">color =</span> continent)) +
 <span class="st">    </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>country)</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-facet-1.png" title="plot of chunk facet" alt="plot of chunk facet" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/facet-1.png" title="plot of chunk facet" alt="plot of chunk facet" style="display: block; margin: auto;" /></p>
 <h3 id="modifying-text">Modifying text</h3>
 <p>To clean this figure up for a publication we need to change some of the text elements. The x-axis is way too cluttered, and the axis labels should read “Life expectancy” and “Year”, rather than the column name in the data frame. Also, the country names don’t fit in the strips at the top of each plot, and we might like to add an overall title to the figure.</p>
 <p>We can do this by adding a few new layers. The <code>xlab</code> and <code>ylab</code> layers control the names of the x and y axes. The <strong>theme</strong> layer is where we change lots of minor details of a plot. here we’ll rotate the axis text (with <code>angle</code>) so that they’ll fit, and then make sure they’re lined up right with <code>vjust</code> for vertical-adjustment. And let’s add a plot title for fun; we can do that with <code>ggtitle</code> layer.</p>
@@ -236,7 +236,7 @@
 <span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">8</span>) +
 <span class="st">    </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">270</span>, <span class="dt">vjust =</span> .<span class="dv">5</span>)) +
 <span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&#39;Life expectancy over time by country&#39;</span>)</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-cleaned up-1.png" title="plot of chunk cleaned up" alt="plot of chunk cleaned up" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/cleaned up-1.png" title="plot of chunk cleaned up" alt="plot of chunk cleaned up" style="display: block; margin: auto;" /></p>
 <p>This is just a taste of what you can do with <code>ggplot2</code>. RStudio provides a really useful <a href="http://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf">cheat sheet</a> of the different layers available, and more extensive documentation is available on the <a href="http://docs.ggplot2.org/current/">ggplot2 website</a>. Finally, if you have no idea how to change something, a quick google search will usually send you to a relevant question and answer on Stack Overflow with reusable code to modify!</p>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
@@ -260,7 +260,7 @@
 <div class="panel-body">
 <p>Modify the example so that the figure visualize how life expectancy has changed over time:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> lifeExp)) +<span class="st"> </span><span class="kw">geom_point</span>()</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-ch1-sol-1.png" title="plot of chunk ch1-sol" alt="plot of chunk ch1-sol" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/ch1-sol-1.png" title="plot of chunk ch1-sol" alt="plot of chunk ch1-sol" style="display: block; margin: auto;" /></p>
 </div>
 </section>
 <section class="challenge panel panel-success">
@@ -271,7 +271,7 @@
 <p>In the previous examples and challenge we’ve used the <code>aes</code> function to tell the scatterplot <strong>geom</strong> about the <strong>x</strong> and <strong>y</strong> locations of each point. Another <em>aesthetic</em> property we can modify is the point <em>color</em>. Modify the code from the previous challenge to <strong>color</strong> the points by the “continent” column. What trends do you see in the data? Are they what you expected?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> lifeExp, <span class="dt">color=</span>continent)) +
 <span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-ch2-sol-1.png" title="plot of chunk ch2-sol" alt="plot of chunk ch2-sol" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/ch2-sol-1.png" title="plot of chunk ch2-sol" alt="plot of chunk ch2-sol" style="display: block; margin: auto;" /></p>
 </div>
 </section>
 <section class="challenge panel panel-success">
@@ -282,7 +282,7 @@
 <p>Switch the order of the point and line layers from the previous example. What happened?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x=</span>year, <span class="dt">y=</span>lifeExp, <span class="dt">by=</span>country)) +
 <span class="st"> </span><span class="kw">geom_point</span>() +<span class="st"> </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">color=</span>continent))</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-ch3-sol-1.png" title="plot of chunk ch3-sol" alt="plot of chunk ch3-sol" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/ch3-sol-1.png" title="plot of chunk ch3-sol" alt="plot of chunk ch3-sol" style="display: block; margin: auto;" /></p>
 <p>The lines now get drawn over the points!</p>
 </div>
 </section>
@@ -296,7 +296,7 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> lifeExp, <span class="dt">y =</span> gdpPercap)) +
 <span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">3</span>, <span class="dt">color=</span><span class="st">&quot;orange&quot;</span>) +<span class="st"> </span><span class="kw">scale_y_log10</span>() +
 <span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">size=</span><span class="fl">1.5</span>)</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-ch4-sol-1.png" title="plot of chunk ch4-sol" alt="plot of chunk ch4-sol" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/ch4-sol-1.png" title="plot of chunk ch4-sol" alt="plot of chunk ch4-sol" style="display: block; margin: auto;" /></p>
 </div>
 </section>
 <section class="challenge panel panel-success">
@@ -308,7 +308,7 @@
 <p>Advanced: - Transform the x axis to better visualize the data spread. - Add a facet layer to panel the density plots by year.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> gdpPercap, <span class="dt">fill=</span>continent)) +
 <span class="st"> </span><span class="kw">geom_density</span>(<span class="dt">alpha=</span><span class="fl">0.6</span>) +<span class="st"> </span><span class="kw">facet_wrap</span>( ~<span class="st"> </span>year) +<span class="st"> </span><span class="kw">scale_x_log10</span>()</code></pre></div>
-<p><img src="fig/08-plot-ggplot2-ch5-sol-1.png" title="plot of chunk ch5-sol" alt="plot of chunk ch5-sol" style="display: block; margin: auto;" /></p>
+<p><img src="fig/04-plot-ggplot2/ch5-sol-1.png" title="plot of chunk ch5-sol" alt="plot of chunk ch5-sol" style="display: block; margin: auto;" /></p>
 </div>
 </section>
         </div>

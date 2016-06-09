@@ -218,6 +218,24 @@ continents</code></pre></div>
 </ol>
 </div>
 </section>
+<h3 id="checking-data.type">Checking data.type</h3>
+<p>You can ask R what kind of data is assigned to a variable name with the <code>class</code> function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(continents)</code></pre></div>
+<pre class="output"><code>[1] &quot;data.frame&quot;
+</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(continents$continent)</code></pre></div>
+<pre class="output"><code>[1] &quot;character&quot;
+</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(continents$population[<span class="dv">1</span>])</code></pre></div>
+<pre class="output"><code>[1] &quot;numeric&quot;
+</code></pre>
+<p>You can also ask specifically whether data is a particular type:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">is.numeric</span>(<span class="dv">3</span>)</code></pre></div>
+<pre class="output"><code>[1] TRUE
+</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">is.numeric</span>(<span class="st">&quot;three&quot;</span>)</code></pre></div>
+<pre class="output"><code>[1] FALSE
+</code></pre>
 <h3 id="reading-csv-data">Reading csv data</h3>
 <p>The <code>continents</code> data.frame was useful for learning because it was so small, but it’s time to graduate to something more interesting and realistic. Data come in many forms, and we need to be able to load them in R. For our own use and with others who use R, there are R-specific data structures we can use, like the .RDA filetype we just saw, but we need to be able to work with more general data types too. Comma-separated value (csv) tables are perhaps the most universal data structure.</p>
 <p>The gapminder dataset provides country-by-year level data on income, population, and longevity. I downloaded it and put it in the data directory of my project. You will do the same in a minute.</p>
