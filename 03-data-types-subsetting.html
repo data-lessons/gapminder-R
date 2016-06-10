@@ -43,7 +43,7 @@
 </div>
 </section>
 <h3 id="loading-data">Loading data</h3>
-<p>We can load the dataset we just saved with the <code>load</code> function. Load needs the location of the saved file, provided as character string filepath, starting with the working directory. We won’t get into working directories now, except to say that when your project’s root directory will usually be your working directory. It is displayed at the top of your console pane in RStudio. Filepaths should be provided relative to that location. So, to load the file we just saved:</p>
+<p>We can load the dataset we just saved with the <code>load</code> function. Load needs the location of the saved file, provided as character string file-path, starting with the working directory. We won’t get into working directories now, except to say that when your project’s root directory will usually be your working directory. It is displayed at the top of your console pane in RStudio. File-paths should be provided relative to that location. So, to load the file we just saved:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">&#39;data/continents.RDA&#39;</span>)</code></pre></div>
 <h3 id="intro-to-data.frames">Intro to data.frames</h3>
 <p>Check your “Environment” tab – a new object called <code>continents</code> has appeared. If your environment is in “list” mode, switch to “grid” as it’s more informative. We can see that <code>continents</code> has Type data.frame and contains 6 observations of 4 variables. Click on the spreadsheet icon at far-right to view it.</p>
@@ -96,7 +96,7 @@
 <p>Note that you can use tab-completion to see what variables are available.</p>
 <p>That just printed the six values of population. We are going to work with them some more, so extract them from the data.frame and store them to a new object, called <code>pop</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop &lt;-<span class="st"> </span>continents$population</code></pre></div>
-<p>Now we have a new object in our environment: a numeric “vector” with six entries. R is built around vectors. In data analysis and statistics, we don’t often work with inidvidual numbers, but multiple observations. This is baked into R and helps it give it its power.</p>
+<p>Now we have a new object in our environment: a numeric “vector” with six entries. R is built around vectors. In data analysis and statistics, we don’t often work with individual numbers, but multiple observations. This is baked into R and helps it give it its power.</p>
 <p>Another core R concept is the idea that when you manipulate an object, the original object doesn’t change. Note that the <code>continents</code> data.frame still has the population variable. R didn’t “take it out” of <code>continents</code>; instead, it made a copy of it and stored it to a variable called <code>pop</code>. They are now two separate things. If we make a change to one, it will not affect the other. There is a powerful computational paradigm here that may not be apparent yet, but keep in mind that anything you do in R, if you want to keep the results, you need to assign them to a new object.</p>
 <h4 id="vectorization">Vectorization</h4>
 <p>We just said that R is built around vectors. Most functions that accept a single value can also accept a vector of values. E.g. we can find the logarithm of each continent’s population:</p>
@@ -137,13 +137,7 @@ continents</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</code></pre></div>
 <pre class="output"><code>[1] 1 2 3
 </code></pre>
-<p>We could assign that vector to a new variable, like this:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">firstThree &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</code></pre></div>
-<p>And then we can get the first three elements in <code>pop</code> like this:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop[firstThree]</code></pre></div>
-<pre class="output"><code>[1] 1022234000  934611000       4490
-</code></pre>
-<p>We didn’t have to store 1-2-3 to a new variable, we could use that vector to subset directly, but it often makes things easier to think about to store intermediate variables, especially as things get more complex.</p>
+<p>Then we can get the first three elements in <code>pop</code> like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)]</code></pre></div>
 <pre class="output"><code>[1] 1022234000  934611000       4490
 </code></pre>
@@ -186,7 +180,7 @@ continents</code></pre></div>
 </div>
 </section>
 <h3 id="boolean-type-and-subsetting">Boolean type and subsetting</h3>
-<p>In <code>continents</code> we saw two of the three most common data types: characters and numeric. You saw the third when making logical comparisons like <code>1 &gt; 0</code>: Logical data. Logical data can only be TRUE or FALSE (or <code>NA</code> for missing). We can make vectorized logical comparisons too. Let’s find the sparcely-populated continents, those with fewer than ten people per square kilometer:</p>
+<p>In <code>continents</code> we saw two of the three most common data types: characters and numeric. You saw the third when making logical comparisons like <code>1 &gt; 0</code>: Logical data. Logical data can only be TRUE or FALSE (or <code>NA</code> for missing). We can make vectorized logical comparisons too. Let’s find the sparsely-populated continents, those with fewer than ten people per square kilometer:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents$pop_density &lt;<span class="st"> </span><span class="dv">10</span></code></pre></div>
 <pre class="output"><code>[1] FALSE FALSE  TRUE FALSE FALSE  TRUE
 </code></pre>
@@ -199,6 +193,15 @@ continents</code></pre></div>
 <pre class="output"><code>   continent area_km2 population percent_total_pop  pop_density
 3 Antarctica 13720000       4490               0.0 0.0003272595
 6    Oceania  9008500   29127000               0.4 3.2332796803
+</code></pre>
+<h4 id="two-ways-to-subset">Two ways to subset</h4>
+<p>To be really clear, there are two similar ways to subset in R. Both use square-brackets. In one, you provide the indices of the elements you want:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents$continent[<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>)]</code></pre></div>
+<pre class="output"><code>[1] &quot;Americas&quot; &quot;Asia&quot;     &quot;Oceania&quot; 
+</code></pre>
+<p>In the other, you provide TRUE or FALSE for each element, TRUE if you want it, FALSE if you don’t.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents$continent[<span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>, <span class="ot">TRUE</span>)]</code></pre></div>
+<pre class="output"><code>[1] &quot;Americas&quot; &quot;Asia&quot;     &quot;Oceania&quot; 
 </code></pre>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
@@ -237,7 +240,7 @@ continents</code></pre></div>
 <pre class="output"><code>[1] FALSE
 </code></pre>
 <h3 id="reading-csv-data">Reading csv data</h3>
-<p>The <code>continents</code> data.frame was useful for learning because it was so small, but it’s time to graduate to something more interesting and realistic. Data come in many forms, and we need to be able to load them in R. For our own use and with others who use R, there are R-specific data structures we can use, like the .RDA filetype we just saw, but we need to be able to work with more general data types too. Comma-separated value (csv) tables are perhaps the most universal data structure.</p>
+<p>The <code>continents</code> data.frame was useful for learning because it was so small, but it’s time to graduate to something more interesting and realistic. Data come in many forms, and we need to be able to load them in R. For our own use and with others who use R, there are R-specific data structures we can use, like the .RDA file-type we just saw, but we need to be able to work with more general data types too. Comma-separated value (csv) tables are perhaps the most universal data structure.</p>
 <p>The gapminder dataset provides country-by-year level data on income, population, and longevity. I downloaded it and put it in the data directory of my project. You will do the same in a minute.</p>
 <p>We can read csv’s with the <code>read.csv</code> function. The argument to <code>read.csv</code> is the location of the file, relative to your working directory. Since I saved the gapminder data to the <code>data</code> directory of my project, I can load it with this. Note the use of tab-completion to find the file and get it exactly right without typos.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read.csv</span>(<span class="st">&#39;data/gapminder-FiveYearData.csv&#39;</span>)</code></pre></div>

@@ -21,7 +21,7 @@ minutes: 45
 
 Welcome to the R portion of the workshop.
 
-In this lesson, you'll become familiar with the R langauge, the RStudio environment, and some best practices that will make your life easier and your science more reliable.
+In this lesson, you'll become familiar with the R language, the RStudio environment, and some best practices that will make your life easier and your science more reliable.
 
 #### Why R?
 
@@ -96,7 +96,7 @@ The simplest thing you could do with R is do arithmetic:
 ~~~
 
 And R will print out the answer, with a preceding "[1]". Don't worry about this
-for now, we'll explain that later. For now think of it as indicating ouput.
+for now, we'll explain that later. For now think of it as indicating output.
 
 If you type in an incomplete command, R will wait for you to
 complete it:
@@ -439,16 +439,16 @@ Use descriptive variable names, as they make your code easier to understand. It 
 
 #### R help files
 
-Once you figure out what function you want, you need to figure out how to use it. Every function has an associated helpfile. They can be hard to read, especially at first, but it is important to learn how to make sense of them.
+Once you figure out what function you want, you need to figure out how to use it. Every function has an associated help-file. They can be hard to read, especially at first, but it is important to learn how to make sense of them.
 
-`?function` brings up helpfile. E.g.
+`?function` brings up help-file. E.g.
 
 
 ~~~{.r}
 ?log
 ~~~
 
-Each helpfile contains the following components.
+Each help-file contains the following components.
 
 - Description: An extended description of what the function does.
 - Usage: The arguments of the function and their default values.
@@ -525,7 +525,7 @@ log(x = 3, base = exp(1))
 
 ~~~
 
-To get the base 10 logrithm of 3, you could do
+To get the base 10 logarithm of 3, you could do
 
 
 ~~~{.r}

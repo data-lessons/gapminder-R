@@ -418,26 +418,42 @@ gapminder &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span c
 12  2007   11680.072      6124.371
 </code></pre>
 <p>Note that <code>summarize</code> eliminates any other columns. Why? What else can it do? E.g. What country should it list for the year 1952!?</p>
-<p>You can also do multiple groupings. Suppose we want the average life expectancy in each continent for each year. We group by continent and year:</p>
+<p>We often want to calculate the number of entries within a group. E.g. we might wonder if our dataset is balanced by country. We can do this with the <code>n()</code> function, or <code>dplyr</code> provides a <code>count</code> function as a convenience:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapminder %&gt;%
-<span class="st">    </span><span class="kw">group_by</span>(continent, year) %&gt;%
-<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean_income =</span> <span class="kw">mean</span>(gdpPercap))</code></pre></div>
-<pre class="output"><code>Source: local data frame [60 x 3]
-Groups: continent [?]
+<span class="st">    </span><span class="kw">group_by</span>(country) %&gt;%
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">number_entries =</span> <span class="kw">n</span>())</code></pre></div>
+<pre class="output"><code>Source: local data frame [142 x 2]
 
-   continent  year mean_income
-      (fctr) (int)       (dbl)
-1     Africa  1952    1252.572
-2     Africa  1957    1385.236
-3     Africa  1962    1598.079
-4     Africa  1967    2050.364
-5     Africa  1972    2339.616
-6     Africa  1977    2585.939
-7     Africa  1982    2481.593
-8     Africa  1987    2282.669
-9     Africa  1992    2281.810
-10    Africa  1997    2378.760
-..       ...   ...         ...
+       country number_entries
+        (fctr)          (int)
+1  Afghanistan             12
+2      Albania             12
+3      Algeria             12
+4       Angola             12
+5    Argentina             12
+6    Australia             12
+7      Austria             12
+8      Bahrain             12
+9   Bangladesh             12
+10     Belgium             12
+..         ...            ...
+</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">count</span>(gapminder, country)</code></pre></div>
+<pre class="output"><code>Source: local data frame [142 x 2]
+
+       country     n
+        (fctr) (int)
+1  Afghanistan    12
+2      Albania    12
+3      Algeria    12
+4       Angola    12
+5    Argentina    12
+6    Australia    12
+7      Austria    12
+8      Bahrain    12
+9   Bangladesh    12
+10     Belgium    12
+..         ...   ...
 </code></pre>
 <p>The highly observant will notice the output of this looks a little different than most of our data.frames – why didn’t it print out all 60 rows, and what’s with that header info at the top? <code>dplyr</code> converted the data.frame to a table-data.frame, or <code>tbl_df</code> object. The most salient difference between them is that <code>tbl_df</code>s never print more than a few rows, which can be nice. If you like this behavior, you can convert any data.frame to a tbl_df like so. Now it prints nicely, so we don’t need to use <code>head</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapminder &lt;-<span class="st"> </span><span class="kw">tbl_df</span>(gapminder)
@@ -457,6 +473,55 @@ gapminder</code></pre></div>
 9  Afghanistan  1992 16317921      Asia  41.674  649.3414
 10 Afghanistan  1997 22227415      Asia  41.763  635.3414
 ..         ...   ...      ...       ...     ...       ...
+</code></pre>
+<p>We can also do multiple groupings. Suppose we want the maximum life expectancy in each continent for each year. We group by continent and year and calculate the maximum with the <code>max</code> function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapminder %&gt;%
+<span class="st">    </span><span class="kw">group_by</span>(continent, year) %&gt;%
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">longest_life =</span> <span class="kw">max</span>(lifeExp))</code></pre></div>
+<pre class="output"><code>Source: local data frame [60 x 3]
+Groups: continent [?]
+
+   continent  year longest_life
+      (fctr) (int)        (dbl)
+1     Africa  1952       52.724
+2     Africa  1957       58.089
+3     Africa  1962       60.246
+4     Africa  1967       61.557
+5     Africa  1972       64.274
+6     Africa  1977       67.064
+7     Africa  1982       69.885
+8     Africa  1987       71.913
+9     Africa  1992       73.615
+10    Africa  1997       74.772
+..       ...   ...          ...
+</code></pre>
+<p>Hmm, we got the longest life expectancy for each continent-year, but we didn’t get the country. To get the country, we have to ask R “Where lifeExp is at a maximum, what is the entry in country?” For that we use the <code>which.max</code> function. <code>max</code> returns the maximum value; <code>which.max</code> returns the location of the maximum value.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">max</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">7</span>, <span class="dv">4</span>))</code></pre></div>
+<pre class="output"><code>[1] 7
+</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">which.max</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">7</span>, <span class="dv">4</span>))</code></pre></div>
+<pre class="output"><code>[1] 2
+</code></pre>
+<p>Now, back to the question: Where lifeExp is at a maximum, what is the entry in country?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapminder %&gt;%
+<span class="st">    </span><span class="kw">group_by</span>(continent, year) %&gt;%
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">longest_life =</span> <span class="kw">max</span>(lifeExp), <span class="dt">country =</span> country[<span class="kw">which.max</span>(lifeExp)])</code></pre></div>
+<pre class="output"><code>Source: local data frame [60 x 4]
+Groups: continent [?]
+
+   continent  year longest_life   country
+      (fctr) (int)        (dbl)    (fctr)
+1     Africa  1952       52.724   Reunion
+2     Africa  1957       58.089 Mauritius
+3     Africa  1962       60.246 Mauritius
+4     Africa  1967       61.557 Mauritius
+5     Africa  1972       64.274   Reunion
+6     Africa  1977       67.064   Reunion
+7     Africa  1982       69.885   Reunion
+8     Africa  1987       71.913   Reunion
+9     Africa  1992       73.615   Reunion
+10    Africa  1997       74.772   Reunion
+..       ...   ...          ...       ...
 </code></pre>
 <section class="challenge panel panel-success">
 <div class="panel-heading">

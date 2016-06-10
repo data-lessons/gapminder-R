@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: R for reproducible scientific analysis</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="css/swc.css" />
+    <link rel="alternate" type="application/rss+xml" title="Software Carpentry Blog" href="http://software-carpentry.org/feed.xml"/>
+    <meta charset="UTF-8" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body class="lesson">
+    <div class="container card">
+      <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
+      </div>
+      <article>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+                    <a href="index.html"><h1 class="title">R for reproducible scientific analysis</h1></a>
+          <h2 class="subtitle">Capstone</h2>
+          <section class="objectives panel panel-warning">
+<div class="panel-heading">
+<h2 id="learning-objectives"><span class="glyphicon glyphicon-certificate"></span>Learning objectives</h2>
+</div>
+<div class="panel-body">
+<ul>
+<li>Practice and integrate the tools learned in preceeding lessons.</li>
+<li>Be able to take a new dataset, understand it, conduct analyses, visualize patterns, and write-up findings.</li>
+</ul>
+</div>
+</section>
+<h3 id="baseball">Baseball</h3>
+<p>Install the “Lahman” package for R. This is primarily a data package: It contains comprehensive statistics for Major League Baseball dating back to the 19th century. More information is available at <a href="http://lahman.r-forge.r-project.org/" class="uri">http://lahman.r-forge.r-project.org/</a>.</p>
+<p>You will be writing a report on some baseball statistics. Throughout, you will need to explore the dataset and figure out how to execute the desired analyses. It may be best to do exploratory work in a temporary .R file, and once you have a step figured out, to move the code into your .Rmd file along with a description of what you’ve done and found.</p>
+<p>Create a new RMarkdown document to be rendered as html. Give it an appropriate title and save it as <code>baseball.Rmd</code> in the <code>papers/</code> directory of your project.</p>
+<p>We will focus primarily on batting statistics and salaries. In a code-chunk at the beginning of your document, load the <code>Lahman</code> package, and load the batting dataset with <code>data(&quot;Batting&quot;)</code> and the salary dataset with <code>data(&quot;Salaries&quot;)</code>.</p>
+<h4 id="getting-acquanited">Getting acquanited</h4>
+<p>Explore the two data.frames. Write a short summary. What time periods do they cover? Is there much missing data? How many players are in the dataset? What is the maximum recorded salary?</p>
+<h4 id="batting-averages">Batting averages</h4>
+<p>A player’s batting average is a key baseball statistic, but it is absent from this dataset. A simplified version of a player’s batting average is the fraction of at-bats in which the player got a hit. Generate a new column in the <code>Batting</code> data.frame for the players’ batting averages. A key to the variable names can be found in the <a href="http://lahman.r-forge.r-project.org/doc/">package documentation</a>.</p>
+<p><strong>Advanced</strong>: If you want to calculate players’ actual batting averages, see the help file for the <code>battingStats</code> function in the Lahman package.</p>
+<p>Plotting batting averages over time. Does it look like batters are getting better or worse over time?</p>
+<h4 id="home-run-kings">Home run kings</h4>
+<p>Who has the most career home runs? How many seasons did they play?</p>
+<p>What is the most home runs in a single season?</p>
+<h4 id="batting-salaries">Batting &amp; Salaries</h4>
+<p>We want to examine how batting ability relates to salaries earned. For only the entries where salary data is available, join the two data.frames.</p>
+<p>The three components of the batting triple crown are batting average, runs batted in (RBI), and home runs. Plot salary against each of the three statistics. Which appears to have the strongest relationship with a player’s salary?</p>
+<p>Run a multiple linear regression of salary on the three batting statistics. Are the results of the model parsimonious with the conclusions from your plots?</p>
+<h4 id="advanced-triple-crown-winners">Advanced: triple crown winners</h4>
+<p>To win the triple crown is to have the most home runs and RBI and the highest batting average in a league for a year. Identify the triple crown winners.</p>
+        </div>
+      </div>
+      </article>
+      <div class="footer">
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/swcarpentry/lesson-template">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
+        <a class="label swc-blue-bg" href="LICENSE.html">License</a>
+      </div>
+    </div>
+    <!-- Javascript placed at the end of the document so the pages load faster -->
+    <script src="http://software-carpentry.org/v5/js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/bootstrap-js/bootstrap.js"></script>
+  </body>
+</html>

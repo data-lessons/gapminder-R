@@ -41,13 +41,13 @@
 </div>
 </section>
 <h3 id="the-what-and-why-of-rmarkdown">The What and Why of RMarkdown</h3>
-<p>Rmarkdown is a way to keep our notes, code, and results organized in a single document. It is a great tool for “literate programming” – the idea that your code should be readable by humans as well as computers. It keeps your writing and results together, so if you collect some new data or change how you clean the data, you just have to re-compile the document and you’re up to date.</p>
+<p>RMarkdown is a way to keep our notes, code, and results organized in a single document. It is a great tool for “literate programming” – the idea that your code should be readable by humans as well as computers. It keeps your writing and results together, so if you collect some new data or change how you clean the data, you just have to re-compile the document and you’re up to date.</p>
 <p>RMarkdown uses a simple syntax, which is then converted by the R package <code>knitr</code> and the utility pandoc, to html, pdf (if you have LaTeX on your machine), or Word files. You can write websites in RMarkdown, articles that conform to publishing standards, CVs, presentations… People have even written dissertations in RMarkdown. The syntax of the language is designed to be super simple, but you still get high quality output.</p>
-<h3 id="organization-of-an-rmarkdown-document">Organization of an Rmarkdown document</h3>
+<h3 id="organization-of-an-rmarkdown-document">Organization of an RMarkdown document</h3>
 <p>To get started, install the <code>knitr</code> package and create a new RMarkdown document.</p>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
-<h2 id="challenge---create-and-render-an-rmarkdown-document"><span class="glyphicon glyphicon-pencil"></span>Challenge - Create and render an Rmarkdown document</h2>
+<h2 id="challenge---create-and-render-an-rmarkdown-document"><span class="glyphicon glyphicon-pencil"></span>Challenge - Create and render an RMarkdown document</h2>
 </div>
 <div class="panel-body">
 <ul>
@@ -62,7 +62,7 @@
 <p>The top of the source (.Rmd) file has some header material in YAML format (enclosed by triple dashes). Some of this gets displayed in the output header, other of it provides formatting information to the conversion engine. This is the only required part of an RMarkdown document.</p>
 <p>After the header, there is a mix of plain-text, formatted with markdown syntax, and R-code chunks.</p>
 <h4 id="markdown-syntax">Markdown syntax</h4>
-<p>This page – <a href="http://rmarkdown.rstudio.com/authoring_basics.html" class="uri">http://rmarkdown.rstudio.com/authoring_basics.html</a> – covers the basics of formatting text in RMarkdown. You can create section headers and sub-headers with <code>#</code>, <code>##</code>, etc. Emphasis is achieved by surrounding text with one or two astericks: *italics* and **bold**. Lists via <code>-</code> and numbered lists using <code>1.</code>, <code>2.</code>, etc. Even creating a table is simple.</p>
+<p>This page – <a href="http://RMarkdown.rstudio.com/authoring_basics.html" class="uri">http://RMarkdown.rstudio.com/authoring_basics.html</a> – covers the basics of formatting text in RMarkdown. You can create section headers and sub-headers with <code>#</code>, <code>##</code>, etc. Emphasis is achieved by surrounding text with one or two asterisks: *italics* and **bold**. Lists via <code>-</code> and numbered lists using <code>1.</code>, <code>2.</code>, etc. Even creating a table is simple.</p>
 <p>Markdown also supports LaTeX equation editing. We can display pretty equations by enclosing them in <code>$</code>. E.g. <code>$\alpha = \dfrac{1}{(1 - \beta)^2}$</code> renders as: <span class="math inline">$\alpha = \dfrac{1}{(1 - \beta)^2}$</span>.</p>
 <h4 id="code-chunks">Code chunks</h4>
 <p>To distinguish R code from text, RMarkdown uses three back-ticks followed by <code>{r}</code> to distinguish a “code chunk”. In RStudio, the keyboard shortcut to create a code chunk is command-option-i or control-alt-i. You can set options for how that code chunk renders after the <code>r</code>. For example, <code>echo = FALSE</code> will prevent the code from being displayed, but its output will still be rendered. <code>fig.height = 8</code> will make plots generated in that code chunk 8 inches in height. You can set the options for the entire document by including this in a code chunk in your document: <code>opts_chunk$set( ... )</code>. Check out the full suite of code-chunk options at <a href="http://yihui.name/knitr/options/">Yihui’s (the author of <code>knitr</code>) website</a>.</p>

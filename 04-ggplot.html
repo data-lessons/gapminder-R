@@ -73,7 +73,7 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> gdpPercap, <span class="dt">y =</span> lifeExp)) +
 <span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
 <p><img src="fig/04-plot-ggplot2/lifeExp-vs-gdpPercap-scatter-1.png" title="plot of chunk lifeExp-vs-gdpPercap-scatter" alt="plot of chunk lifeExp-vs-gdpPercap-scatter" style="display: block; margin: auto;" /></p>
-<p>The first thing we do is call the <code>ggplot</code> function. This function tells ggplot what dataset we’re using (gapminder) and how to map variables in gapminder to the plotting “canvas” (gdp to the x-axis, life expectency to the y-axis). That <strong>mapping</strong> of variables to plot elements is done through the <code>aes</code> function. Arguments to <code>aes</code> will be variable names from the <code>data.frame</code> passed to <code>ggplot</code>. If you need a reminder of what’s in our data.frame, use <code>str(gapminder)</code>.</p>
+<p>The first thing we do is call the <code>ggplot</code> function. This function tells ggplot what dataset we’re using (gapminder) and how to map variables in gapminder to the plotting “canvas” (gdp to the x-axis, life expectancy to the y-axis). That <strong>mapping</strong> of variables to plot elements is done through the <code>aes</code> function. Arguments to <code>aes</code> will be variable names from the <code>data.frame</code> passed to <code>ggplot</code>. If you need a reminder of what’s in our data.frame, use <code>str(gapminder)</code>.</p>
 <p>By itself, the call to <code>ggplot</code> isn’t enough to draw a figure. This sets up the canvas correctly, but it doesn’t draw anything on it.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> gdpPercap, <span class="dt">y =</span> lifeExp))</code></pre></div>
 <p><img src="fig/04-plot-ggplot2/unnamed-chunk-4-1.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" style="display: block; margin: auto;" /></p>
@@ -102,7 +102,7 @@
 </div>
 </section>
 <h3 id="layers">Layers</h3>
-<p>Using a scatterplot probably isn’t the best for visualising change over time. Let’s add another layer to the plot – lines connecting the points representing each country:</p>
+<p>Using a scatterplot probably isn’t the best for visualizing change over time. Let’s add another layer to the plot – lines connecting the points representing each country:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> lifeExp, <span class="dt">color =</span> continent)) +
 <span class="st">    </span><span class="kw">geom_point</span>() +
 <span class="st">    </span><span class="kw">geom_line</span>()</code></pre></div>
@@ -130,7 +130,7 @@
 <blockquote>
 <p>NB: A barchart (or, less likely, a dotchart) is suboptimal because it requires summarizing the data to the mean or median or whatever – we’d rather preserve the information present in the full distribution.</p>
 </blockquote>
-<p>One possibility is a boxplot. In a boxplot, the distribution of values for each cateogry is displayed, with the central line at the median value, the box representing the inner-50%, etc.</p>
+<p>One possibility is a boxplot. In a boxplot, the distribution of values for each category is displayed, with the central line at the median value, the box representing the inner-50%, etc.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> continent, <span class="dt">y =</span> lifeExp)) +
 <span class="st">    </span><span class="kw">geom_boxplot</span>()</code></pre></div>
 <p><img src="fig/04-plot-ggplot2/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" style="display: block; margin: auto;" /></p>
@@ -237,7 +237,7 @@
 <span class="st">    </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">270</span>, <span class="dt">vjust =</span> .<span class="dv">5</span>)) +
 <span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&#39;Life expectancy over time by country&#39;</span>)</code></pre></div>
 <p><img src="fig/04-plot-ggplot2/cleaned up-1.png" title="plot of chunk cleaned up" alt="plot of chunk cleaned up" style="display: block; margin: auto;" /></p>
-<p>This is just a taste of what you can do with <code>ggplot2</code>. RStudio provides a really useful <a href="http://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf">cheat sheet</a> of the different layers available, and more extensive documentation is available on the <a href="http://docs.ggplot2.org/current/">ggplot2 website</a>. Finally, if you have no idea how to change something, a quick google search will usually send you to a relevant question and answer on Stack Overflow with reusable code to modify!</p>
+<p>This is just a taste of what you can do with <code>ggplot2</code>. RStudio provides a really useful <a href="http://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf">cheat sheet</a> of the different layers available, and more extensive documentation is available on the <a href="http://docs.ggplot2.org/current/">ggplot2 website</a>. Finally, if you have no idea how to change something, a quick Google search will usually send you to a relevant question and answer on Stack Overflow with reusable code to modify!</p>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
 <h4 id="challenge-5"><span class="glyphicon glyphicon-pencil"></span>Challenge 5</h4>

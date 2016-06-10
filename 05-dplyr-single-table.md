@@ -598,34 +598,60 @@ Source: local data frame [12 x 3]
 
 Note that `summarize` eliminates any other columns. Why? What else can it do? E.g. What country should it list for the year 1952!?
 
-You can also do multiple groupings. Suppose we want the average life expectancy in each continent for each year. We group by continent and year:
+We often want to calculate the number of entries within a group. E.g. we might wonder if our dataset is balanced by country. We can do this with the `n()` function, or `dplyr` provides a `count` function as a convenience:
 
 
 ~~~{.r}
 gapminder %>%
-    group_by(continent, year) %>%
-    summarize(mean_income = mean(gdpPercap))
+    group_by(country) %>%
+    summarize(number_entries = n())
 ~~~
 
 
 
 ~~~{.output}
-Source: local data frame [60 x 3]
-Groups: continent [?]
+Source: local data frame [142 x 2]
 
-   continent  year mean_income
-      (fctr) (int)       (dbl)
-1     Africa  1952    1252.572
-2     Africa  1957    1385.236
-3     Africa  1962    1598.079
-4     Africa  1967    2050.364
-5     Africa  1972    2339.616
-6     Africa  1977    2585.939
-7     Africa  1982    2481.593
-8     Africa  1987    2282.669
-9     Africa  1992    2281.810
-10    Africa  1997    2378.760
-..       ...   ...         ...
+       country number_entries
+        (fctr)          (int)
+1  Afghanistan             12
+2      Albania             12
+3      Algeria             12
+4       Angola             12
+5    Argentina             12
+6    Australia             12
+7      Austria             12
+8      Bahrain             12
+9   Bangladesh             12
+10     Belgium             12
+..         ...            ...
+
+~~~
+
+
+
+~~~{.r}
+count(gapminder, country)
+~~~
+
+
+
+~~~{.output}
+Source: local data frame [142 x 2]
+
+       country     n
+        (fctr) (int)
+1  Afghanistan    12
+2      Albania    12
+3      Algeria    12
+4       Angola    12
+5    Argentina    12
+6    Australia    12
+7      Austria    12
+8      Bahrain    12
+9   Bangladesh    12
+10     Belgium    12
+..         ...   ...
 
 ~~~
 
@@ -657,6 +683,98 @@ Source: local data frame [1,704 x 6]
 ..         ...   ...      ...       ...     ...       ...
 
 ~~~
+
+We can also do multiple groupings. Suppose we want the maximum life expectancy in each continent for each year. We group by continent and year and calculate the maximum with the `max` function:
+
+
+~~~{.r}
+gapminder %>%
+    group_by(continent, year) %>%
+    summarize(longest_life = max(lifeExp))
+~~~
+
+
+
+~~~{.output}
+Source: local data frame [60 x 3]
+Groups: continent [?]
+
+   continent  year longest_life
+      (fctr) (int)        (dbl)
+1     Africa  1952       52.724
+2     Africa  1957       58.089
+3     Africa  1962       60.246
+4     Africa  1967       61.557
+5     Africa  1972       64.274
+6     Africa  1977       67.064
+7     Africa  1982       69.885
+8     Africa  1987       71.913
+9     Africa  1992       73.615
+10    Africa  1997       74.772
+..       ...   ...          ...
+
+~~~
+
+Hmm, we got the longest life expectancy for each continent-year, but we didn't get the country. To get the country, we have to ask R "Where lifeExp is at a maximum, what is the entry in country?" For that we use the `which.max` function. `max` returns the maximum value; `which.max` returns the location of the maximum value.
+
+
+~~~{.r}
+max(c(1, 7, 4))
+~~~
+
+
+
+~~~{.output}
+[1] 7
+
+~~~
+
+
+
+~~~{.r}
+which.max(c(1, 7, 4))
+~~~
+
+
+
+~~~{.output}
+[1] 2
+
+~~~
+
+Now, back to the question: Where lifeExp is at a maximum, what is the entry in country? 
+
+
+~~~{.r}
+gapminder %>%
+    group_by(continent, year) %>%
+    summarize(longest_life = max(lifeExp), country = country[which.max(lifeExp)])
+~~~
+
+
+
+~~~{.output}
+Source: local data frame [60 x 4]
+Groups: continent [?]
+
+   continent  year longest_life   country
+      (fctr) (int)        (dbl)    (fctr)
+1     Africa  1952       52.724   Reunion
+2     Africa  1957       58.089 Mauritius
+3     Africa  1962       60.246 Mauritius
+4     Africa  1967       61.557 Mauritius
+5     Africa  1972       64.274   Reunion
+6     Africa  1977       67.064   Reunion
+7     Africa  1982       69.885   Reunion
+8     Africa  1987       71.913   Reunion
+9     Africa  1992       73.615   Reunion
+10    Africa  1997       74.772   Reunion
+..       ...   ...          ...       ...
+
+~~~
+
+
+
 
 > #### Challenge -- Part 1 {.challenge}
 >
