@@ -10,6 +10,7 @@ source("tools/chunk-options.R")
 opts_chunk$set(fig.path = "fig/04-plot-ggplot2/", cache = TRUE)
 # Silently load in the data so the rest of the lesson works
 gapminder <- read.csv("data/gapminder-FiveYearData.csv", header=TRUE)
+# Create a results/ directory to match learners' projects, in which to save plots
 ```
 
 > ## Learning objectives {.objectives}
@@ -314,6 +315,34 @@ ggplot(gapminder, aes(x = year, y = lifeExp, by = country)) +
 ```
 
 
+### Saving plots
+
+Now that we have that plot just the way we want it, let's write it to disk as an image. Of course, we could regenerate it by re-running our script, but we might want to make it available separately to show a collaborator or include in a document or presentation.
+
+You can use the `ggsave` function to save a ggplot. By default, `ggave` will save the last generated plot in the same dimensions as your viewing pane. The only required argument to `ggsave` is the location of the file you want to write to. Using our project organization, let's write the last plot to `results/lifeExpByCountry.png`. `ggsave` will notices the extension of the filename and writes the file in that format. You can also save as .pdf, .jpg, and other file types.
+
+```{r}
+ggsave('results/lifeExpByYear.png')
+```
+
+Some of the country names are still getting squeezed, so let's make the canvas a little bigger. Let's also assign our plot to an object and explicitly save that plot to disk. You assign a ggplot object to a variable just like any other object.
+
+```{r}
+myplot <- ggplot(gapminder, aes(x = year, y = lifeExp, by = country)) +
+    geom_line(aes(color = continent)) +
+    facet_wrap(~ country) +
+    xlab("Year") + 
+    ylab("Life expectancy") + 
+    theme_bw(base_size = 8) +
+    theme(axis.text.x = element_text(angle = 270, vjust = .5)) +
+    ggtitle('Life expectancy over time by country')
+ggsave(filename = 'results/lifeExpByYear-bigger.png', plot = myplot, 
+       width = 12, height = 8)
+```
+
+
+### Wrap-up
+
 This is just a taste of what you can do with `ggplot2`. RStudio provides a
 really useful [cheat sheet][cheat] of the different layers available, and more
 extensive documentation is available on the [ggplot2 website][ggplot-doc].
@@ -327,7 +356,7 @@ code to modify!
 
 > #### Challenge 5 {.challenge}
 >
-> Create a density plot of GDP per capita, with a separate curve for each continent, with color filled by continent.
+> Create a density plot of GDP per capita, with a separate curve for each continent, with color filled by continent. Save the plot to your `results/` directory.
 >
 > Advanced:
 > 

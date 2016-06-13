@@ -237,13 +237,31 @@
 <span class="st">    </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">270</span>, <span class="dt">vjust =</span> .<span class="dv">5</span>)) +
 <span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&#39;Life expectancy over time by country&#39;</span>)</code></pre></div>
 <p><img src="fig/04-plot-ggplot2/cleaned up-1.png" title="plot of chunk cleaned up" alt="plot of chunk cleaned up" style="display: block; margin: auto;" /></p>
+<h3 id="saving-plots">Saving plots</h3>
+<p>Now that we have that plot just the way we want it, let’s write it to disk as an image. Of course, we could regenerate it by re-running our script, but we might want to make it available separately to show a collaborator or include in a document or presentation.</p>
+<p>You can use the <code>ggsave</code> function to save a ggplot. By default, <code>ggave</code> will save the last generated plot in the same dimensions as your viewing pane. The only required argument to <code>ggsave</code> is the location of the file you want to write to. Using our project organization, let’s write the last plot to <code>results/lifeExpByCountry.png</code>. <code>ggsave</code> will notices the extension of the filename and writes the file in that format. You can also save as .pdf, .jpg, and other file types.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggsave</span>(<span class="st">&#39;results/lifeExpByYear.png&#39;</span>)</code></pre></div>
+<pre class="output"><code>Saving 7 x 7 in image
+</code></pre>
+<p>Some of the country names are still getting squeezed, so let’s make the canvas a little bigger. Let’s also assign our plot to an object and explicitly save that plot to disk. You assign a ggplot object to a variable just like any other object.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">myplot &lt;-<span class="st"> </span><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> lifeExp, <span class="dt">by =</span> country)) +
+<span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">color =</span> continent)) +
+<span class="st">    </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>country) +
+<span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;Year&quot;</span>) +<span class="st"> </span>
+<span class="st">    </span><span class="kw">ylab</span>(<span class="st">&quot;Life expectancy&quot;</span>) +<span class="st"> </span>
+<span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">8</span>) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">270</span>, <span class="dt">vjust =</span> .<span class="dv">5</span>)) +
+<span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&#39;Life expectancy over time by country&#39;</span>)
+<span class="kw">ggsave</span>(<span class="dt">filename =</span> <span class="st">&#39;results/lifeExpByYear-bigger.png&#39;</span>, <span class="dt">plot =</span> myplot, 
+       <span class="dt">width =</span> <span class="dv">12</span>, <span class="dt">height =</span> <span class="dv">8</span>)</code></pre></div>
+<h3 id="wrap-up">Wrap-up</h3>
 <p>This is just a taste of what you can do with <code>ggplot2</code>. RStudio provides a really useful <a href="http://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf">cheat sheet</a> of the different layers available, and more extensive documentation is available on the <a href="http://docs.ggplot2.org/current/">ggplot2 website</a>. Finally, if you have no idea how to change something, a quick Google search will usually send you to a relevant question and answer on Stack Overflow with reusable code to modify!</p>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
 <h4 id="challenge-5"><span class="glyphicon glyphicon-pencil"></span>Challenge 5</h4>
 </div>
 <div class="panel-body">
-<p>Create a density plot of GDP per capita, with a separate curve for each continent, with color filled by continent.</p>
+<p>Create a density plot of GDP per capita, with a separate curve for each continent, with color filled by continent. Save the plot to your <code>results/</code> directory.</p>
 <p>Advanced:</p>
 <ul>
 <li>Adjust the opacity (<code>alpha</code>) of the density curves so all are visible.</li>
