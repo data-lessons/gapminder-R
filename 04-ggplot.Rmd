@@ -10,7 +10,8 @@ source("tools/chunk-options.R")
 opts_chunk$set(fig.path = "fig/04-plot-ggplot2/", cache = TRUE)
 # Silently load in the data so the rest of the lesson works
 gapminder <- read.csv("data/gapminder-FiveYearData.csv", header=TRUE)
-# Create a results/ directory to match learners' projects, in which to save plots
+# Create a results/ directory to match learners' projects, in which to save plots:
+dir.create('results')
 ```
 
 > ## Learning objectives {.objectives}
