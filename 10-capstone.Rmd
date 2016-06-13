@@ -54,4 +54,4 @@ Run a multiple linear regression of salary on the three batting statistics. Are 
 
 #### Advanced: triple crown winners
 
-To win the triple crown is to have the most home runs and RBI and the highest batting average in a league for a year. Identify the triple crown winners. 
+To win the triple crown is to have the most home runs and RBI and the highest batting average in a league for a year. Since 1957, only batters with at least 502 at-bats are eligible for the highest batting average. There have been two (non-tie) triple crown winners since 1957 -- can you identify them?

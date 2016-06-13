@@ -1,0 +1,197 @@
+---
+title: "Capstone Project"
+author: "Data Carpentry"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output: html_document
+---
+
+```{r setup-silent, include=FALSE}
+knitr::opts_chunk$set(cache = FALSE, fig.path = "fig/capstoneSolutions/", 
+                      fig.height = 4.5, fig.width = 5, warning = FALSE)
+```
+
+
+# Setup
+
+Set some global document properties and load the data and some useful packages.
+
+```{r setup, warning = FALSE, message = FALSE}
+library(Lahman)
+data('Batting')
+data('Salaries')
+library(dplyr)
+library(ggplot2)
+```
+
+#### Getting acquanited
+
+> Explore the two data.frames. Write a short summary. What time periods do they cover? How many players are in the dataset? What is the maximum recorded salary?
+
+We can calculate all of these statistics directly in the text of our writeup...
+
+The batting data range from `r paste(range(Batting$year), collapse = ' - ')`, while the salary data start at `r min(Salaries$year)`. 
+
+<!-- There are `r sum(is.na(Batting))` missing data points in the Batting dataset, which represents `r round(100 * sum(is.na(Batting)) / prod(dim(Batting)), 1)`% of the cells in the table. -->
+
+There are `r length(unique(Batting$playerID))` players in the batting dataset, and `r length(unique(Salaries$playerID))` in the salary dataset.
+
+The maximum salary earned is $`r max(Salaries$salary)`, which was earned by `r Salaries$playerID[which.max(Salaries$salary)]` in `r Salaries$yearID[which.max(Salaries$salary)]`.
+
+
+#### Batting averages
+
+To approximate a player's batting average we divide their number of at bats by the number of hits they got. Then let's glance at the top of our data.frame to make sure the numbers look reasonable.
+
+```{r BA1}
+Batting <- mutate(Batting, BA_approx = H / AB)
+head(select(Batting, H, AB, BA_approx))
+```
+
+Using the `battingStats` function that comes with the `Lahman` package, we can calculate players' actual batting averages (accounting for things like at-bats where the batter got on base without getting a hit, for example).
+
+```{r}
+Batting <- battingStats(Batting)
+```
+
+Let's take a look at how our approximation of batting average compares with the actual statistic. We'll draw a 1:1 line for comparison.
+
+```{r BA approximation vs actual}
+ggplot(Batting, aes(x = BA, y = BA_approx)) + 
+    geom_point() + 
+    geom_abline(slope = 1, intercept = 0, color = 'red')
+```
+
+Wow, it is very close! Are they exactly the same? There are a few ways we could look at that. Let's plot the distribution of ratios of the statistics. Where that ratio is one, they are the same.
+
+```{r BA density}
+ggplot(Batting, aes(x = BA / BA_approx)) + 
+    geom_density(fill = 'lightblue') 
+```
+
+
+#### Batting averages over time
+
+```{r BA over time}
+ggplot(Batting, aes(x = yearID, y = BA)) +
+    geom_point() 
+```
+
+What a mess! There is so much over-plotting we can't see where there is more data versus less. Also, the fact that there are so many 0, 0.5, and 1.0 entries suggests there are many data points with a small number of at bats. Let's filter to only those players who had at least 50 at bats, add some transparency to the points, and fit a linear trend line.
+
+It looks like batting averages have stayed pretty steady over time.
+
+```{r filtered BA over time}
+filter(Batting, AB > 50) %>%
+    ggplot(aes(x = yearID, y = BA)) +
+    geom_point(alpha = .1) +
+    geom_smooth(method = 'lm')
+```
+
+
+
+#### Home run kings
+
+Here are the top-five career home run hitters. Calculating number of seasons with `n()` will get close, but if a player played for multiple teams within a year, they will have multiple entries for that year.
+
+```{r}
+group_by(Batting, playerID) %>%
+    summarize(careerHR = sum(HR),
+              seasons = length(unique(yearID))) %>%
+    arrange(desc(careerHR)) %>%
+    head(n = 5)
+```
+
+
+> What is the most home runs in a single season?
+
+If you are willing to ignore the fact that some players play for more than one team in a year (and so have multiple entries in one season), you can just sort the data.frame by HR (descending).
+
+```{r}
+arrange(Batting, desc(HR)) %>%
+    select(playerID, yearID, HR) %>%
+    head(n = 10)
+```
+
+To avoid having to make that assumption, we need to group multiple rows for the same player in the same year, and add the number of home runs. In order to get `arrange` working properly, we need to remove the grouping; otherwise, it will try to arrange within the groups. Here though, the assumption doesn't do any harm.
+
+```{r}
+group_by(Batting, playerID, yearID) %>%
+    summarize(yearHR = sum(HR)) %>%
+    ungroup() %>%
+    arrange(desc(yearHR)) %>%
+    head(n = 10)
+```
+
+
+ 
+#### Batting & Salaries
+
+> We want to examine how batting ability relates to salaries earned. For only the entries where salary data is available, join the two data.frames.
+
+To keep only the entries that have a salary, either use `left_join` and make Salaries the first table, or use `right_join` and make Batting the first table.
+
+```{r}
+battingSalaries <- right_join(Batting, Salaries, "playerID", "yearID")
+```
+
+> The three components of the batting triple crown are batting average, runs batted in (RBI), and home runs. Plot salary against each of the three statistics. Which appears to have the strongest relationship with a player's salary?
+
+There are two ways to do this; either make a separate plot for each of the three statistics (we'll write a function to do that to avoid typing the whole thing three times), or tidy the data across statistics, making one column for the name of the statistic and another for its value, and then faceting the plot by statistic. Here's how to do each:
+
+##### Separate plots
+
+Let's write a function that takes the `battingSalaries` data.frame and a batting statistic and plots the statistic against salary earned, with some transparency to help with over-plotting, and add a linear trend line.
+
+- There is one tricky new thing here. When you use `ggplot` inside a function and you want to use a variable name (e.g. RBI) as an argument to the function, you have to use `aes_string` instead of `aes` inside `ggplot`, and you put any column names that you're using directly in quotes. That is, if the variable you want to map to x, or y, or color, or whatever is itself a variable that contains the name of a column in the data.frame, rather than the name of a column in the data.frame, you use `aes_string`. Inside `aes_string` don't use quotes for variables that contain column names, but do use quotes for column names. The mechanism is beyond the scope of this workshop, but it has to do with "non-standard evaluation." If you want to know more, Google that phrase along with ggplot. The same thing applies to using `dplyr` within functions: You can use `filter_`, `arrange_`, etc.
+
+All three statistics appear to be associated with higher salaries.
+
+```{r batting stats 1}
+plotVsSalary <- function(statistic, df = battingSalaries) {
+    ggplot(df, aes_string(x = statistic, y = 'salary')) +
+    geom_point(alpha = .1) +
+    geom_smooth(method = 'lm')
+}
+plotVsSalary(statistic = 'BA')
+plotVsSalary(statistic = 'RBI')
+plotVsSalary(statistic = 'HR')
+```
+
+##### Faceted plots
+
+Alternatively, you could use `tidyr`'s `gather` to put all the batting statistics in one column, and then facet by the batting statistic. In this case, use the `scales` argument to `facet_wrap` to get avoid plotting batting averages (0 - 1) on the same scale as home runs (0 - 73), etc.
+
+```{r batting stats 2, fig.width=7}
+library(tidyr)
+gather(battingSalaries, stat, value, BA, RBI, HR) %>%
+    ggplot(aes(x = value, y = salary)) + 
+    geom_point(alpha = .1) +
+    geom_smooth(method = 'lm') +
+    facet_wrap(~ stat, scales = 'free_x')
+```
+
+
+> Run a multiple linear regression of salary on the three batting statistics. Are the results of the model parsimonious with the conclusions from your plots?
+
+No! After accounting for home runs, it looks like batting average and RBI are *negatively* associated with salary! Of course, there are many factors to consider before concluding that players should start getting fewer hits if they want to make more money (e.g. filtering players with very few at-bats or weighting data-points by the number of at bats, accounting for clustering at the team level, filtering pitchers who are paid for skills other than batting, etc.)
+
+```{r}
+lm(salary ~ HR + BA + RBI, data = battingSalaries) %>%
+    summary()
+```
+
+
+#### Advanced: triple crown winners
+
+> To win the triple crown is to have the most home runs and RBI and the highest batting average in a league for a year. Since 1957, only batters with at least 502 at-bats are eligible for the highest batting average. There have been two (non-tie) triple crown winners since 1957 -- can you identify them?
+
+To do this we need to filter to the eligible players and years of interest, group by year and league, identify the top player for each of the three statistics, and check if they are all the same person. Here goes...
+
+```{r}
+filter(Batting, AB >= 502, yearID >= 1957) %>%
+    group_by(yearID, lgID) %>%
+    summarize(topBA = playerID[which.max(BA)],
+              topRBI = playerID[which.max(RBI)],
+              topHR = playerID[which.max(HR)]) %>%
+    filter(topBA == topRBI & topRBI == topHR)
+```

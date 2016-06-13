@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: Capstone Project</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="css/swc.css" />
+    <link rel="alternate" type="application/rss+xml" title="Software Carpentry Blog" href="http://software-carpentry.org/feed.xml"/>
+    <meta charset="UTF-8" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body class="lesson">
+    <div class="container card">
+      <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
+      </div>
+      <article>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+                    <h1 class="title">Capstone Project</h1>
+          <h1 id="setup">Setup</h1>
+<p>Set some global document properties and load the data and some useful packages.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(Lahman)
+<span class="kw">data</span>(<span class="st">&#39;Batting&#39;</span>)
+<span class="kw">data</span>(<span class="st">&#39;Salaries&#39;</span>)
+<span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(ggplot2)</code></pre></div>
+<h4 id="getting-acquanited">Getting acquanited</h4>
+<blockquote>
+<p>Explore the two data.frames. Write a short summary. What time periods do they cover? How many players are in the dataset? What is the maximum recorded salary?</p>
+</blockquote>
+<p>We can calculate all of these statistics directly in the text of our writeup…</p>
+<p>The batting data range from 1871 - 2014, while the salary data start at 1985.</p>
+<!-- There are 223251 missing data points in the Batting dataset, which represents 10.2% of the cells in the table. -->
+<p>There are 18405 players in the batting dataset, and 4826 in the salary dataset.</p>
+<p>The maximum salary earned is $33000000, which was earned by rodrial01 in 2009.</p>
+<h4 id="batting-averages">Batting averages</h4>
+<p>To approximate a player’s batting average we divide their number of at bats by the number of hits they got. Then let’s glance at the top of our data.frame to make sure the numbers look reasonable.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Batting &lt;-<span class="st"> </span><span class="kw">mutate</span>(Batting, <span class="dt">BA_approx =</span> H /<span class="st"> </span>AB)
+<span class="kw">head</span>(<span class="kw">select</span>(Batting, H, AB, BA_approx))</code></pre></div>
+<pre><code>##    H  AB BA_approx
+## 1  0   4 0.0000000
+## 2 32 118 0.2711864
+## 3 40 137 0.2919708
+## 4 44 133 0.3308271
+## 5 39 120 0.3250000
+## 6 11  49 0.2244898</code></pre>
+<p>Using the <code>battingStats</code> function that comes with the <code>Lahman</code> package, we can calculate players’ actual batting averages (accounting for things like at-bats where the batter got on base without getting a hit, for example).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Batting &lt;-<span class="st"> </span><span class="kw">battingStats</span>(Batting)</code></pre></div>
+<p>Let’s take a look at how our approximation of batting average compares with the actual statistic. We’ll draw a 1:1 line for comparison.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(Batting, <span class="kw">aes</span>(<span class="dt">x =</span> BA, <span class="dt">y =</span> BA_approx)) +<span class="st"> </span>
+<span class="st">    </span><span class="kw">geom_point</span>() +<span class="st"> </span>
+<span class="st">    </span><span class="kw">geom_abline</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&#39;red&#39;</span>)</code></pre></div>
+<div class="figure">
+<img src="fig/capstoneSolutions/BA%20approximation%20vs%20actual-1.png" alt="plot of chunk BA approximation vs actual" />
+<p class="caption">plot of chunk BA approximation vs actual</p>
+</div>
+<p>Wow, it is very close! Are they exactly the same? There are a few ways we could look at that. Let’s plot the distribution of ratios of the statistics. Where that ratio is one, they are the same.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(Batting, <span class="kw">aes</span>(<span class="dt">x =</span> BA /<span class="st"> </span>BA_approx)) +<span class="st"> </span>
+<span class="st">    </span><span class="kw">geom_density</span>(<span class="dt">fill =</span> <span class="st">&#39;lightblue&#39;</span>) </code></pre></div>
+<div class="figure">
+<img src="fig/capstoneSolutions/BA%20density-1.png" alt="plot of chunk BA density" />
+<p class="caption">plot of chunk BA density</p>
+</div>
+<h4 id="batting-averages-over-time">Batting averages over time</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(Batting, <span class="kw">aes</span>(<span class="dt">x =</span> yearID, <span class="dt">y =</span> BA)) +
+<span class="st">    </span><span class="kw">geom_point</span>() </code></pre></div>
+<div class="figure">
+<img src="fig/capstoneSolutions/BA%20over%20time-1.png" alt="plot of chunk BA over time" />
+<p class="caption">plot of chunk BA over time</p>
+</div>
+<p>What a mess! There is so much over-plotting we can’t see where there is more data versus less. Also, the fact that there are so many 0, 0.5, and 1.0 entries suggests there are many data points with a small number of at bats. Let’s filter to only those players who had at least 50 at bats, add some transparency to the points, and fit a linear trend line.</p>
+<p>It looks like batting averages have stayed pretty steady over time.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">filter</span>(Batting, AB &gt;<span class="st"> </span><span class="dv">50</span>) %&gt;%
+<span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> yearID, <span class="dt">y =</span> BA)) +
+<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> .<span class="dv">1</span>) +
+<span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&#39;lm&#39;</span>)</code></pre></div>
+<div class="figure">
+<img src="fig/capstoneSolutions/filtered%20BA%20over%20time-1.png" alt="plot of chunk filtered BA over time" />
+<p class="caption">plot of chunk filtered BA over time</p>
+</div>
+<h4 id="home-run-kings">Home run kings</h4>
+<p>Here are the top-five career home run hitters. Calculating number of seasons with <code>n()</code> will get close, but if a player played for multiple teams within a year, they will have multiple entries for that year.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_by</span>(Batting, playerID) %&gt;%
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">careerHR =</span> <span class="kw">sum</span>(HR),
+              <span class="dt">seasons =</span> <span class="kw">length</span>(<span class="kw">unique</span>(yearID))) %&gt;%
+<span class="st">    </span><span class="kw">arrange</span>(<span class="kw">desc</span>(careerHR)) %&gt;%
+<span class="st">    </span><span class="kw">head</span>(<span class="dt">n =</span> <span class="dv">5</span>)</code></pre></div>
+<pre><code>## Source: local data frame [5 x 3]
+## 
+##    playerID careerHR seasons
+##       (chr)    (int)   (int)
+## 1 bondsba01      762      22
+## 2 aaronha01      755      23
+## 3  ruthba01      714      22
+## 4  mayswi01      660      22
+## 5 rodrial01      654      20</code></pre>
+<blockquote>
+<p>What is the most home runs in a single season?</p>
+</blockquote>
+<p>If you are willing to ignore the fact that some players play for more than one team in a year (and so have multiple entries in one season), you can just sort the data.frame by HR (descending).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">arrange</span>(Batting, <span class="kw">desc</span>(HR)) %&gt;%
+<span class="st">    </span><span class="kw">select</span>(playerID, yearID, HR) %&gt;%
+<span class="st">    </span><span class="kw">head</span>(<span class="dt">n =</span> <span class="dv">10</span>)</code></pre></div>
+<pre><code>##     playerID yearID HR
+## 1  bondsba01   2001 73
+## 2  mcgwima01   1998 70
+## 3   sosasa01   1998 66
+## 4  mcgwima01   1999 65
+## 5   sosasa01   2001 64
+## 6   sosasa01   1999 63
+## 7  marisro01   1961 61
+## 8   ruthba01   1927 60
+## 9   ruthba01   1921 59
+## 10  foxxji01   1932 58</code></pre>
+<p>To avoid having to make that assumption, we need to group multiple rows for the same player in the same year, and add the number of home runs. In order to get <code>arrange</code> working properly, we need to remove the grouping; otherwise, it will try to arrange within the groups. Here though, the assumption doesn’t do any harm.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_by</span>(Batting, playerID, yearID) %&gt;%
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">yearHR =</span> <span class="kw">sum</span>(HR)) %&gt;%
+<span class="st">    </span><span class="kw">ungroup</span>() %&gt;%
+<span class="st">    </span><span class="kw">arrange</span>(<span class="kw">desc</span>(yearHR)) %&gt;%
+<span class="st">    </span><span class="kw">head</span>(<span class="dt">n =</span> <span class="dv">10</span>)</code></pre></div>
+<pre><code>## Source: local data frame [10 x 3]
+## 
+##     playerID yearID yearHR
+##        (chr)  (int)  (int)
+## 1  bondsba01   2001     73
+## 2  mcgwima01   1998     70
+## 3   sosasa01   1998     66
+## 4  mcgwima01   1999     65
+## 5   sosasa01   2001     64
+## 6   sosasa01   1999     63
+## 7  marisro01   1961     61
+## 8   ruthba01   1927     60
+## 9   ruthba01   1921     59
+## 10  foxxji01   1932     58</code></pre>
+<h4 id="batting-salaries">Batting &amp; Salaries</h4>
+<blockquote>
+<p>We want to examine how batting ability relates to salaries earned. For only the entries where salary data is available, join the two data.frames.</p>
+</blockquote>
+<p>To keep only the entries that have a salary, either use <code>left_join</code> and make Salaries the first table, or use <code>right_join</code> and make Batting the first table.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">battingSalaries &lt;-<span class="st"> </span><span class="kw">right_join</span>(Batting, Salaries, <span class="st">&quot;playerID&quot;</span>, <span class="st">&quot;yearID&quot;</span>)</code></pre></div>
+<blockquote>
+<p>The three components of the batting triple crown are batting average, runs batted in (RBI), and home runs. Plot salary against each of the three statistics. Which appears to have the strongest relationship with a player’s salary?</p>
+</blockquote>
+<p>There are two ways to do this; either make a separate plot for each of the three statistics (we’ll write a function to do that to avoid typing the whole thing three times), or tidy the data across statistics, making one column for the name of the statistic and another for its value, and then faceting the plot by statistic. Here’s how to do each:</p>
+<h5 id="separate-plots">Separate plots</h5>
+<p>Let’s write a function that takes the <code>battingSalaries</code> data.frame and a batting statistic and plots the statistic against salary earned, with some transparency to help with over-plotting, and add a linear trend line.</p>
+<ul>
+<li>There is one tricky new thing here. When you use <code>ggplot</code> inside a function and you want to use a variable name (e.g. RBI) as an argument to the function, you have to use <code>aes_string</code> instead of <code>aes</code> inside <code>ggplot</code>, and you put any column names that you’re using directly in quotes. That is, if the variable you want to map to x, or y, or color, or whatever is itself a variable that contains the name of a column in the data.frame, rather than the name of a column in the data.frame, you use <code>aes_string</code>. Inside <code>aes_string</code> don’t use quotes for variables that contain column names, but do use quotes for column names. The mechanism is beyond the scope of this workshop, but it has to do with “non-standard evaluation.” If you want to know more, Google that phrase along with ggplot. The same thing applies to using <code>dplyr</code> within functions: You can use <code>filter_</code>, <code>arrange_</code>, etc.</li>
+</ul>
+<p>All three statistics appear to be associated with higher salaries.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plotVsSalary &lt;-<span class="st"> </span>function(statistic, <span class="dt">df =</span> battingSalaries) {
+    <span class="kw">ggplot</span>(df, <span class="kw">aes_string</span>(<span class="dt">x =</span> statistic, <span class="dt">y =</span> <span class="st">&#39;salary&#39;</span>)) +
+<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> .<span class="dv">1</span>) +
+<span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&#39;lm&#39;</span>)
+}
+<span class="kw">plotVsSalary</span>(<span class="dt">statistic =</span> <span class="st">&#39;BA&#39;</span>)</code></pre></div>
+<div class="figure">
+<img src="fig/capstoneSolutions/batting%20stats%201-1.png" alt="plot of chunk batting stats 1" />
+<p class="caption">plot of chunk batting stats 1</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotVsSalary</span>(<span class="dt">statistic =</span> <span class="st">&#39;RBI&#39;</span>)</code></pre></div>
+<div class="figure">
+<img src="fig/capstoneSolutions/batting%20stats%201-2.png" alt="plot of chunk batting stats 1" />
+<p class="caption">plot of chunk batting stats 1</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotVsSalary</span>(<span class="dt">statistic =</span> <span class="st">&#39;HR&#39;</span>)</code></pre></div>
+<div class="figure">
+<img src="fig/capstoneSolutions/batting%20stats%201-3.png" alt="plot of chunk batting stats 1" />
+<p class="caption">plot of chunk batting stats 1</p>
+</div>
+<h5 id="faceted-plots">Faceted plots</h5>
+<p>Alternatively, you could use <code>tidyr</code>’s <code>gather</code> to put all the batting statistics in one column, and then facet by the batting statistic. In this case, use the <code>scales</code> argument to <code>facet_wrap</code> to get avoid plotting batting averages (0 - 1) on the same scale as home runs (0 - 73), etc.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
+<span class="kw">gather</span>(battingSalaries, stat, value, BA, RBI, HR) %&gt;%
+<span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> value, <span class="dt">y =</span> salary)) +<span class="st"> </span>
+<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> .<span class="dv">1</span>) +
+<span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&#39;lm&#39;</span>) +
+<span class="st">    </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>stat, <span class="dt">scales =</span> <span class="st">&#39;free_x&#39;</span>)</code></pre></div>
+<div class="figure">
+<img src="fig/capstoneSolutions/batting%20stats%202-1.png" alt="plot of chunk batting stats 2" />
+<p class="caption">plot of chunk batting stats 2</p>
+</div>
+<blockquote>
+<p>Run a multiple linear regression of salary on the three batting statistics. Are the results of the model parsimonious with the conclusions from your plots?</p>
+</blockquote>
+<p>No! After accounting for home runs, it looks like batting average and RBI are <em>negatively</em> associated with salary! Of course, there are many factors to consider before concluding that players should start getting fewer hits if they want to make more money (e.g. filtering players with very few at-bats or weighting data-points by the number of at bats, accounting for clustering at the team level, filtering pitchers who are paid for skills other than batting, etc.)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(salary ~<span class="st"> </span>HR +<span class="st"> </span>BA +<span class="st"> </span>RBI, <span class="dt">data =</span> battingSalaries) %&gt;%
+<span class="st">    </span><span class="kw">summary</span>()</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = salary ~ HR + BA + RBI, data = battingSalaries)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -9784059 -1808692 -1300712   643130 31182465 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  2085040.9    15673.1 133.033  &lt; 2e-16 ***
+## HR            118074.4     1995.3  59.176  &lt; 2e-16 ***
+## BA          -1279767.8    69776.8 -18.341  &lt; 2e-16 ***
+## RBI            -3216.4      605.2  -5.314 1.07e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3576000 on 227708 degrees of freedom
+##   (61544 observations deleted due to missingness)
+## Multiple R-squared:  0.07473,    Adjusted R-squared:  0.07472 
+## F-statistic:  6130 on 3 and 227708 DF,  p-value: &lt; 2.2e-16</code></pre>
+<h4 id="advanced-triple-crown-winners">Advanced: triple crown winners</h4>
+<blockquote>
+<p>To win the triple crown is to have the most home runs and RBI and the highest batting average in a league for a year. Since 1957, only batters with at least 502 at-bats are eligible for the highest batting average. There have been two (non-tie) triple crown winners since 1957 – can you identify them?</p>
+</blockquote>
+<p>To do this we need to filter to the eligible players and years of interest, group by year and league, identify the top player for each of the three statistics, and check if they are all the same person. Here goes…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">filter</span>(Batting, AB &gt;=<span class="st"> </span><span class="dv">502</span>, yearID &gt;=<span class="st"> </span><span class="dv">1957</span>) %&gt;%
+<span class="st">    </span><span class="kw">group_by</span>(yearID, lgID) %&gt;%
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">topBA =</span> playerID[<span class="kw">which.max</span>(BA)],
+              <span class="dt">topRBI =</span> playerID[<span class="kw">which.max</span>(RBI)],
+              <span class="dt">topHR =</span> playerID[<span class="kw">which.max</span>(HR)]) %&gt;%
+<span class="st">    </span><span class="kw">filter</span>(topBA ==<span class="st"> </span>topRBI &amp;<span class="st"> </span>topRBI ==<span class="st"> </span>topHR)</code></pre></div>
+<pre><code>## Source: local data frame [2 x 5]
+## Groups: yearID [2]
+## 
+##   yearID   lgID     topBA    topRBI     topHR
+##    (int) (fctr)     (chr)     (chr)     (chr)
+## 1   1966     AL robinfr02 robinfr02 robinfr02
+## 2   2012     AL cabremi01 cabremi01 cabremi01</code></pre>
+        </div>
+      </div>
+      </article>
+      <div class="footer">
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/swcarpentry/lesson-template">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
+        <a class="label swc-blue-bg" href="LICENSE.html">License</a>
+      </div>
+    </div>
+    <!-- Javascript placed at the end of the document so the pages load faster -->
+    <script src="http://software-carpentry.org/v5/js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/bootstrap-js/bootstrap.js"></script>
+  </body>
+</html>

@@ -28,3 +28,4 @@ seriously the idea that motivation comes before detailed understanding, so the f
 8.  [Dynamic Documents](08-knitr.html)
 9.  [Statistical Modeling](09-regression.html)
 10. [Capstone Project](10-capstone.html)
+- [Solutions to Capstone Project](11-capstone_solutions.html)
