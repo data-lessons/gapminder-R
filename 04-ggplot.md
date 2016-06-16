@@ -275,7 +275,7 @@ ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
 
 <img src="fig/04-plot-ggplot2/themes-1.png" title="plot of chunk themes" alt="plot of chunk themes" style="display: block; margin: auto;" />
 
-There are a variety of themes in a separate package called `ggthemes`, e.g. we can mimic The Economist [or many others](https://github.com/jrnold/ggthemes):
+There are a variety of themes in a separate package called `ggthemes`, e.g. we can mimic The Economist [or many others](https://github.com/jrnold/ggthemes). Of course before we use the `ggthemes` package, we have to install it, which you can do with `install.packages('ggthemes')`.
 
 
 ~~~{.r}

@@ -190,7 +190,7 @@
 <span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&#39;lm&#39;</span>) +
 <span class="st">    </span><span class="kw">theme_bw</span>()</code></pre></div>
 <p><img src="fig/04-plot-ggplot2/themes-1.png" title="plot of chunk themes" alt="plot of chunk themes" style="display: block; margin: auto;" /></p>
-<p>There are a variety of themes in a separate package called <code>ggthemes</code>, e.g. we can mimic The Economist <a href="https://github.com/jrnold/ggthemes">or many others</a>:</p>
+<p>There are a variety of themes in a separate package called <code>ggthemes</code>, e.g. we can mimic The Economist <a href="https://github.com/jrnold/ggthemes">or many others</a>. Of course before we use the <code>ggthemes</code> package, we have to install it, which you can do with <code>install.packages('ggthemes')</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggthemes)
 <span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> gdpPercap, <span class="dt">y =</span> lifeExp)) +
 <span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> continent)) +<span class="st"> </span>

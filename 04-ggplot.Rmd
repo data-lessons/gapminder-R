@@ -243,7 +243,7 @@ ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
     theme_bw()
 ```
 
-There are a variety of themes in a separate package called `ggthemes`, e.g. we can mimic The Economist [or many others](https://github.com/jrnold/ggthemes):
+There are a variety of themes in a separate package called `ggthemes`, e.g. we can mimic The Economist [or many others](https://github.com/jrnold/ggthemes). Of course before we use the `ggthemes` package, we have to install it, which you can do with `install.packages('ggthemes')`.
 
 ```{r ggthemes}
 library(ggthemes)
