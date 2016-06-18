@@ -503,19 +503,6 @@ gapminder %>%
 
 Making your code easier for humans to read will save you lots of time. The human reading it is usually future-you, and operations that seem simple when you're writing them will look like gibberish when you're three weeks removed from them, let alone three months or three years or another person. Make your code as easy to read as possible by using the pipe where appropriate, leaving white space, using descriptive variable names, being consistent with spacing and naming, and liberally commenting code.
 
-> #### MCQ: Data Reduction {.challenge}
->
-> Produce a data.frame with only the names and years of countries where per capita income is less than a dollar a day sorted from most- to least-recent.
->
-> - Tip: The `gdpPercap` variable is annual income. You'll need to adjust.
-> - Tip: For complex tasks, it often helps to use pencil and paper to write/draw/map the various steps needed and how they fit together before writing any code.
-> 
-> What is the annual per-capita income, rounded to the nearest dollar, of the first row in the data.frame?
->
-> a. $278
-> b. $312
-> c. $331
-> d. $339
 
 #### `mutate()`
 
@@ -562,6 +549,21 @@ gapminder %>%
 6  Kuwait 1977 1140357      Asia  69.343  59265.48   4.772802 6.057041
 
 ~~~
+
+
+> #### MCQ: Data Reduction {.challenge}
+>
+> Produce a data.frame with only the names and years of countries where per capita income is less than a dollar a day sorted from most- to least-recent.
+>
+> - Tip: The `gdpPercap` variable is annual income. You'll need to adjust.
+> - Tip: For complex tasks, it often helps to use pencil and paper to write/draw/map the various steps needed and how they fit together before writing any code.
+> 
+> What is the annual per-capita income, rounded to the nearest dollar, of the first row in the data.frame?
+>
+> a. $278
+> b. $312
+> c. $331
+> d. $339
 
 #### `summarize()`
 
