@@ -183,15 +183,24 @@ lm(salary ~ HR + BA + RBI, data = battingSalaries) %>%
 
 #### Advanced: triple crown winners
 
-> To win the triple crown is to have the most home runs and RBI and the highest batting average in a league for a year. Since 1957, only batters with at least 502 at-bats are eligible for the highest batting average. There have been two (non-tie) triple crown winners since 1957 -- can you identify them?
+> To win the triple crown is to have the most home runs and RBI and the highest batting average in a league for a year. Since 1957, only batters with at least 502 at-bats are eligible for the highest batting average. There have been three triple crown winners since 1957 -- can you identify them?
 
-To do this we need to filter to the eligible players and years of interest, group by year and league, identify the top player for each of the three statistics, and check if they are all the same person. Here goes...
+This might be a good candidate for the type of problem where it's useful to map
+what you want to do before you start writing code. Here is one way to attack this
+problem:
+
+1. Filter to the eligible players and years of interest (`filter`)
+1. Group by year and league and identify the maximal values for each of the three statistics in each of the groups (`group_by %>% summarize`)
+1. Add columns for the maximal values to the original data.frame (`X_join`)
+1. Filter to rows where the player's value equals the maximal value for each of the three statistics (`filter`)
 
 ```{r}
-filter(Batting, AB >= 502, yearID >= 1957) %>%
+best = 
+    filter(Batting, AB >= 502, yearID >= 1957) %>%
     group_by(yearID, lgID) %>%
-    summarize(topBA = playerID[which.max(BA)],
-              topRBI = playerID[which.max(RBI)],
-              topHR = playerID[which.max(HR)]) %>%
-    filter(topBA == topRBI & topRBI == topHR)
+    summarize(topBA = max(BA),
+              topRBI = max(RBI),
+              topHR = max(HR))
+withBest = right_join(Batting, best, by = c("yearID", "lgID"))
+filter(withBest, BA == topBA & RBI == topRBI & HR == topHR)
 ```

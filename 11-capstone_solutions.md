@@ -293,26 +293,40 @@ lm(salary ~ HR + BA + RBI, data = battingSalaries) %>%
 
 #### Advanced: triple crown winners
 
-> To win the triple crown is to have the most home runs and RBI and the highest batting average in a league for a year. Since 1957, only batters with at least 502 at-bats are eligible for the highest batting average. There have been two (non-tie) triple crown winners since 1957 -- can you identify them?
+> To win the triple crown is to have the most home runs and RBI and the highest batting average in a league for a year. Since 1957, only batters with at least 502 at-bats are eligible for the highest batting average. There have been three triple crown winners since 1957 -- can you identify them?
 
-To do this we need to filter to the eligible players and years of interest, group by year and league, identify the top player for each of the three statistics, and check if they are all the same person. Here goes...
+This might be a good candidate for the type of problem where it's useful to map
+what you want to do before you start writing code. Here is one way to attack this
+problem:
+
+1. Filter to the eligible players and years of interest (`filter`)
+1. Group by year and league and identify the maximal values for each of the three statistics in each of the groups (`group_by %>% summarize`)
+1. Add columns for the maximal values to the original data.frame (`X_join`)
+1. Filter to rows where the player's value equals the maximal value for each of the three statistics (`filter`)
 
 
 ```r
-filter(Batting, AB >= 502, yearID >= 1957) %>%
+best = 
+    filter(Batting, AB >= 502, yearID >= 1957) %>%
     group_by(yearID, lgID) %>%
-    summarize(topBA = playerID[which.max(BA)],
-              topRBI = playerID[which.max(RBI)],
-              topHR = playerID[which.max(HR)]) %>%
-    filter(topBA == topRBI & topRBI == topHR)
+    summarize(topBA = max(BA),
+              topRBI = max(RBI),
+              topHR = max(HR))
+withBest = right_join(Batting, best, by = c("yearID", "lgID"))
+filter(withBest, BA == topBA & RBI == topRBI & HR == topHR)
 ```
 
 ```
-## Source: local data frame [2 x 5]
-## Groups: yearID [2]
-## 
-##   yearID   lgID     topBA    topRBI     topHR
-##    (int) (fctr)     (chr)     (chr)     (chr)
-## 1   1966     AL robinfr02 robinfr02 robinfr02
-## 2   2012     AL cabremi01 cabremi01 cabremi01
+##    playerID yearID stint teamID lgID   G  AB   R   H X2B X3B HR RBI SB CS
+## 1 robinfr02   1966     1    BAL   AL 155 576 122 182  34   2 49 122  8  5
+## 2 yastrca01   1967     1    BOS   AL 161 579 112 189  31   4 44 121 10  8
+## 3 cabremi01   2012     1    DET   AL 161 622 109 205  40   0 44 139  4  1
+##   BB SO IBB HBP SH SF GIDP BA_approx    BA  PA  TB SlugPct   OBP   OPS
+## 1 87 90  11  10  0  7   24 0.3159722 0.316 680 367   0.637 0.410 1.047
+## 2 91 69  11   4  1  5    5 0.3264249 0.326 680 360   0.622 0.418 1.040
+## 3 66 98  17   3  0  6   28 0.3295820 0.330 697 377   0.606 0.393 0.999
+##   BABIP topBA topRBI topHR
+## 1 0.300 0.316    122    49
+## 2 0.308 0.326    121    44
+## 3 0.331 0.330    139    44
 ```
