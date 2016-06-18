@@ -103,14 +103,14 @@ eg</code></pre></div>
 <h4 id="challenge-gather-and-plot"><span class="glyphicon glyphicon-pencil"></span>Challenge – Gather and plot</h4>
 </div>
 <div class="panel-body">
-<p>The following code produces a data.frame with the annual relative standard deviation of income among countries, both by per-capita income and country-total income. Run the code. Is the resulting dataset in tidy form?</p>
+<p>The following code produces a data.frame with the annual relative standard deviation of gdp among countries, both by per-capita gdp and country-total gdp. Run the code. Is the resulting dataset in tidy form?</p>
 <pre><code>gapminder %&gt;%
     mutate(gdpCountry = gdpPercap * pop) %&gt;%
     group_by(year) %&gt;%
     summarize(RSD_individual = sd(gdpPercap) / mean(gdpPercap),
               RSD_country = sd(gdpCountry) / mean(gdpCountry))</code></pre>
 <p>You could argue that it is or is not in tidy form, because you could see the two outcomes as different variables or two ways of measuring the same variable. For our purposes, consider them two ways of measuring the same variable and <code>gather</code> the data.frame so that there is only one measurement of RSD on each row.</p>
-<p>Make a plot with two lines, one for each measure of RSD in income, by year. To make the plot black-and-white-printer friendly, distinguish the lines using the <code>linetype</code> <strong>aes</strong>thetic. Could you have made this plot without tidying the data? Why or why not?</p>
+<p>Make a plot with two lines, one for each measure of RSD in gdp, by year. To make the plot black-and-white-printer friendly, distinguish the lines using the <code>linetype</code> <strong>aes</strong>thetic. Could you have made this plot without tidying the data? Why or why not?</p>
 </div>
 </section>
 <h3 id="joins">Joins</h3>
@@ -180,7 +180,7 @@ continents</code></pre></div>
 <h4 id="challenge-putting-the-pieces-together"><span class="glyphicon glyphicon-pencil"></span>Challenge – Putting the pieces together</h4>
 </div>
 <div class="panel-body">
-<p>A colleague suggests that the more land area an individual has, the greater their income will be and that this relationship will be observable at any scale of observation. You chuckle and mutter “Not at the continental scale,” but your colleague insists. Test your colleague’s hypothesis by:</p>
+<p>A colleague suggests that the more land area an individual has, the greater their gdp will be and that this relationship will be observable at any scale of observation. You chuckle and mutter “Not at the continental scale,” but your colleague insists. Test your colleague’s hypothesis by:</p>
 <ul>
 <li>Calculating the total GDP of each continent,
 <ul>
@@ -188,7 +188,7 @@ continents</code></pre></div>
 </ul></li>
 <li>Joining the resulting data.frame to the <code>continents</code> data.frame,</li>
 <li>Calculating the per-capita GDP for each continent, and</li>
-<li>Plotting per-capita income versus population density.</li>
+<li>Plotting per-capita gdp versus population density.</li>
 </ul>
 </div>
 </section>
@@ -205,12 +205,12 @@ continents</code></pre></div>
 <span class="co"># Group by continent</span>
 <span class="st">    </span><span class="kw">group_by</span>(continent) %&gt;%<span class="st">  </span>
 <span class="co"># Calculate continent-level GDP</span>
-<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">cont_income =</span> <span class="kw">sum</span>(GDP)) %&gt;%<span class="st">  </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">cont_gdp =</span> <span class="kw">sum</span>(GDP)) %&gt;%<span class="st">  </span>
 <span class="co"># Join the continent-GDP data.frame to the continents data.frame</span>
 <span class="st">    </span><span class="kw">left_join</span>(continents) %&gt;%<span class="st">  </span>
 <span class="co"># Calculate continent-level per-capita GDP</span>
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">per_cap =</span> cont_income /<span class="st"> </span>population) %&gt;%<span class="st">  </span>
-<span class="co"># Plot income versus land area</span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">per_cap =</span> cont_gdp /<span class="st"> </span>population) %&gt;%<span class="st">  </span>
+<span class="co"># Plot gdp versus land area</span>
 <span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> area_km2, <span class="dt">y =</span> per_cap)) +<span class="st">  </span>
 <span class="co"># Draw points</span>
 <span class="st">    </span><span class="kw">geom_point</span>() +<span class="st">  </span>

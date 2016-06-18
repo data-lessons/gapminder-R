@@ -65,7 +65,7 @@ Now `ggplot` is ready to go!
 The key to understanding ggplot is thinking about a figure in layers: 
 just like you might do in an image editing program like Photoshop, Illustrator, or Inkscape.
 
-Let's start off with an example, longevity as a function of income:
+Let's start off with an example, longevity as a function of gdp:
 
 
 ~~~{.r}

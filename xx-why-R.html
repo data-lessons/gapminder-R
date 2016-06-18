@@ -104,14 +104,16 @@ cors &lt;-<span class="st"> </span>gapminder %&gt;%
 6  1977         0.6198638   -0.05587981  0.042456753
 </code></pre>
 <p>This is interesting, but it’s now in a form that’s hard to give to ggplot. We can use the <code>tidyr</code> package to put the data into tidy form.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
-tidy.cors &lt;-<span class="st"> </span>cors %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)</code></pre></div>
+<pre class="output"><code>Warning: package &#39;tidyr&#39; was built under R version 3.2.5
+</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy.cors &lt;-<span class="st"> </span>cors %&gt;%
 <span class="st">  </span><span class="kw">gather</span>(variables, correlation, gdpPercap.lifeExp, gdpPercap.pop, pop.lifeExp)
 <span class="kw">head</span>(tidy.cors)</code></pre></div>
 <pre class="output"><code>Source: local data frame [6 x 3]
 
    year         variables correlation
-  (int)             (chr)       (dbl)
+  &lt;int&gt;             &lt;chr&gt;       &lt;dbl&gt;
 1  1952 gdpPercap.lifeExp   0.2780236
 2  1957 gdpPercap.lifeExp   0.3037445
 3  1962 gdpPercap.lifeExp   0.3832211

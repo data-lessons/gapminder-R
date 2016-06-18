@@ -118,6 +118,18 @@ This is interesting, but it's now in a form that's hard to give to ggplot. We ca
 
 ~~~{.r}
 library(tidyr)
+~~~
+
+
+
+~~~{.output}
+Warning: package 'tidyr' was built under R version 3.2.5
+
+~~~
+
+
+
+~~~{.r}
 tidy.cors <- cors %>%
   gather(variables, correlation, gdpPercap.lifeExp, gdpPercap.pop, pop.lifeExp)
 head(tidy.cors)
@@ -129,7 +141,7 @@ head(tidy.cors)
 Source: local data frame [6 x 3]
 
    year         variables correlation
-  (int)             (chr)       (dbl)
+  <int>             <chr>       <dbl>
 1  1952 gdpPercap.lifeExp   0.2780236
 2  1957 gdpPercap.lifeExp   0.3037445
 3  1962 gdpPercap.lifeExp   0.3832211

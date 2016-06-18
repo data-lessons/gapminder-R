@@ -67,9 +67,9 @@
 <h4 id="code-chunks">Code chunks</h4>
 <p>To distinguish R code from text, RMarkdown uses three back-ticks followed by <code>{r}</code> to distinguish a “code chunk”. In RStudio, the keyboard shortcut to create a code chunk is command-option-i or control-alt-i. You can set options for how that code chunk renders after the <code>r</code>. For example, <code>echo = FALSE</code> will prevent the code from being displayed, but its output will still be rendered. <code>fig.height = 8</code> will make plots generated in that code chunk 8 inches in height. You can set the options for the entire document by including this in a code chunk in your document: <code>opts_chunk$set( ... )</code>. Check out the full suite of code-chunk options at <a href="http://yihui.name/knitr/options/">Yihui’s (the author of <code>knitr</code>) website</a>.</p>
 <p>A code chunk will set off the code and its results in the output document, but you can also print the results of code within a text block by enclosing code like so: <code>`r code-here`</code>. For example, this:</p>
-<p><code>There were `r length(unique(gapminder$country))` countries in the dataset with a mean per-capita income of $`r round(mean(gapminder$gdpPercap), 1)`.</code></p>
+<p><code>There were `r length(unique(gapminder$country))` countries in the dataset with a mean per-capita gdp of $`r round(mean(gapminder$gdpPercap), 1)`.</code></p>
 <p>Renders to:</p>
-<p>There were 142 countries in the dataset with a mean per-capita income of $7215.33.</p>
+<p>There were 142 countries in the dataset with a mean per-capita gdp of $7215.33.</p>
 <h4 id="rmarkdown-documents-are-self-contained">RMarkdown documents are self-contained</h4>
 <p>Any data or package you use in an RMarkdown document must be loaded in that document. <code>knitr</code> will not look in the Environment for data or functions. It is sometimes useful to include a code-chunk at the beginning of your document where you load data and packages and perhaps set <code>knitr</code> options for the whole document. You may or may not want to include this code in the output. If not, you can give it the option <code>include = FALSE</code>.</p>
 <section class="challenge panel panel-success">

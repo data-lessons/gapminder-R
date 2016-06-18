@@ -154,31 +154,31 @@ Making your code easier for humans to read will save you lots of time. The human
 
 #### `mutate()`
 
-We have learned how to drop rows, drop columns, and rearrange rows. To make a new column we use the `mutate` function. As usual, the first argument is a data.frame. The second argument is the name of the new column you want to create, followed by an equal sign, followed by what to put in that column. You can reference other variables in the data.frame, and `mutate` will treat each row independently. E.g. we can calculate the total GDP of each country in each year by multiplying the per-capita GDP by the population. We pass the output of `mutate` to `head` to keep the display under control. How would we view the highest-total-income countries?
+We have learned how to drop rows, drop columns, and rearrange rows. To make a new column we use the `mutate` function. As usual, the first argument is a data.frame. The second argument is the name of the new column you want to create, followed by an equal sign, followed by what to put in that column. You can reference other variables in the data.frame, and `mutate` will treat each row independently. E.g. we can calculate the total GDP of each country in each year by multiplying the per-capita GDP by the population. We pass the output of `mutate` to `head` to keep the display under control. How would we view the highest-total-gdp countries?
 
 ```{r mutate}
-mutate(gapminder, total_income = gdpPercap * pop) %>%
+mutate(gapminder, total_gdp = gdpPercap * pop) %>%
     head()
 ```
 
-You can create multiple columns in the same function call, separating them by commas. E.g. suppose we want the base-10 logarithm of each country's population and per-capita income:
+You can create multiple columns in the same function call, separating them by commas. E.g. suppose we want the base-10 logarithm of each country's population and per-capita gdp:
 
 ```{r mutate 2}
 gapminder %>%
-    mutate(log_income = log10(gdpPercap), log_pop = log10(pop)) %>%
-    arrange(desc(log_income)) %>%
+    mutate(log_gdp = log10(gdpPercap), log_pop = log10(pop)) %>%
+    arrange(desc(log_gdp)) %>%
     head()
 ```
 
 
 > #### MCQ: Data Reduction {.challenge}
 >
-> Produce a data.frame with only the names and years of countries where per capita income is less than a dollar a day sorted from most- to least-recent.
+> Produce a data.frame with only the names and years of countries where per capita gdp is less than a dollar a day sorted from most- to least-recent.
 >
-> - Tip: The `gdpPercap` variable is annual income. You'll need to adjust.
+> - Tip: The `gdpPercap` variable is annual gdp. You'll need to adjust.
 > - Tip: For complex tasks, it often helps to use pencil and paper to write/draw/map the various steps needed and how they fit together before writing any code.
 > 
-> What is the annual per-capita income, rounded to the nearest dollar, of the first row in the data.frame?
+> What is the annual per-capita gdp, rounded to the nearest dollar, of the first row in the data.frame?
 >
 > a. $278
 > b. $312
@@ -187,12 +187,12 @@ gapminder %>%
 
 #### `summarize()`
 
-Often we want to calculate a new variable, but rather than keeping each row as an independent observation, we want to group observations together to calculate some summary statistic. To do this we need two functions, one to do the grouping and one to calculate the summary statistic: `group_by` and `summarize`. By itself `group_by` doesn't change a data.frame; it just sets up the grouping. `summarize` then goes over each group in the data.frame and does whatever calculation you want. E.g. suppose we want the average global income for each year. While we're at it, let's calculate the mean and median and see how they differ. 
+Often we want to calculate a new variable, but rather than keeping each row as an independent observation, we want to group observations together to calculate some summary statistic. To do this we need two functions, one to do the grouping and one to calculate the summary statistic: `group_by` and `summarize`. By itself `group_by` doesn't change a data.frame; it just sets up the grouping. `summarize` then goes over each group in the data.frame and does whatever calculation you want. E.g. suppose we want the average global gdp for each year. While we're at it, let's calculate the mean and median and see how they differ. 
 
 ```{r summarize}
 gapminder %>%
     group_by(year) %>%
-    summarize(mean_income = mean(gdpPercap), median_income = median(gdpPercap))
+    summarize(mean_gdp = mean(gdpPercap), median_gdp = median(gdpPercap))
 ```
 
 Note that `summarize` eliminates any other columns. Why? What else can it do? E.g. What country should it list for the year 1952!?
@@ -242,7 +242,7 @@ gapminder %>%
 > #### Challenge -- Part 1 {.challenge}
 >
 > - Calculate a new column: the total GDP of each country in each year. 
-> - Calculate the variance -- `var()` of countries' incomes in each year.
+> - Calculate the variance -- `var()` of countries' gdps in each year.
 > - Is country-level GDP getting more or less equal over time?
 > - Plot your findings.
 > 

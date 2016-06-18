@@ -109,7 +109,7 @@ gather(eg, condition, value, -subject, -sex)
 
 > #### Challenge -- Gather and plot {.challenge}
 >
-> The following code produces a data.frame with the annual relative standard deviation of income among countries, both by per-capita income and country-total income. Run the code. Is the resulting dataset in tidy form? 
+> The following code produces a data.frame with the annual relative standard deviation of gdp among countries, both by per-capita gdp and country-total gdp. Run the code. Is the resulting dataset in tidy form? 
 > 
 > ```
 > gapminder %>%
@@ -121,7 +121,7 @@ gather(eg, condition, value, -subject, -sex)
 >
 > You could argue that it is or is not in tidy form, because you could see the two outcomes as different variables or two ways of measuring the same variable. For our purposes, consider them two ways of measuring the same variable and `gather` the data.frame so that there is only one measurement of RSD on each row.
 > 
-> Make a plot with two lines, one for each measure of RSD in income, by year. To make the plot black-and-white-printer friendly, distinguish the lines using the `linetype` **aes**thetic. Could you have made this plot without tidying the data? Why or why not?
+> Make a plot with two lines, one for each measure of RSD in gdp, by year. To make the plot black-and-white-printer friendly, distinguish the lines using the `linetype` **aes**thetic. Could you have made this plot without tidying the data? Why or why not?
 >
 
 ### Joins
@@ -230,13 +230,13 @@ right_join(gapminder, continents) %>%
 
 > #### Challenge -- Putting the pieces together {.challenge}
 > 
-> A colleague suggests that the more land area an individual has, the greater their income will be and that this relationship will be observable at any scale of observation. You chuckle and mutter "Not at the continental scale," but your colleague insists. Test your colleague's hypothesis by:
+> A colleague suggests that the more land area an individual has, the greater their gdp will be and that this relationship will be observable at any scale of observation. You chuckle and mutter "Not at the continental scale," but your colleague insists. Test your colleague's hypothesis by:
 > 
 > - Calculating the total GDP of each continent, 
 >       - Hint: Use `dplyr`'s `group_by` and `summarize`
 > - Joining the resulting data.frame to the `continents` data.frame, 
 > - Calculating the per-capita GDP for each continent, and 
-> - Plotting per-capita income versus population density. 
+> - Plotting per-capita gdp versus population density. 
 >
 
 ## Challenge solutions
@@ -253,12 +253,12 @@ right_join(gapminder, continents) %>%
 > # Group by continent
 >     group_by(continent) %>%  
 > # Calculate continent-level GDP
->     summarize(cont_income = sum(GDP)) %>%  
+>     summarize(cont_gdp = sum(GDP)) %>%  
 > # Join the continent-GDP data.frame to the continents data.frame
 >     left_join(continents) %>%  
 > # Calculate continent-level per-capita GDP
->     mutate(per_cap = cont_income / population) %>%  
-> # Plot income versus land area
+>     mutate(per_cap = cont_gdp / population) %>%  
+> # Plot gdp versus land area
 >     ggplot(aes(x = area_km2, y = per_cap)) +  
 > # Draw points
 >     geom_point() +  

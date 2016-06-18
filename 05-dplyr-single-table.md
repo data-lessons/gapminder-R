@@ -506,59 +506,59 @@ Making your code easier for humans to read will save you lots of time. The human
 
 #### `mutate()`
 
-We have learned how to drop rows, drop columns, and rearrange rows. To make a new column we use the `mutate` function. As usual, the first argument is a data.frame. The second argument is the name of the new column you want to create, followed by an equal sign, followed by what to put in that column. You can reference other variables in the data.frame, and `mutate` will treat each row independently. E.g. we can calculate the total GDP of each country in each year by multiplying the per-capita GDP by the population. We pass the output of `mutate` to `head` to keep the display under control. How would we view the highest-total-income countries?
+We have learned how to drop rows, drop columns, and rearrange rows. To make a new column we use the `mutate` function. As usual, the first argument is a data.frame. The second argument is the name of the new column you want to create, followed by an equal sign, followed by what to put in that column. You can reference other variables in the data.frame, and `mutate` will treat each row independently. E.g. we can calculate the total GDP of each country in each year by multiplying the per-capita GDP by the population. We pass the output of `mutate` to `head` to keep the display under control. How would we view the highest-total-gdp countries?
 
 
 ~~~{.r}
-mutate(gapminder, total_income = gdpPercap * pop) %>%
+mutate(gapminder, total_gdp = gdpPercap * pop) %>%
     head()
 ~~~
 
 
 
 ~~~{.output}
-      country year      pop continent lifeExp gdpPercap total_income
-1 Afghanistan 1952  8425333      Asia  28.801  779.4453   6567086330
-2 Afghanistan 1957  9240934      Asia  30.332  820.8530   7585448670
-3 Afghanistan 1962 10267083      Asia  31.997  853.1007   8758855797
-4 Afghanistan 1967 11537966      Asia  34.020  836.1971   9648014150
-5 Afghanistan 1972 13079460      Asia  36.088  739.9811   9678553274
-6 Afghanistan 1977 14880372      Asia  38.438  786.1134  11697659231
+      country year      pop continent lifeExp gdpPercap   total_gdp
+1 Afghanistan 1952  8425333      Asia  28.801  779.4453  6567086330
+2 Afghanistan 1957  9240934      Asia  30.332  820.8530  7585448670
+3 Afghanistan 1962 10267083      Asia  31.997  853.1007  8758855797
+4 Afghanistan 1967 11537966      Asia  34.020  836.1971  9648014150
+5 Afghanistan 1972 13079460      Asia  36.088  739.9811  9678553274
+6 Afghanistan 1977 14880372      Asia  38.438  786.1134 11697659231
 
 ~~~
 
-You can create multiple columns in the same function call, separating them by commas. E.g. suppose we want the base-10 logarithm of each country's population and per-capita income:
+You can create multiple columns in the same function call, separating them by commas. E.g. suppose we want the base-10 logarithm of each country's population and per-capita gdp:
 
 
 ~~~{.r}
 gapminder %>%
-    mutate(log_income = log10(gdpPercap), log_pop = log10(pop)) %>%
-    arrange(desc(log_income)) %>%
+    mutate(log_gdp = log10(gdpPercap), log_pop = log10(pop)) %>%
+    arrange(desc(log_gdp)) %>%
     head()
 ~~~
 
 
 
 ~~~{.output}
-  country year     pop continent lifeExp gdpPercap log_income  log_pop
-1  Kuwait 1957  212846      Asia  58.033 113523.13   5.055084 5.328065
-2  Kuwait 1972  841934      Asia  67.712 109347.87   5.038810 5.925278
-3  Kuwait 1952  160000      Asia  55.565 108382.35   5.034959 5.204120
-4  Kuwait 1962  358266      Asia  60.470  95458.11   4.979813 5.554206
-5  Kuwait 1967  575003      Asia  64.624  80894.88   4.907921 5.759670
-6  Kuwait 1977 1140357      Asia  69.343  59265.48   4.772802 6.057041
+  country year     pop continent lifeExp gdpPercap  log_gdp  log_pop
+1  Kuwait 1957  212846      Asia  58.033 113523.13 5.055084 5.328065
+2  Kuwait 1972  841934      Asia  67.712 109347.87 5.038810 5.925278
+3  Kuwait 1952  160000      Asia  55.565 108382.35 5.034959 5.204120
+4  Kuwait 1962  358266      Asia  60.470  95458.11 4.979813 5.554206
+5  Kuwait 1967  575003      Asia  64.624  80894.88 4.907921 5.759670
+6  Kuwait 1977 1140357      Asia  69.343  59265.48 4.772802 6.057041
 
 ~~~
 
 
 > #### MCQ: Data Reduction {.challenge}
 >
-> Produce a data.frame with only the names and years of countries where per capita income is less than a dollar a day sorted from most- to least-recent.
+> Produce a data.frame with only the names and years of countries where per capita gdp is less than a dollar a day sorted from most- to least-recent.
 >
-> - Tip: The `gdpPercap` variable is annual income. You'll need to adjust.
+> - Tip: The `gdpPercap` variable is annual gdp. You'll need to adjust.
 > - Tip: For complex tasks, it often helps to use pencil and paper to write/draw/map the various steps needed and how they fit together before writing any code.
 > 
-> What is the annual per-capita income, rounded to the nearest dollar, of the first row in the data.frame?
+> What is the annual per-capita gdp, rounded to the nearest dollar, of the first row in the data.frame?
 >
 > a. $278
 > b. $312
@@ -567,13 +567,13 @@ gapminder %>%
 
 #### `summarize()`
 
-Often we want to calculate a new variable, but rather than keeping each row as an independent observation, we want to group observations together to calculate some summary statistic. To do this we need two functions, one to do the grouping and one to calculate the summary statistic: `group_by` and `summarize`. By itself `group_by` doesn't change a data.frame; it just sets up the grouping. `summarize` then goes over each group in the data.frame and does whatever calculation you want. E.g. suppose we want the average global income for each year. While we're at it, let's calculate the mean and median and see how they differ. 
+Often we want to calculate a new variable, but rather than keeping each row as an independent observation, we want to group observations together to calculate some summary statistic. To do this we need two functions, one to do the grouping and one to calculate the summary statistic: `group_by` and `summarize`. By itself `group_by` doesn't change a data.frame; it just sets up the grouping. `summarize` then goes over each group in the data.frame and does whatever calculation you want. E.g. suppose we want the average global gdp for each year. While we're at it, let's calculate the mean and median and see how they differ. 
 
 
 ~~~{.r}
 gapminder %>%
     group_by(year) %>%
-    summarize(mean_income = mean(gdpPercap), median_income = median(gdpPercap))
+    summarize(mean_gdp = mean(gdpPercap), median_gdp = median(gdpPercap))
 ~~~
 
 
@@ -581,20 +581,20 @@ gapminder %>%
 ~~~{.output}
 Source: local data frame [12 x 3]
 
-    year mean_income median_income
-   (int)       (dbl)         (dbl)
-1   1952    3725.276      1968.528
-2   1957    4299.408      2173.220
-3   1962    4725.812      2335.440
-4   1967    5483.653      2678.335
-5   1972    6770.083      3339.129
-6   1977    7313.166      3798.609
-7   1982    7518.902      4216.228
-8   1987    7900.920      4280.300
-9   1992    8158.609      4386.086
-10  1997    9090.175      4781.825
-11  2002    9917.848      5319.805
-12  2007   11680.072      6124.371
+    year  mean_gdp median_gdp
+   (int)     (dbl)      (dbl)
+1   1952  3725.276   1968.528
+2   1957  4299.408   2173.220
+3   1962  4725.812   2335.440
+4   1967  5483.653   2678.335
+5   1972  6770.083   3339.129
+6   1977  7313.166   3798.609
+7   1982  7518.902   4216.228
+8   1987  7900.920   4280.300
+9   1992  8158.609   4386.086
+10  1997  9090.175   4781.825
+11  2002  9917.848   5319.805
+12  2007 11680.072   6124.371
 
 ~~~
 
@@ -781,7 +781,7 @@ Groups: continent [?]
 > #### Challenge -- Part 1 {.challenge}
 >
 > - Calculate a new column: the total GDP of each country in each year. 
-> - Calculate the variance -- `var()` of countries' incomes in each year.
+> - Calculate the variance -- `var()` of countries' gdps in each year.
 > - Is country-level GDP getting more or less equal over time?
 > - Plot your findings.
 > 

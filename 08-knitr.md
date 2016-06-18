@@ -48,11 +48,11 @@ To distinguish R code from text, RMarkdown uses three back-ticks followed by `{r
 
 A code chunk will set off the code and its results in the output document, but you can also print the results of code within a text block by enclosing code like so: `` `r code-here` ``. For example, this: 
 
-``There were `r length(unique(gapminder$country))` countries in the dataset with a mean per-capita income of $`r round(mean(gapminder$gdpPercap), 1)`.``
+``There were `r length(unique(gapminder$country))` countries in the dataset with a mean per-capita gdp of $`r round(mean(gapminder$gdpPercap), 1)`.``
 
 Renders to:
 
-There were 142 countries in the dataset with a mean per-capita income of $7215.33.
+There were 142 countries in the dataset with a mean per-capita gdp of $7215.33.
 
 #### RMarkdown documents are self-contained
 

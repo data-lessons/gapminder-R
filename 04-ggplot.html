@@ -69,7 +69,7 @@
 </section>
 <h3 id="first-plots">First plots</h3>
 <p>The key to understanding ggplot is thinking about a figure in layers: just like you might do in an image editing program like Photoshop, Illustrator, or Inkscape.</p>
-<p>Let’s start off with an example, longevity as a function of income:</p>
+<p>Let’s start off with an example, longevity as a function of gdp:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> gdpPercap, <span class="dt">y =</span> lifeExp)) +
 <span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
 <p><img src="fig/04-plot-ggplot2/lifeExp-vs-gdpPercap-scatter-1.png" title="plot of chunk lifeExp-vs-gdpPercap-scatter" alt="plot of chunk lifeExp-vs-gdpPercap-scatter" style="display: block; margin: auto;" /></p>

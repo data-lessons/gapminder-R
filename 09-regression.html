@@ -40,7 +40,7 @@
 </section>
 <h3 id="linear-models">Linear models</h3>
 <p>This workshop can’t and won’t teach you statistical modeling, but here is the syntax you need to know to use R’s basic statistical modeling infrastructure.</p>
-<p><code>lm</code> is the function for a linear model. <code>lm</code> expects a formula as its first argument. Formulas in R are specified with a tilde separating the left and right hand sides: <code>DV ~ IV1 + IV2 + ...</code>. The second argument to <code>lm</code> is the name of the data.frame in which the variables are to be found. For example, to model life expectancy as a function of income:</p>
+<p><code>lm</code> is the function for a linear model. <code>lm</code> expects a formula as its first argument. Formulas in R are specified with a tilde separating the left and right hand sides: <code>DV ~ IV1 + IV2 + ...</code>. The second argument to <code>lm</code> is the name of the data.frame in which the variables are to be found. For example, to model life expectancy as a function of gdp:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(lifeExp ~<span class="st"> </span>gdpPercap, gapminder)</code></pre></div>
 <pre class="output"><code>
 Call:
