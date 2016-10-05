@@ -1,31 +1,24 @@
 ---
 layout: page
-title: R for reproducible scientific analysis
+title: R for Cornerstone Research
 ---
 
-Introduction to R for non-programmers using gapminder data.
+## Introduction to R
 
-The goal of these lessons is to teach novice R users to efficiently write
-scripts to manage data, conduct analyses, produce visualizations, and 
-write up the results in a reproducible manner. The lessons take
-seriously the idea that motivation comes before detailed understanding, so the focus is on learning powerful tools: ggplot, dplyr, tidyr, and knitr. The capstone project at the end of the workshop asks learners to integrate many of the concepts from earlier lessons.
+This is a two-day intensive introduction to modern computational techniques for data management, analysis, and visualization with an emphasis on the programming language R. The course is designed for quantitatively-oriented professionals but assumes no prior programming knowledge. By the end of the workshop, participants will understand the motivation for computational workflows including automation, collaboration, flexibility, and reproducability and be able to implement them. Participants will be able to efficiently clean data, organize it for analysis, estimate and work with the output of statistical models, produce a variety of publication-quality plots, and compose dynamic documents that integrate writing, code, and code output.
 
-
-> ## Prerequisites {.prereq}
->
-> Have installed R and RStudio.
->
 
 ## Topics
 
-1.  [Introduction to R and RStudio](01-intro-r-rstudio.html)
-2.  [Project Management](02-project-intro.html)
-3.  [Data types and subsetting](03-data-types-subsetting.html)
-4.  [Plotting](04-ggplot.html)
-5.  [Data.frame manipulation](05-dplyr-single-table.html)
-6.  [Tidy Data & Joins](06-tidy-data.html)
-7.  [Functions](07-functions.html)
-8.  [Dynamic Documents](08-knitr.html)
-9.  [Statistical Modeling](09-regression.html)
-10. [Capstone Project](10-capstone.html)
+1.  Spreadsheets
+1.	[Introduction to R and RStudio](01-intro-r-rstudio.html)
+1.  [Project Management](02-project-intro.html)
+1.  [Data types and subsetting](03-data-types-subsetting.html)
+1.  [Plotting](04-ggplot.html)
+1.  [Data.frame manipulation](05-dplyr-single-table.html)
+1.  [Tidy Data & Joins](06-tidy-data.html)
+1.  [Statistical Modeling](09-regression.html)
+1.  [Functions](07-functions.html)
+1.  [Dynamic Documents](08-knitr.html)
+1.	[Capstone Project](10-capstone.html)
 - [Solutions to Capstone Project](11-capstone_solutions.html)

@@ -19,7 +19,7 @@ Please see the current list of [issues][] for ideas for contributing to this rep
 
 When editing topic pages, you should change the source R Markdown file. Afterwards you can render the pages by running `make preview` from the base of the repository. Building the rendered page with the Makefile requires installing some dependencies first. In addition to the dependencies listed in the [lesson template documentation][dependencies], you also need to install the R package [knitr][].
 
-Once you've made your edits and looked over the rendered html files, you should add, commit, and push **only the source R Markdown file(s)** to your fork, and then open a pull request. The repository maintainers will run the html generation process once the pull request has been merged. You can learn more about the design of the build process [here][design].
+Once you've made your edits and looked over the rendered html files, you should add, commit, and push the fully compiled site.
 
 ## Getting Help
 
