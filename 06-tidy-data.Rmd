@@ -94,3 +94,13 @@ Note that the variables with `-` in front of them aren't removed from the data.f
 > 
 > Make a plot with two lines, one for each measure of RSD in gdp, by year. To make the plot black-and-white-printer friendly, distinguish the lines using the `linetype` **aes**thetic. Could you have made this plot without tidying the data? Why or why not?
 >
+
+
+> #### Challenge -- More practice with gather {.challenge}
+>
+> Download [this dataset](https://raw.githubusercontent.com/michaellevy/gapminder-R/gh-pages/data/stocks.tsv) of closing prices for several restaurant stocks over a year.
+>
+> - Is the data tidy?  
+> - If not, tidy it
+> - Which stock performed the best over this year? Use any method you want to answer that question.
+>
