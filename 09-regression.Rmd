@@ -129,3 +129,12 @@ Finally, the specification of generalized linear models such as logistic or Pois
 >
 > - Does the change in gdpPercap over time vary across continents?  
 >   - Hint: An interaction model can answer that question.
+
+
+> ## Alternatve challenge - Stock prices {.challenge}
+>
+> - Using the stock data you tidy'd earlier, fit a simple linear model of stock performance.   
+> - Extract the model coefficients into a data.frame.  
+> - Fortify the data with residuals, predicted values, etc.  
+> - Examine (however you wish) residuals by stock. Is the model particularly over or underpredicting any particular stock? How could you improve the model?  
+> - **Advanced**: Build that better model.
