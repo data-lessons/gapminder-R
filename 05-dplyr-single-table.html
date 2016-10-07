@@ -349,35 +349,16 @@ USdata</code></pre></div>
 ..         ...   ...      ...       ...     ...       ...         ...
 </code></pre>
 <p>Note that didn’t change gapminder: We didn’t assign the output to anything, so it was just printed, with the new column. If we want to modify our gapminder data.frame, we can assign the output of <code>mutate</code> back to the gapminder variable, but be careful doing this – if you make a mistake, you can’t just re-run that line of code, you’ll need to go back to loading the gapminder data.frame.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapminder =<span class="st"> </span><span class="kw">mutate</span>(gapminder, <span class="dt">total_gdp =</span> gdpPercap *<span class="st"> </span>pop)</code></pre></div>
-<p>You can create multiple columns in the same mutate, separating them by commas.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tmp =<span class="st"> </span><span class="kw">mutate</span>(gapminder, 
-       <span class="dt">log_pop =</span> <span class="kw">log10</span>(pop),
-       <span class="dt">country_cont =</span> <span class="kw">paste</span>(country, continent, <span class="dt">sep =</span> <span class="st">&quot;, &quot;</span>))
-<span class="kw">arrange</span>(tmp, <span class="kw">desc</span>(log_pop))</code></pre></div>
-<pre class="output"><code>Source: local data frame [1,704 x 9]
-
-   country  year        pop continent  lifeExp gdpPercap    total_gdp
-     &lt;chr&gt; &lt;int&gt;      &lt;dbl&gt;     &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;
-1    China  2007 1318683096      Asia 72.96100 4959.1149 6.539501e+12
-2    China  2002 1280400000      Asia 72.02800 3119.2809 3.993927e+12
-3    China  1997 1230075000      Asia 70.42600 2289.2341 2.815930e+12
-4    China  1992 1164970000      Asia 68.69000 1655.7842 1.928939e+12
-5    India  2007 1110396331      Asia 64.69800 2452.2104 2.722925e+12
-6    China  1987 1084035000      Asia 67.27400 1378.9040 1.494780e+12
-7    India  2002 1034172547      Asia 62.87900 1746.7695 1.806461e+12
-8    China  1982 1000281000      Asia 65.52500  962.4214 9.626918e+11
-9    India  1997  959000000      Asia 61.76500 1458.8174 1.399006e+12
-10   China  1977  943455000      Asia 63.96736  741.2375 6.993242e+11
-..     ...   ...        ...       ...      ...       ...          ...
-Variables not shown: log_pop &lt;dbl&gt;, country_cont &lt;chr&gt;.
-</code></pre>
+<p>Also, you can create multiple columns in one call to <code>mutate</code>, even using variables that you just created, separating them with commas:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapminder =<span class="st"> </span><span class="kw">mutate</span>(gapminder, 
+                   <span class="dt">total_gdp =</span> gdpPercap *<span class="st"> </span>pop,
+                   <span class="dt">log_gdp =</span> <span class="kw">log10</span>(total_gdp))</code></pre></div>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
 <h4 id="mcq-data-reduction"><span class="glyphicon glyphicon-pencil"></span>MCQ: Data Reduction</h4>
 </div>
 <div class="panel-body">
-<p>Produce a data.frame with only the names and years of countries where per capita gdp is less than a dollar a day sorted from most- to least-recent.</p>
+<p>Produce a data.frame with only the names, years, and per-capita GDP of countries where per capita gdp is less than a dollar a day sorted from most- to least-recent.</p>
 <ul>
 <li>Tip: The <code>gdpPercap</code> variable is annual gdp. You’ll need to adjust.</li>
 <li>Tip: For complex tasks, it often helps to use pencil and paper to write/draw/map the various steps needed and how they fit together before writing any code.</li>
@@ -395,7 +376,7 @@ Variables not shown: log_pop &lt;dbl&gt;, country_cont &lt;chr&gt;.
 <p>Suppose we want to look at all the countries where life expectancy is greater than 80 years, sorted from poorest to richest. First, we <code>filter</code>, then we <code>arrange</code>. We could assign the intermediate data.frame to a variable:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lifeExpGreater80 =<span class="st"> </span><span class="kw">filter</span>(gapminder, lifeExp &gt;<span class="st"> </span><span class="dv">80</span>)
 <span class="kw">arrange</span>(lifeExpGreater80, gdpPercap)</code></pre></div>
-<pre class="output"><code>Source: local data frame [21 x 7]
+<pre class="output"><code>Source: local data frame [21 x 8]
 
            country  year       pop continent lifeExp gdpPercap
              &lt;chr&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;
@@ -410,12 +391,12 @@ Variables not shown: log_pop &lt;dbl&gt;, country_cont &lt;chr&gt;.
 9  Hong Kong China  2002   6762476      Asia  81.495  30209.02
 10          France  2007  61083916    Europe  80.657  30470.02
 ..             ...   ...       ...       ...     ...       ...
-Variables not shown: total_gdp &lt;dbl&gt;.
+Variables not shown: total_gdp &lt;dbl&gt;, log_gdp &lt;dbl&gt;.
 </code></pre>
 <p>In this case it doesn’t much matter, but we make a whole new data.frame (<code>lifeExpGreater80</code>) and only use it once; that’s a little wasteful of system resources, and it clutters our environment. If the data are large, that can be a big problem. There is a better way, and it makes both writing and reading the code easier. The pipe from the <code>magrittr</code> package (which is automatically installed and loaded with <code>dplyr</code> and <code>tidyverse</code>) takes the output of first line, and plugs it in as the first argument of the next line. Since many <code>tidyverse</code> functions expect a data.frame as the first argument and output a data.frame, this works fluidly.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">filter</span>(gapminder, lifeExp &gt;<span class="st"> </span><span class="dv">80</span>) %&gt;%
 <span class="st">    </span><span class="kw">arrange</span>(gdpPercap)</code></pre></div>
-<pre class="output"><code>Source: local data frame [21 x 7]
+<pre class="output"><code>Source: local data frame [21 x 8]
 
            country  year       pop continent lifeExp gdpPercap
              &lt;chr&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;
@@ -430,7 +411,7 @@ Variables not shown: total_gdp &lt;dbl&gt;.
 9  Hong Kong China  2002   6762476      Asia  81.495  30209.02
 10          France  2007  61083916    Europe  80.657  30470.02
 ..             ...   ...       ...       ...     ...       ...
-Variables not shown: total_gdp &lt;dbl&gt;.
+Variables not shown: total_gdp &lt;dbl&gt;, log_gdp &lt;dbl&gt;.
 </code></pre>
 <p>To demonstrate how it works, here are some examples where it’s unnecessary.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">4</span> %&gt;%<span class="st"> </span><span class="kw">sqrt</span>()</code></pre></div>
@@ -443,7 +424,7 @@ Variables not shown: total_gdp &lt;dbl&gt;.
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapminder %&gt;%
 <span class="st">    </span><span class="kw">filter</span>(lifeExp &gt;<span class="st"> </span><span class="dv">80</span>) %&gt;%
 <span class="st">    </span><span class="kw">arrange</span>(gdpPercap)</code></pre></div>
-<pre class="output"><code>Source: local data frame [21 x 7]
+<pre class="output"><code>Source: local data frame [21 x 8]
 
            country  year       pop continent lifeExp gdpPercap
              &lt;chr&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;
@@ -458,7 +439,7 @@ Variables not shown: total_gdp &lt;dbl&gt;.
 9  Hong Kong China  2002   6762476      Asia  81.495  30209.02
 10          France  2007  61083916    Europe  80.657  30470.02
 ..             ...   ...       ...       ...     ...       ...
-Variables not shown: total_gdp &lt;dbl&gt;.
+Variables not shown: total_gdp &lt;dbl&gt;, log_gdp &lt;dbl&gt;.
 </code></pre>
 <p>Making your code easier for humans to read will save you lots of time. The human reading it is usually future-you, and operations that seem simple when you’re writing them will look like gibberish when you’re three weeks removed from them, let alone three months or three years or another person. Make your code as easy to read as possible by using the pipe where appropriate, leaving white space, using descriptive variable names, being consistent with spacing and naming, and liberally commenting code.</p>
 <section class="challenge panel panel-success">

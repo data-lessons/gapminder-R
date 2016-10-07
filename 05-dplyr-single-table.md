@@ -477,47 +477,19 @@ Source: local data frame [1,704 x 7]
 
 Note that didn't change gapminder: We didn't assign the output to anything, so it was just printed, with the new column. If we want to modify our gapminder data.frame, we can assign the output of `mutate` back to the gapminder variable, but be careful doing this -- if you make a mistake, you can't just re-run that line of code, you'll need to go back to loading the gapminder data.frame.
 
-
-~~~{.r}
-gapminder = mutate(gapminder, total_gdp = gdpPercap * pop)
-~~~
-
-You can create multiple columns in the same mutate, separating them by commas. 
+Also, you can create multiple columns in one call to `mutate`, even using variables that you just created, separating them with commas:
 
 
 ~~~{.r}
-tmp = mutate(gapminder, 
-       log_pop = log10(pop),
-       country_cont = paste(country, continent, sep = ", "))
-arrange(tmp, desc(log_pop))
-~~~
-
-
-
-~~~{.output}
-Source: local data frame [1,704 x 9]
-
-   country  year        pop continent  lifeExp gdpPercap    total_gdp
-     <chr> <int>      <dbl>     <chr>    <dbl>     <dbl>        <dbl>
-1    China  2007 1318683096      Asia 72.96100 4959.1149 6.539501e+12
-2    China  2002 1280400000      Asia 72.02800 3119.2809 3.993927e+12
-3    China  1997 1230075000      Asia 70.42600 2289.2341 2.815930e+12
-4    China  1992 1164970000      Asia 68.69000 1655.7842 1.928939e+12
-5    India  2007 1110396331      Asia 64.69800 2452.2104 2.722925e+12
-6    China  1987 1084035000      Asia 67.27400 1378.9040 1.494780e+12
-7    India  2002 1034172547      Asia 62.87900 1746.7695 1.806461e+12
-8    China  1982 1000281000      Asia 65.52500  962.4214 9.626918e+11
-9    India  1997  959000000      Asia 61.76500 1458.8174 1.399006e+12
-10   China  1977  943455000      Asia 63.96736  741.2375 6.993242e+11
-..     ...   ...        ...       ...      ...       ...          ...
-Variables not shown: log_pop <dbl>, country_cont <chr>.
-
+gapminder = mutate(gapminder, 
+                   total_gdp = gdpPercap * pop,
+                   log_gdp = log10(total_gdp))
 ~~~
 
 
 > #### MCQ: Data Reduction {.challenge}
 >
-> Produce a data.frame with only the names and years of countries where per capita gdp is less than a dollar a day sorted from most- to least-recent.
+> Produce a data.frame with only the names, years, and per-capita GDP of countries where per capita gdp is less than a dollar a day sorted from most- to least-recent.
 >
 > - Tip: The `gdpPercap` variable is annual gdp. You'll need to adjust.
 > - Tip: For complex tasks, it often helps to use pencil and paper to write/draw/map the various steps needed and how they fit together before writing any code.
@@ -544,7 +516,7 @@ arrange(lifeExpGreater80, gdpPercap)
 
 
 ~~~{.output}
-Source: local data frame [21 x 7]
+Source: local data frame [21 x 8]
 
            country  year       pop continent lifeExp gdpPercap
              <chr> <int>     <dbl>     <chr>   <dbl>     <dbl>
@@ -559,7 +531,7 @@ Source: local data frame [21 x 7]
 9  Hong Kong China  2002   6762476      Asia  81.495  30209.02
 10          France  2007  61083916    Europe  80.657  30470.02
 ..             ...   ...       ...       ...     ...       ...
-Variables not shown: total_gdp <dbl>.
+Variables not shown: total_gdp <dbl>, log_gdp <dbl>.
 
 ~~~
 
@@ -574,7 +546,7 @@ filter(gapminder, lifeExp > 80) %>%
 
 
 ~~~{.output}
-Source: local data frame [21 x 7]
+Source: local data frame [21 x 8]
 
            country  year       pop continent lifeExp gdpPercap
              <chr> <int>     <dbl>     <chr>   <dbl>     <dbl>
@@ -589,7 +561,7 @@ Source: local data frame [21 x 7]
 9  Hong Kong China  2002   6762476      Asia  81.495  30209.02
 10          France  2007  61083916    Europe  80.657  30470.02
 ..             ...   ...       ...       ...     ...       ...
-Variables not shown: total_gdp <dbl>.
+Variables not shown: total_gdp <dbl>, log_gdp <dbl>.
 
 ~~~
 
@@ -633,7 +605,7 @@ gapminder %>%
 
 
 ~~~{.output}
-Source: local data frame [21 x 7]
+Source: local data frame [21 x 8]
 
            country  year       pop continent lifeExp gdpPercap
              <chr> <int>     <dbl>     <chr>   <dbl>     <dbl>
@@ -648,7 +620,7 @@ Source: local data frame [21 x 7]
 9  Hong Kong China  2002   6762476      Asia  81.495  30209.02
 10          France  2007  61083916    Europe  80.657  30470.02
 ..             ...   ...       ...       ...     ...       ...
-Variables not shown: total_gdp <dbl>.
+Variables not shown: total_gdp <dbl>, log_gdp <dbl>.
 
 ~~~
 

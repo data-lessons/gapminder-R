@@ -151,23 +151,18 @@ mutate(gapminder, total_gdp = gdpPercap * pop)
 
 Note that didn't change gapminder: We didn't assign the output to anything, so it was just printed, with the new column. If we want to modify our gapminder data.frame, we can assign the output of `mutate` back to the gapminder variable, but be careful doing this -- if you make a mistake, you can't just re-run that line of code, you'll need to go back to loading the gapminder data.frame.
 
+Also, you can create multiple columns in one call to `mutate`, even using variables that you just created, separating them with commas:
+
 ```{r}
-gapminder = mutate(gapminder, total_gdp = gdpPercap * pop)
-```
-
-You can create multiple columns in the same mutate, separating them by commas. 
-
-```{r mutate 2}
-tmp = mutate(gapminder, 
-       log_pop = log10(pop),
-       country_cont = paste(country, continent, sep = ", "))
-arrange(tmp, desc(log_pop))
+gapminder = mutate(gapminder, 
+                   total_gdp = gdpPercap * pop,
+                   log_gdp = log10(total_gdp))
 ```
 
 
 > #### MCQ: Data Reduction {.challenge}
 >
-> Produce a data.frame with only the names and years of countries where per capita gdp is less than a dollar a day sorted from most- to least-recent.
+> Produce a data.frame with only the names, years, and per-capita GDP of countries where per capita gdp is less than a dollar a day sorted from most- to least-recent.
 >
 > - Tip: The `gdpPercap` variable is annual gdp. You'll need to adjust.
 > - Tip: For complex tasks, it often helps to use pencil and paper to write/draw/map the various steps needed and how they fit together before writing any code.
