@@ -121,60 +121,20 @@
 </div>
 </section>
 <h3 id="a-more-useful-function">A more-useful function</h3>
-<p>Let’s write a function to find the GPD of a country for a given year. Our data will be the same gapminder data.frame we have been working with, but we want to keep our function flexible, so that if we get a new data.frame with the same information, say updated with 2012 data, we can pass it to the same function. So, we will pass the gapminder data.frame to the function as an argument rather than “hard-coding” the <code>gapminder</code> data.frame, and we will set <code>gapminder</code> as the default value for ease of use. The other arguments our function needs are the country and year for which to calculate GDP. For clarity, we will call these <code>the_country</code> and <code>the_year</code>. Here is the function definition, without any body. Currently it won’t do anything.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">calcGDP &lt;-<span class="st"> </span>function(the_country, the_year, <span class="dt">dat =</span> gapminder) {
-  
-}</code></pre></div>
-<p>When we call the function we will use a syntax like <code>calcGDP(the_country = 'China', the_year = 2007)</code>. Then, inside the body of calcGDP, everywhere <code>the_country</code> appears, ‘China’ will be substituted, and everywhere <code>the_year</code> appears, 2007 will be substituted. With that in mind, we filter to the country and year we want just like we would using “China” and 2007 directly, and assign the new data.frame to <code>filteredDF</code>. Note that <code>filteredDF</code> only exists inside the function. It will be created when we call <code>calcGDP</code>, but it won’t appear in our Environment, and it will be gone as soon as <code>calcGDP</code> returns its return value.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">calcGDP &lt;-<span class="st"> </span>function(the_country, the_year, <span class="dt">dat =</span> gapminder) {
-    filteredDF &lt;-<span class="st"> </span><span class="kw">filter</span>(dat, country ==<span class="st"> </span>the_country, year ==<span class="st"> </span>the_year)
-}</code></pre></div>
-<p>Now we have a data.frame filtered to the country and year we want, but we still need to calculate total GDP. We can use <code>mutate</code> from <code>dplyr</code> to calculate a new column, and then tell calcGDP to <code>return</code> the data.frame with the new column:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">calcGDP &lt;-<span class="st"> </span>function(the_country, the_year, <span class="dt">dat =</span> gapminder) {
-    filteredDF &lt;-<span class="st"> </span><span class="kw">filter</span>(dat, country ==<span class="st"> </span>the_country &amp;<span class="st"> </span>year ==<span class="st"> </span>the_year)
-    filteredWithGDP &lt;-<span class="st"> </span><span class="kw">mutate</span>(filteredDF, <span class="dt">GDP =</span> gdpPercap *<span class="st"> </span>pop)
-    <span class="kw">return</span>(filteredWithGDP)
-}
-<span class="kw">calcGDP</span>(<span class="st">&#39;China&#39;</span>, <span class="dv">2007</span>)</code></pre></div>
-<pre class="output"><code>  country year        pop continent lifeExp gdpPercap          GDP
-1   China 2007 1318683096      Asia  72.961  4959.115 6.539501e+12
-</code></pre>
-<h4 id="making-the-function-flexible">Making the function flexible</h4>
-<p>Okay, but what if we want that information for multiple years or multiple countries. The <code>%in%</code> function is similar to <code>==</code>, but it allows multiple entries on the right hand side. For example:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">3</span> %in%<span class="st"> </span><span class="dv">1</span>:<span class="dv">10</span></code></pre></div>
-<pre class="output"><code>[1] TRUE
-</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="st">&#39;sam&#39;</span> %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;jim&#39;</span>, <span class="st">&#39;joe&#39;</span>, <span class="st">&#39;bob&#39;</span>)</code></pre></div>
-<pre class="output"><code>[1] FALSE
-</code></pre>
-<p>We can replace the <code>==</code> tests in our function with <code>%in%</code> to allow it to take multiple years and continents. We will also change the names of <code>calcGDP</code>’s arguments to make it more intuitive that they can take multiple values. We should also add some comments to our code to make it easy to understand what it does.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">calcGDP &lt;-<span class="st"> </span>function(countries, years, <span class="dt">dat =</span> gapminder) {
-    
-    <span class="co"># Given a gapminder-like data.frame and sets of countries and years, returns the corresponding rows of the data.frame with a new column for the countries&#39; total GDP.</span>
-    <span class="co"># Arguments:</span>
-    <span class="co">#   countries: character vector</span>
-    <span class="co">#   years: numeric vector</span>
-    <span class="co"># Returns: data.frame with new GDP variable</span>
-    
-    filteredDF &lt;-<span class="st"> </span><span class="kw">filter</span>(dat, country %in%<span class="st"> </span>countries, year %in%<span class="st"> </span>years)
-    filteredWithGDP &lt;-<span class="st"> </span><span class="kw">mutate</span>(filteredDF, <span class="dt">GDP =</span> gdpPercap *<span class="st"> </span>pop)
-    <span class="kw">return</span>(filteredWithGDP)
-}
-<span class="kw">calcGDP</span>(<span class="dt">countries =</span> <span class="kw">c</span>(<span class="st">&#39;China&#39;</span>, <span class="st">&#39;Japan&#39;</span>, <span class="st">&#39;Korea Rep.&#39;</span>), <span class="dt">years =</span> <span class="dv">1970</span>:<span class="dv">1990</span>)</code></pre></div>
-<pre class="output"><code>      country year        pop continent  lifeExp  gdpPercap          GDP
-1       China 1972  862030000      Asia 63.11888   676.9001 5.835082e+11
-2       China 1977  943455000      Asia 63.96736   741.2375 6.993242e+11
-3       China 1982 1000281000      Asia 65.52500   962.4214 9.626918e+11
-4       China 1987 1084035000      Asia 67.27400  1378.9040 1.494780e+12
-5       Japan 1972  107188273      Asia 73.42000 14778.7864 1.584113e+12
-6       Japan 1977  113872473      Asia 75.38000 16610.3770 1.891465e+12
-7       Japan 1982  118454974      Asia 77.11000 19384.1057 2.296144e+12
-8       Japan 1987  122091325      Asia 78.67000 22375.9419 2.731908e+12
-9  Korea Rep. 1972   33505000      Asia 62.61200  3030.8767 1.015495e+11
-10 Korea Rep. 1977   36436000      Asia 64.76600  4657.2210 1.696905e+11
-11 Korea Rep. 1982   39326000      Asia 67.12300  5622.9425 2.211278e+11
-12 Korea Rep. 1987   41622000      Asia 69.81000  8533.0888 3.551642e+11
-</code></pre>
+<p>Let’s write a function to calculate countries’ GDPs in their local currency.</p>
+<ul>
+<li><p>Start with Canada, exchange rate is 1.279098</p></li>
+<li><p>Turn that into a function that takes country and exchange rate.</p></li>
+<li><p>Here is a <a href="https://raw.githubusercontent.com/michaellevy/gapminder-R/gh-pages/data/simple_exchange_rate.csv">table of exchange rates for many countries</a>.</p></li>
+<li><p>Call the function with some row</p></li>
+<li><p>lapply over rows</p></li>
+</ul>
+<h3 id="do-by-joins">Do by joins</h3>
+<p>And by year</p>
+<ul>
+<li><p>Get all the exchange rates over time. You can <a href="https://raw.githubusercontent.com/michaellevy/gapminder-R/gh-pages/data/exchange_rate.csv">download that here</a>.</p></li>
+<li><p>join, filter</p></li>
+</ul>
 <aside class="callout panel panel-info">
 <div class="panel-heading">
 <h4 id="tip-pass-by-value"><span class="glyphicon glyphicon-pushpin"></span>Tip: Pass by value</h4>
@@ -213,7 +173,7 @@
     <span class="kw">return</span>(plot)
 }
 <span class="kw">plotPopGrowth</span>(<span class="st">&#39;Canada&#39;</span>)</code></pre></div>
-<p><img src="fig/07-functions/unnamed-chunk-14-1.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" style="display: block; margin: auto;" /></p>
+<p><img src="fig/07-functions/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" style="display: block; margin: auto;" /></p>
 </div>
 </section>
         </div>

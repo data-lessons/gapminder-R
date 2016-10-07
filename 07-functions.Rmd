@@ -125,17 +125,21 @@ Let's write a function to calculate countries' GDPs in their local currency.
 
 - Turn that into a function that takes country and exchange rate.
 
-
-
-- Collapse the data to one exchange rate per country
-
-
-
-- Get all the exchange rates. You can [download that here](https://raw.githubusercontent.com/michaellevy/gapminder-R/gh-pages/data/exchange_rate.csv).
+- Here is a [table of exchange rates for many countries](https://raw.githubusercontent.com/michaellevy/gapminder-R/gh-pages/data/simple_exchange_rate.csv).
 
 - Call the function with some row
 
 - lapply over rows
+
+
+### Do by joins
+
+And by year
+
+- Get all the exchange rates over time. You can [download that here](https://raw.githubusercontent.com/michaellevy/gapminder-R/gh-pages/data/exchange_rate.csv).
+
+- join, filter
+
 
 > #### Tip: Pass by value {.callout}
 >

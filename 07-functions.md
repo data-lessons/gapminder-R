@@ -172,112 +172,27 @@ into ever large chunks to get the effect we want.
 
 ### A more-useful function
 
-Let's write a function to find the GPD of a country for a given year. Our data will be the same gapminder data.frame we have been working with, but we want to keep our function flexible, so that if we get a new data.frame with the same information, say updated with 2012 data, we can pass it to the same function. So, we will pass the gapminder data.frame to the function as an argument rather than "hard-coding" the `gapminder` data.frame, and we will set `gapminder` as the default value for ease of use. The other arguments our function needs are the country and year for which to calculate GDP. For clarity, we will call these `the_country` and `the_year`. Here is the function definition, without any body. Currently it won't do anything.
+Let's write a function to calculate countries' GDPs in their local currency. 
+
+- Start with Canada, exchange rate is 1.279098
+
+- Turn that into a function that takes country and exchange rate.
+
+- Here is a [table of exchange rates for many countries](https://raw.githubusercontent.com/michaellevy/gapminder-R/gh-pages/data/simple_exchange_rate.csv).
+
+- Call the function with some row
+
+- lapply over rows
 
 
-~~~{.r}
-calcGDP <- function(the_country, the_year, dat = gapminder) {
-  
-}
-~~~
+### Do by joins
 
-When we call the function we will use a syntax like 
-`calcGDP(the_country = 'China', the_year = 2007)`. Then, inside the body of calcGDP, everywhere `the_country` appears, 'China' will be substituted, and everywhere `the_year` appears, 2007 will be substituted. With that in mind, we filter to the country and year we want just like we would using "China" and 2007 directly, and assign the new data.frame to `filteredDF`. Note that `filteredDF` only exists inside the function. It will be created when we call `calcGDP`, but it won't appear in our Environment, and it will be gone as soon as `calcGDP` returns its return value.
+And by year
 
+- Get all the exchange rates over time. You can [download that here](https://raw.githubusercontent.com/michaellevy/gapminder-R/gh-pages/data/exchange_rate.csv).
 
-~~~{.r}
-calcGDP <- function(the_country, the_year, dat = gapminder) {
-    filteredDF <- filter(dat, country == the_country, year == the_year)
-}
-~~~
+- join, filter
 
-Now we have a data.frame filtered to the country and year we want, but we still need to calculate total GDP. We can use `mutate` from `dplyr` to calculate a new column, and then tell calcGDP to `return` the data.frame with the new column:
-
-
-~~~{.r}
-calcGDP <- function(the_country, the_year, dat = gapminder) {
-    filteredDF <- filter(dat, country == the_country & year == the_year)
-    filteredWithGDP <- mutate(filteredDF, GDP = gdpPercap * pop)
-    return(filteredWithGDP)
-}
-calcGDP('China', 2007)
-~~~
-
-
-
-~~~{.output}
-  country year        pop continent lifeExp gdpPercap          GDP
-1   China 2007 1318683096      Asia  72.961  4959.115 6.539501e+12
-
-~~~
-
-
-#### Making the function flexible
-
-Okay, but what if we want that information for multiple years or multiple countries. The `%in%` function is similar to `==`, but it allows multiple entries on the right hand side. For example:
-
-
-~~~{.r}
-3 %in% 1:10
-~~~
-
-
-
-~~~{.output}
-[1] TRUE
-
-~~~
-
-
-
-~~~{.r}
-'sam' %in% c('jim', 'joe', 'bob')
-~~~
-
-
-
-~~~{.output}
-[1] FALSE
-
-~~~
-
-We can replace the `==` tests in our function with `%in%` to allow it to take multiple years and continents. We will also change the names of `calcGDP`'s arguments to make it more intuitive that they can take multiple values. We should also add some comments to our code to make it easy to understand what it does.
-
-
-~~~{.r}
-calcGDP <- function(countries, years, dat = gapminder) {
-    
-    # Given a gapminder-like data.frame and sets of countries and years, returns the corresponding rows of the data.frame with a new column for the countries' total GDP.
-    # Arguments:
-    #   countries: character vector
-    #   years: numeric vector
-    # Returns: data.frame with new GDP variable
-    
-    filteredDF <- filter(dat, country %in% countries, year %in% years)
-    filteredWithGDP <- mutate(filteredDF, GDP = gdpPercap * pop)
-    return(filteredWithGDP)
-}
-calcGDP(countries = c('China', 'Japan', 'Korea Rep.'), years = 1970:1990)
-~~~
-
-
-
-~~~{.output}
-      country year        pop continent  lifeExp  gdpPercap          GDP
-1       China 1972  862030000      Asia 63.11888   676.9001 5.835082e+11
-2       China 1977  943455000      Asia 63.96736   741.2375 6.993242e+11
-3       China 1982 1000281000      Asia 65.52500   962.4214 9.626918e+11
-4       China 1987 1084035000      Asia 67.27400  1378.9040 1.494780e+12
-5       Japan 1972  107188273      Asia 73.42000 14778.7864 1.584113e+12
-6       Japan 1977  113872473      Asia 75.38000 16610.3770 1.891465e+12
-7       Japan 1982  118454974      Asia 77.11000 19384.1057 2.296144e+12
-8       Japan 1987  122091325      Asia 78.67000 22375.9419 2.731908e+12
-9  Korea Rep. 1972   33505000      Asia 62.61200  3030.8767 1.015495e+11
-10 Korea Rep. 1977   36436000      Asia 64.76600  4657.2210 1.696905e+11
-11 Korea Rep. 1982   39326000      Asia 67.12300  5622.9425 2.211278e+11
-12 Korea Rep. 1987   41622000      Asia 69.81000  8533.0888 3.551642e+11
-
-~~~
 
 > #### Tip: Pass by value {.callout}
 >
@@ -324,7 +239,7 @@ calcGDP(countries = c('China', 'Japan', 'Korea Rep.'), years = 1970:1990)
 > plotPopGrowth('Canada')
 > ~~~
 > 
-> <img src="fig/07-functions/unnamed-chunk-14-1.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" style="display: block; margin: auto;" />
+> <img src="fig/07-functions/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" style="display: block; margin: auto;" />
 > 
 
 

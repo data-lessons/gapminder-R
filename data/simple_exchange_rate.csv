@@ -1,4 +1,4 @@
-country,rate[which.max(year)]
+country,xrate
 Argentina,9.233186
 Australia,1.33109
 Austria,0.901659
