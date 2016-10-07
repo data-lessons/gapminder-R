@@ -6,14 +6,16 @@ minutes: 30
 ---
 
 ```{r setup, include = FALSE}
+library(tidyverse)
 source("tools/chunk-options.R")
 gapminder <- read.csv('data/gapminder-FiveYearData.csv')
 ```
 
 > ## Learning Objectives {.objectives}
 >
-> * Understand how to execute and interpret basic statistical models. 
-> 
+> * Understand how to execute and interpret basic statistical models
+> * Learn to querry and extract from lists
+> * Use `broom` to work with models
 
 ### Linear models
 
@@ -37,9 +39,69 @@ Notice that the same `summary` function gives summary information of a different
 We can specify interaction effects by separating variables with `*`:
 
 ```{r}
-model2 <- lm(lifeExp ~ gdpPercap * continent, gapminder)
-summary(model2)
+interaction_model <- lm(lifeExp ~ gdpPercap * continent, gapminder)
+summary(interaction_model)
 ```
+
+### Diversion into lists
+
+Let's see what `model` really is. It's class is "lm" -- that's what R suggests we see it as. We can ask R, "Okay, but what do *you* see it as?" with the `typeof` function.
+
+```{r}
+class(model)
+typeof(model)
+```
+
+Lists are the most flexible data structures in R. A list can have any number of entries, and each entry can be anything, even another list. In fact, it's common to deeply nested lists. Because of this flexibility, it is a useful format for complicated objects like a statistical model. Let's ask R how many entries are in the list, and what the name of each entry is.
+
+```{r}
+length(model)
+names(model)
+```
+
+You can probably guess what at least some of those entries are. We can extract a single item from a list using double square brackets.
+
+```{r}
+model[[1]] 
+```
+
+We can also extract items by name. Suppose we want the residuals:
+
+```{r}
+resid = model[["residuals"]]
+summary(resid)
+```
+
+But there is a better way to work with model objects like residuals...
+
+### `broom`
+
+The package `broom` is another `tidyverse`-family member. It is built to make working with models easier. Since you won't always be working with models, it doesn't load automatically with `tidyverse` (but does install with it), so we load it with library.
+
+```{r}
+library(broom)
+```
+
+We can get a nice data.frame output of the model summary.
+
+```{r}
+tidy(model)
+```
+
+We can create a data.frame that has the data that went into the model plus a bunch of new columns based on the model, such as residuals and predicted values. Note that all the newly added columns' names start with ".".
+
+```{r}
+modelOut = augment(model)
+head(modelOut)
+```
+
+This is useful for checking model assumptions, looking for anomalous points that may indicate omitted variables, etc. For example, it looks like our model underpredicts short life expectancies:
+
+```{r}
+ggplot(modelOut, aes(lifeExp, .resid, color = year)) + 
+  geom_point()
+```
+
 
 ### glm and beyond
 
@@ -49,8 +111,12 @@ Finally, the specification of generalized linear models such as logistic or Pois
 
 > ## Challenge - A plot and a model {.challenge}
 >
-> - Make a scatterplot of gdpPercap versus year.
-> - Add a smoother and specify `method = lm` to get a linear fit.
-> - Run a linear regression of gpdPercap on year.
+> - Make a scatterplot of gdpPercap versus year.  
+> - Add a smoother and specify `method = lm` to get a linear fit.  
+> - Run a linear regression of gpdPercap on year and use `tidy` to extract the model results.  
 > - Do your plot and model point to the same conclusions? Which do you find easier to interpret?
 >
+> Advanced  
+>
+> - Does the change in gdpPercap over time vary across continents?  
+>   - Hint: An interaction model can answer that question.

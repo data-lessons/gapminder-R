@@ -9,8 +9,9 @@ minutes: 30
 
 > ## Learning Objectives {.objectives}
 >
-> * Understand how to execute and interpret basic statistical models. 
-> 
+> * Understand how to execute and interpret basic statistical models
+> * Learn to querry and extract from lists
+> * Use `broom` to work with models
 
 ### Linear models
 
@@ -75,8 +76,8 @@ We can specify interaction effects by separating variables with `*`:
 
 
 ~~~{.r}
-model2 <- lm(lifeExp ~ gdpPercap * continent, gapminder)
-summary(model2)
+interaction_model <- lm(lifeExp ~ gdpPercap * continent, gapminder)
+summary(interaction_model)
 ~~~
 
 
@@ -111,6 +112,162 @@ F-statistic: 287.9 on 9 and 1694 DF,  p-value: < 2.2e-16
 
 ~~~
 
+### Diversion into lists
+
+Let's see what `model` really is. It's class is "lm" -- that's what R suggests we see it as. We can ask R, "Okay, but what do *you* see it as?" with the `typeof` function.
+
+
+~~~{.r}
+class(model)
+~~~
+
+
+
+~~~{.output}
+[1] "lm"
+
+~~~
+
+
+
+~~~{.r}
+typeof(model)
+~~~
+
+
+
+~~~{.output}
+[1] "list"
+
+~~~
+
+Lists are the most flexible data structures in R. A list can have any number of entries, and each entry can be anything, even another list. In fact, it's common to deeply nested lists. Because of this flexibility, it is a useful format for complicated objects like a statistical model. Let's ask R how many entries are in the list, and what the name of each entry is.
+
+
+~~~{.r}
+length(model)
+~~~
+
+
+
+~~~{.output}
+[1] 12
+
+~~~
+
+
+
+~~~{.r}
+names(model)
+~~~
+
+
+
+~~~{.output}
+ [1] "coefficients"  "residuals"     "effects"       "rank"         
+ [5] "fitted.values" "assign"        "qr"            "df.residual"  
+ [9] "xlevels"       "call"          "terms"         "model"        
+
+~~~
+
+You can probably guess what at least some of those entries are. We can extract a single item from a list using double square brackets.
+
+
+~~~{.r}
+model[[1]] 
+~~~
+
+
+
+~~~{.output}
+  (Intercept)     gdpPercap          year 
+-4.184243e+02  6.697323e-04  2.389828e-01 
+
+~~~
+
+We can also extract items by name. Suppose we want the residuals:
+
+
+~~~{.r}
+resid = model[["residuals"]]
+summary(resid)
+~~~
+
+
+
+~~~{.output}
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+-67.260  -6.954   1.219   0.000   7.759  19.550 
+
+~~~
+
+But there is a better way to work with model objects like residuals...
+
+### `broom`
+
+The package `broom` is another `tidyverse`-family member. It is built to make working with models easier. Since you won't always be working with models, it doesn't load automatically with `tidyverse` (but does install with it), so we load it with library.
+
+
+~~~{.r}
+library(broom)
+~~~
+
+We can get a nice data.frame output of the model summary.
+
+
+~~~{.r}
+tidy(model)
+~~~
+
+
+
+~~~{.output}
+         term      estimate    std.error statistic       p.value
+1 (Intercept) -4.184243e+02 2.761714e+01 -15.15089  9.759589e-49
+2   gdpPercap  6.697323e-04 2.447033e-05  27.36915 5.766430e-137
+3        year  2.389828e-01 1.397107e-02  17.10554  1.184970e-60
+
+~~~
+
+We can create a data.frame that has the data that went into the model plus a bunch of new columns based on the model, such as residuals and predicted values. Note that all the newly added columns' names start with ".".
+
+
+~~~{.r}
+modelOut = augment(model)
+head(modelOut)
+~~~
+
+
+
+~~~{.output}
+  lifeExp gdpPercap year  .fitted   .se.fit    .resid         .hat
+1  28.801  779.4453 1952 48.59210 0.4472722 -19.79110 0.0021289331
+2  30.332  820.8530 1957 49.81474 0.3950734 -19.48274 0.0016610162
+3  31.997  853.1007 1962 51.03125 0.3490783 -19.03425 0.0012967730
+4  34.020  836.1971 1967 52.21485 0.3124381 -18.19485 0.0010388340
+5  36.088  739.9811 1972 53.34532 0.2892826 -17.25732 0.0008905594
+6  38.438  786.1134 1977 54.57113 0.2803902 -16.13313 0.0008366498
+    .sigma      .cooksd .std.resid
+1 9.684667 0.0029706383  -2.043816
+2 9.685041 0.0022439588  -2.011501
+3 9.685571 0.0016709354  -1.964838
+4 9.686523 0.0012224824  -1.877946
+5 9.687535 0.0009424980  -1.781049
+6 9.688676 0.0007737577  -1.664982
+
+~~~
+
+This is useful for checking model assumptions, looking for anomalous points that may indicate omitted variables, etc. For example, it looks like our model underpredicts short life expectancies:
+
+
+~~~{.r}
+ggplot(modelOut, aes(lifeExp, .resid, color = year)) + 
+  geom_point()
+~~~
+
+<img src="fig/unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" style="display: block; margin: auto;" />
+
+
 ### glm and beyond
 
 Finally, the specification of generalized linear models such as logistic or Poisson regressions is very similar via the `glm` command. See `?glm` and the web for help. Beyond glm's, the statistical capabilities of R are extensive. A Google search for whatever you are interested in will get you started.
@@ -119,8 +276,12 @@ Finally, the specification of generalized linear models such as logistic or Pois
 
 > ## Challenge - A plot and a model {.challenge}
 >
-> - Make a scatterplot of gdpPercap versus year.
-> - Add a smoother and specify `method = lm` to get a linear fit.
-> - Run a linear regression of gpdPercap on year.
+> - Make a scatterplot of gdpPercap versus year.  
+> - Add a smoother and specify `method = lm` to get a linear fit.  
+> - Run a linear regression of gpdPercap on year and use `tidy` to extract the model results.  
 > - Do your plot and model point to the same conclusions? Which do you find easier to interpret?
 >
+> Advanced  
+>
+> - Does the change in gdpPercap over time vary across continents?  
+>   - Hint: An interaction model can answer that question.
