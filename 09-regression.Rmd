@@ -8,7 +8,7 @@ minutes: 30
 ```{r setup, include = FALSE}
 library(tidyverse)
 source("tools/chunk-options.R")
-gapminder <- read.csv('data/gapminder-FiveYearData.csv')
+gapminder <- read_csv('data/gapminder-FiveYearData.csv')
 ```
 
 > ## Learning Objectives {.objectives}
@@ -43,7 +43,7 @@ interaction_model <- lm(lifeExp ~ gdpPercap * continent, gapminder)
 summary(interaction_model)
 ```
 
-### Diversion into lists
+### Lists
 
 Let's see what `model` really is. It's class is "lm" -- that's what R suggests we see it as. We can ask R, "Okay, but what do *you* see it as?" with the `typeof` function.
 
@@ -65,12 +65,21 @@ You can probably guess what at least some of those entries are. We can extract a
 model[[1]] 
 ```
 
-We can also extract items by name. Suppose we want the residuals:
+To inspect any item, we could extract each of them using `[[`, but we can also "loop" over every item in a list and run a function on each. That's what `lapply` does. It takes a minimum of two arguments, a list and a function, and executes the function on each item in the list. And it always returns a list of the same length as the original list. Let's look at the class of each item in the model-list:
+
+```{r}
+lapply(model, class)
+```
+
+
+We can also extract items by name. Suppose we want the residuals, we can extract them by name, also with double square brackets. Since there are 1704 of them, we'll just look at a summary.
 
 ```{r}
 resid = model[["residuals"]]
 summary(resid)
 ```
+
+
 
 But there is a better way to work with model objects like residuals...
 

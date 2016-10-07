@@ -112,7 +112,7 @@ F-statistic: 287.9 on 9 and 1694 DF,  p-value: < 2.2e-16
 
 ~~~
 
-### Diversion into lists
+### Lists
 
 Let's see what `model` really is. It's class is "lm" -- that's what R suggests we see it as. We can ask R, "Okay, but what do *you* see it as?" with the `typeof` function.
 
@@ -185,7 +185,56 @@ model[[1]]
 
 ~~~
 
-We can also extract items by name. Suppose we want the residuals:
+To inspect any item, we could extract each of them using `[[`, but we can also "loop" over every item in a list and run a function on each. That's what `lapply` does. It takes a minimum of two arguments, a list and a function, and executes the function on each item in the list. And it always returns a list of the same length as the original list. Let's look at the class of each item in the model-list:
+
+
+~~~{.r}
+lapply(model, class)
+~~~
+
+
+
+~~~{.output}
+$coefficients
+[1] "numeric"
+
+$residuals
+[1] "numeric"
+
+$effects
+[1] "numeric"
+
+$rank
+[1] "integer"
+
+$fitted.values
+[1] "numeric"
+
+$assign
+[1] "integer"
+
+$qr
+[1] "qr"
+
+$df.residual
+[1] "integer"
+
+$xlevels
+[1] "list"
+
+$call
+[1] "call"
+
+$terms
+[1] "terms"   "formula"
+
+$model
+[1] "data.frame"
+
+~~~
+
+
+We can also extract items by name. Suppose we want the residuals, we can extract them by name, also with double square brackets. Since there are 1704 of them, we'll just look at a summary.
 
 
 ~~~{.r}
@@ -200,6 +249,8 @@ summary(resid)
 -67.260  -6.954   1.219   0.000   7.759  19.550 
 
 ~~~
+
+
 
 But there is a better way to work with model objects like residuals...
 
@@ -265,7 +316,7 @@ ggplot(modelOut, aes(lifeExp, .resid, color = year)) +
   geom_point()
 ~~~
 
-<img src="fig/unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" style="display: block; margin: auto;" />
+<img src="fig/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" style="display: block; margin: auto;" />
 
 
 ### glm and beyond
