@@ -52,7 +52,7 @@
 <li>Each observational type forms a table</li>
 </ol>
 <p>What exactly constitutes a variable can be difficult to define out of context, but as a general rule, if observations are measured in different units, they should be in different columns, and if they are measured in the same units, there is a good chance they should be in the same column.</p>
-<p>An example will clarify. Here is some fake data on blood readings under several medical treatments. Is this data in tidy format? Why not – which of the three principles does it not satisfy?</p>
+<p>An example will clarify. Download <a href="https://raw.githubusercontent.com/michaellevy/gapminder-R/gh-pages/data/wide_eg.csv">this fake data</a> on blood readings under several medical treatments. Save it to your data directory and read it into R. Is this data in tidy format? Why not – which of the three principles does it not satisfy?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">blood &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&#39;data/wide_eg.csv&#39;</span>)
 blood</code></pre></div>
 <pre class="output"><code>Source: local data frame [14 x 5]

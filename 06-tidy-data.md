@@ -26,7 +26,7 @@ Data can be organized many ways. While there may be times that call for other or
 
 What exactly constitutes a variable can be difficult to define out of context, but as a general rule, if observations are measured in different units, they should be in different columns, and if they are measured in the same units, there is a good chance they should be in the same column.
 
-An example will clarify. Here is some fake data on blood readings under several medical treatments. Is this data in tidy format? Why not -- which of the three principles does it not satisfy?
+An example will clarify. Download [this fake data](https://raw.githubusercontent.com/michaellevy/gapminder-R/gh-pages/data/wide_eg.csv) on blood readings under several medical treatments. Save it to your data directory and read it into R. Is this data in tidy format? Why not -- which of the three principles does it not satisfy?
 
 
 ~~~{.r}
