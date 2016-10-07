@@ -17,7 +17,7 @@ source("tools/chunk-options.R")
 
 It is an often bemoaned fact that a data scientist spends much, and often most, of her time wrangling data: getting it organized and clean. In this lesson we will learn an efficient set of tools that can handle the vast majority of most data management tasks. 
 
-If you didn't install the `dplyr` package during the last lesson, do so now:
+Load the `dplyr` package individually or part of `tidyverse` if it's not already:
 
 ```{r install, eval = FALSE}
 install.packages('dplyr')
@@ -25,12 +25,21 @@ install.packages('dplyr')
 
 Remember that you only have to install each package once (per computer), but you have to load them for each R session in which you want to use them.
 
-You also have to load any data you want to use each time you start a new R session. So, if it's not already loaded, read in the gapminder data.
+You also have to load any data you want to use each time you start a new R session. So, if it's not already loaded, read in the gapminder data. We're going to use tidyverse's `read_csv` instead of base R's `read.csv` here. It has a few nice features; the most obvious is that it makes a special kind of data.frame that only prints the first ten rows instead of all 1704.
 
 ```{r load, warning = FALSE, message = FALSE}
-library(dplyr)
-gapminder <- read.csv('data/gapminder-FiveYearData.csv')
+library(tidyverse)
+gapminder <- read_csv('data/gapminder-FiveYearData.csv')
+class(gapminder)
+gapminder
 ```
+
+You can always convert a data.frame into this special kind of data.frame like this:
+
+```{r}
+gapminder <- tbl_df(gapminder)
+```
+
 
 ### The five tasks of `dplyr`
 
@@ -80,52 +89,108 @@ Suppose we only want to see country and life expectancy.
 select(gapminder, country, lifeExp)
 ```
 
-Hmm, we can't really see all 1704 rows. We can just look at the top of the data.frame with the `head` function. We could assign the output of our `select` command to a new variable and display the head of that, or we can wrap our select function in `head`. Note that if we don't assign the output of a function to a variable, the output is printed, but nothing changes. E.g. the last command didn't remove the other columns from the gapminder data.frame, it just printed the results of that function call. Understand how the nesting functions works: `head` expects a data.frame as its argument, and `select` returns a data.frame. The output of `select` becomes the input to `head`.
+We can choose which columns we don't want
 
-```{r select head}
-gapCountryExp <- select(gapminder, country, lifeExp)
-head(gapCountryExp)
-head(select(gapminder, country, lifeExp))
+```{r}
+select(gapminder, -continent, income = gdpPercap)
 ```
+
+And we can rename columns
+
+```{r}
+select(gapminder, ThePlace = country, HowLongTheyLive = lifeExp)
+```
+
+As usual, R isn't saving any of these outputs; just printing them to the screen. If we want to keep them around, we need to assign them to a variable.
+
+```{r}
+justUS = filter(gapminder, country == "United States")
+USdata = select(justUS, -country, -continent)
+USdata
+```
+
+> #### Subsetting {.challenge}
+>
+> - Subset the gapminder data to only Oceania countries post-1980.
+> - Remove the continent column
+> - Make a scatter plot of gdpPercap vs. population colored by country
+>
+> **Advanced** Yesterday we learned how to do this using base R's subsetting. Do the same thing without the `filter` and `select` functions.
+> 
 
 #### `arrange()`
 
 You can order the rows of a data.frame by a variable using `arrange`. Suppose we want to see the most populous countries. Again, we wrap the results in `head` to just print the first few rows: 
 
 ```{r arrange}
-head(arrange(gapminder, pop))
+arrange(gapminder, pop)
 ```
 
 Hmm, we didn't get the most populous countries. By default, `arrange` sorts the variable in *increasing* order. We could see the most populous countries by examining the `tail` of the last command, or we can sort the data.frame by descending population by wrapping the variable in `desc()`:
 
 ```{r arrange desc}
-head(arrange(gapminder, desc(pop)))
+arrange(gapminder, desc(pop))
 ```
 
 `arrange` can also sort by multiple variables. It will sort the data.frame by the first variable, and if there are any ties in that variable, they will be sorted by the next variable, and so on. Here we sort from newest to oldest, and within year from richest to poorest:
 
 ```{r arrange multi}
-head(arrange(gapminder, desc(year), desc(gdpPercap)))
+arrange(gapminder, desc(year), desc(gdpPercap))
 ```
 
 **Shoutout Q: Would we get the same output if we switched the order of `desc(year)` and `desc(gdpPercap)` in the last line?**
 
-#### C'est ne pas une pipe
 
-Suppose we want to look at all the countries where life expectancy is greater than 80 years, sorted from poorest to richest. First, we `filter`, then we `arrange`. Each function expects a data.frame as its first argument and returns a data.frame as its output. So we could wrap them like we did with `head(select( ... ))` above: 
+#### `mutate()`
 
-```{r filter and arrange}
-arrange(filter(gapminder, lifeExp > 80), gdpPercap)
+We have learned how to drop rows, drop columns, and rearrange rows. To make a new column we use the `mutate` function. As usual, the first argument is a data.frame. The second argument is the name of the new column you want to create, followed by an equal sign, followed by what to put in that column. You can reference other variables in the data.frame, and `mutate` will treat each row independently. E.g. we can calculate the total GDP of each country in each year by multiplying the per-capita GDP by the population. We pass the output of `mutate` to `head` to keep the display under control. How would we view the highest-total-gdp countries?
+
+```{r mutate}
+mutate(gapminder, total_gdp = gdpPercap * pop)
 ```
 
-Or, we could assign the intermediate data.frame to a variable:
+Note that didn't change gapminder: We didn't assign the output to anything, so it was just printed, with the new column. If we want to modify our gapminder data.frame, we can assign the output of `mutate` back to the gapminder variable, but be careful doing this -- if you make a mistake, you can't just re-run that line of code, you'll need to go back to loading the gapminder data.frame.
+
+```{r}
+gapminder = mutate(gapminder, total_gdp = gdpPercap * pop)
+```
+
+You can create multiple columns in the same mutate, separating them by commas. 
+
+```{r mutate 2}
+tmp = mutate(gapminder, 
+       log_pop = log10(pop),
+       country_cont = paste(country, continent, sep = ", "))
+arrange(tmp, desc(log_pop))
+```
+
+
+> #### MCQ: Data Reduction {.challenge}
+>
+> Produce a data.frame with only the names and years of countries where per capita gdp is less than a dollar a day sorted from most- to least-recent.
+>
+> - Tip: The `gdpPercap` variable is annual gdp. You'll need to adjust.
+> - Tip: For complex tasks, it often helps to use pencil and paper to write/draw/map the various steps needed and how they fit together before writing any code.
+> 
+> What is the annual per-capita gdp, rounded to the nearest dollar, of the first row in the data.frame?
+>
+> a. $278
+> b. $312
+> c. $331
+> d. $339
+>
+
+
+#### C'est ne pas une pipe
+
+Suppose we want to look at all the countries where life expectancy is greater than 80 years, sorted from poorest to richest. First, we `filter`, then we `arrange`. We could assign the intermediate data.frame to a variable:
 
 ```{r filter and arrange assign}
-lifeExpGreater80 <- filter(gapminder, lifeExp > 80)
+lifeExpGreater80 = filter(gapminder, lifeExp > 80)
 arrange(lifeExpGreater80, gdpPercap)
 ```
 
-The first option is difficult to read, and the second option clutters our Environment with a data.frame that we will only use once. There is a better way, which makes both writing and reading the code easier. The pipe from the `magrittr` package (which is automatically installed and loaded with `dplyr`) takes the output of first line, and plugs it in as the first argument of the next line.
+In this case it doesn't much matter, but we make a whole new data.frame (`lifeExpGreater80`) and only use it once; that's a little wasteful of system resources, and it clutters our environment. If the data are large, that can be a big problem. There is a better way, and it makes both writing and reading the code easier. The pipe from the `magrittr` package (which is automatically installed and loaded with `dplyr` and `tidyverse`) takes the output of first line, and plugs it in as the first argument of the next line. Since many `tidyverse` functions expect a data.frame as the first argument and output a data.frame, this works fluidly.
 
 ```{r filter and arrange pipe}
 filter(gapminder, lifeExp > 80) %>%
@@ -151,39 +216,12 @@ gapminder %>%
 
 Making your code easier for humans to read will save you lots of time. The human reading it is usually future-you, and operations that seem simple when you're writing them will look like gibberish when you're three weeks removed from them, let alone three months or three years or another person. Make your code as easy to read as possible by using the pipe where appropriate, leaving white space, using descriptive variable names, being consistent with spacing and naming, and liberally commenting code.
 
-
-#### `mutate()`
-
-We have learned how to drop rows, drop columns, and rearrange rows. To make a new column we use the `mutate` function. As usual, the first argument is a data.frame. The second argument is the name of the new column you want to create, followed by an equal sign, followed by what to put in that column. You can reference other variables in the data.frame, and `mutate` will treat each row independently. E.g. we can calculate the total GDP of each country in each year by multiplying the per-capita GDP by the population. We pass the output of `mutate` to `head` to keep the display under control. How would we view the highest-total-gdp countries?
-
-```{r mutate}
-mutate(gapminder, total_gdp = gdpPercap * pop) %>%
-    head()
-```
-
-You can create multiple columns in the same function call, separating them by commas. E.g. suppose we want the base-10 logarithm of each country's population and per-capita gdp:
-
-```{r mutate 2}
-gapminder %>%
-    mutate(log_gdp = log10(gdpPercap), log_pop = log10(pop)) %>%
-    arrange(desc(log_gdp)) %>%
-    head()
-```
-
-
-> #### MCQ: Data Reduction {.challenge}
+> #### Challenge: Data Reduction {.challenge}
 >
-> Produce a data.frame with only the names and years of countries where per capita gdp is less than a dollar a day sorted from most- to least-recent.
+> Copy the code you (or the instructor) wrote to solve the previous challenge
+> Rewrite it using pipes (i.e. no assignment and no nested functions)
 >
-> - Tip: The `gdpPercap` variable is annual gdp. You'll need to adjust.
-> - Tip: For complex tasks, it often helps to use pencil and paper to write/draw/map the various steps needed and how they fit together before writing any code.
-> 
-> What is the annual per-capita gdp, rounded to the nearest dollar, of the first row in the data.frame?
->
-> a. $278
-> b. $312
-> c. $331
-> d. $339
+
 
 #### `summarize()`
 
@@ -206,12 +244,6 @@ gapminder %>%
 count(gapminder, country)
 ```
 
-The highly observant will notice the output of this looks a little different than most of our data.frames -- why didn't it print out all 60 rows, and what's with that header info at the top? `dplyr` converted the data.frame to a table-data.frame, or `tbl_df` object. The most salient difference between them is that `tbl_df`s never print more than a few rows, which can be nice. If you like this behavior, you can convert any data.frame to a tbl_df like so. Now it prints nicely, so we don't need to use `head`.
-
-```{r}
-gapminder <- tbl_df(gapminder)
-gapminder
-```
 
 We can also do multiple groupings. Suppose we want the maximum life expectancy in each continent for each year. We group by continent and year and calculate the maximum with the `max` function:
 
