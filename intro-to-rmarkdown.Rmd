@@ -1,0 +1,92 @@
+---
+title: "Introduction to RMarkdown"
+author: "Michael Koontz"
+date: "10/5/2016"
+output: html_document
+---
+
+<!--- Start by opening a new RMarkdown file and deleting everything after the header. Knit the document to start ---!>
+
+This is an RMarkdown file, which combines text and executed R code into a single, reproducible document. First, we write the text and code that we want to execute, then we 'knit' those pieces together, which creates a single document (in our case an .html file) as a finished product.
+
+We write plain text in the white space within this .Rmd file.
+
+If we want to write R code, and have that R code executed, then we use the following syntax in the .Rmd file to create a 'chunk' of R code. Three back ticks, open brace, a lower-case 'r', closed curly brace, the code we want to execute, and then three back ticks at the end. Notice the area between the back ticks turns grey.
+
+```{r}
+4 + 5
+```
+
+These back ticks and curly braces disappear in the rendered document, because they have a specific meaning within RMarkdown.
+
+Here's a more relevant example:
+
+```{r nameOfChunk}
+str(trees) # The structure of the built-in dataset trees
+```
+
+<!--- Exercise --->
+Open up a new markdown file
+
+
+You can also format the plain text using the markdown language. Here's an external link to a great cheat sheet: <https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf>
+
+# Headers! ('#' does not designate a comment in the markdown language)
+
+<!---  this is a comment in RMarkdown, with a start AND an end component ---> 
+
+
+## A smaller header
+##### The smallest of headers.
+
+### Italics and bold font
+Italics using the asterisk. I am *really* emphasizing this word. Bold text using pairs of asterisks. Here is another way to **really** make sure my wording is strong.
+
+### Inline R Code
+We can also use R code nested within our text. If we want to output the mean value of the Girth column in the trees dataset, rounded off to 2 decimal places, we can say: The mean girth of all trees is `r round(x = mean(trees$Girth), digits = 2)`. And then we can keep typing!
+
+### Greek letters, math symbols, and equations
+
+Inline math like this $4+4$. Or an inline Greek symbol, let's say $\alpha$.
+
+Here's a linear model inline: $y_i = \beta_0 + \beta_1x_i + \epsilon$
+
+To use TeX formatting and make multiple lined equations (these are also aligned by the equal sign and "is distributed as" tilde).
+
+$$
+\begin{aligned}
+y_i &= \beta_{0} + \beta_1x_i + \epsilon \\
+\epsilon &\sim Normal(0, \sigma^2)
+\end{aligned}
+$$
+
+```{r readTheDataNoShow, echo = FALSE}
+library(babynames)
+```
+
+The next chunk will set the eval= argument to FALSE so that the code is printed to the knitted document, but not executed in R.
+
+```{r noEvaluationChunk, eval = FALSE}
+str(babynames)
+```
+
+### Typewriter font.
+
+Use the code font to write text in typewriter font with grey background.
+
+Here I'm typing plain text, but I want to emphasize that the `mean()` function is R code that will return the mean of a vector of numbers.
+
+### Embedding plots
+
+You can embed plots directly into your document using an R chunk.
+
+```{r plotMike}
+library(ggplot2)
+
+mike <- ggplot(babynames[babynames$name == "Michael", ], aes(x = year, y = prop)) +
+  geom_line(aes(color = sex)) +
+  ggtitle(label = "Michael") +
+  theme_bw()
+
+mike
+```

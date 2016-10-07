@@ -1,0 +1,47 @@
+country,rate[which.max(year)]
+Argentina,9.233186
+Australia,1.33109
+Austria,0.901659
+Belgium,0.901659
+Brazil,3.329955
+Canada,1.279098
+Chile,654.124084
+"China, People's Republic of",6.227489
+Colombia,2741.880855
+Costa Rica,534.56577
+Czech Republic,24.59875
+Denmark,6.727907
+Estonia,0.901659
+Finland,0.901659
+France,0.901659
+Germany,0.901659
+Greece,0.901659
+Hungary,279.3325
+Iceland,131.918708
+India,64.151944
+Indonesia,13389.412937
+Ireland,0.901659
+Israel,3.886833
+Italy,0.901659
+Japan,121.044026
+"Korea, South",1131.1575
+Latvia,0.901659
+Lithuania,0.901659
+Luxembourg,0.901659
+Mexico,15.848267
+Netherlands,0.901659
+New Zealand,1.433975
+Norway,8.064167
+Poland,3.7695
+Portugal,0.901659
+Russia,60.93765
+Saudi Arabia,3.75
+Slovakia,0.901659
+Slovenia,0.901659
+South Africa,12.758931
+Spain,0.901659
+Sweden,8.434841
+Switzerland,0.962381
+Turkey,2.720009
+United Kingdom,0.654545
+United States,1
