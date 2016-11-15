@@ -106,73 +106,6 @@ Residual standard error: 8.143 on 1694 degrees of freedom
 Multiple R-squared:  0.6047,    Adjusted R-squared:  0.6026 
 F-statistic: 287.9 on 9 and 1694 DF,  p-value: &lt; 2.2e-16
 </code></pre>
-<h3 id="lists">Lists</h3>
-<p>Let’s see what <code>model</code> really is. It’s class is “lm” – that’s what R suggests we see it as. We can ask R, “Okay, but what do <em>you</em> see it as?” with the <code>typeof</code> function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(model)</code></pre></div>
-<pre class="output"><code>[1] &quot;lm&quot;
-</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">typeof</span>(model)</code></pre></div>
-<pre class="output"><code>[1] &quot;list&quot;
-</code></pre>
-<p>Lists are the most flexible data structures in R. A list can have any number of entries, and each entry can be anything, even another list. In fact, it’s common to deeply nested lists. Because of this flexibility, it is a useful format for complicated objects like a statistical model. Let’s ask R how many entries are in the list, and what the name of each entry is.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(model)</code></pre></div>
-<pre class="output"><code>[1] 12
-</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(model)</code></pre></div>
-<pre class="output"><code> [1] &quot;coefficients&quot;  &quot;residuals&quot;     &quot;effects&quot;       &quot;rank&quot;         
- [5] &quot;fitted.values&quot; &quot;assign&quot;        &quot;qr&quot;            &quot;df.residual&quot;  
- [9] &quot;xlevels&quot;       &quot;call&quot;          &quot;terms&quot;         &quot;model&quot;        
-</code></pre>
-<p>You can probably guess what at least some of those entries are. We can extract a single item from a list using double square brackets.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model[[<span class="dv">1</span>]] </code></pre></div>
-<pre class="output"><code>  (Intercept)     gdpPercap          year 
--4.184243e+02  6.697323e-04  2.389828e-01 
-</code></pre>
-<p>To inspect any item, we could extract each of them using <code>[[</code>, but we can also “loop” over every item in a list and run a function on each. That’s what <code>lapply</code> does. It takes a minimum of two arguments, a list and a function, and executes the function on each item in the list. And it always returns a list of the same length as the original list. Let’s look at the class of each item in the model-list:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lapply</span>(model, class)</code></pre></div>
-<pre class="output"><code>$coefficients
-[1] &quot;numeric&quot;
-
-$residuals
-[1] &quot;numeric&quot;
-
-$effects
-[1] &quot;numeric&quot;
-
-$rank
-[1] &quot;integer&quot;
-
-$fitted.values
-[1] &quot;numeric&quot;
-
-$assign
-[1] &quot;integer&quot;
-
-$qr
-[1] &quot;qr&quot;
-
-$df.residual
-[1] &quot;integer&quot;
-
-$xlevels
-[1] &quot;list&quot;
-
-$call
-[1] &quot;call&quot;
-
-$terms
-[1] &quot;terms&quot;   &quot;formula&quot;
-
-$model
-[1] &quot;data.frame&quot;
-</code></pre>
-<p>We can also extract items by name. Suppose we want the residuals, we can extract them by name, also with double square brackets. Since there are 1704 of them, we’ll just look at a summary.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resid =<span class="st"> </span>model[[<span class="st">&quot;residuals&quot;</span>]]
-<span class="kw">summary</span>(resid)</code></pre></div>
-<pre class="output"><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
--67.260  -6.954   1.219   0.000   7.759  19.550 
-</code></pre>
-<p>But there is a better way to work with model objects like residuals…</p>
 <h3 id="broom"><code>broom</code></h3>
 <p>The package <code>broom</code> is another <code>tidyverse</code>-family member. It is built to make working with models easier. Since you won’t always be working with models, it doesn’t load automatically with <code>tidyverse</code> (but does install with it), so we load it with library.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(broom)</code></pre></div>
@@ -204,7 +137,7 @@ $model
 <p>This is useful for checking model assumptions, looking for anomalous points that may indicate omitted variables, etc. For example, it looks like our model underpredicts short life expectancies:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(modelOut, <span class="kw">aes</span>(lifeExp, .resid, <span class="dt">color =</span> year)) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
-<p><img src="fig/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" style="display: block; margin: auto;" /></p>
+<p><img src="fig/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" style="display: block; margin: auto;" /></p>
 <h3 id="glm-and-beyond">glm and beyond</h3>
 <p>Finally, the specification of generalized linear models such as logistic or Poisson regressions is very similar via the <code>glm</code> command. See <code>?glm</code> and the web for help. Beyond glm’s, the statistical capabilities of R are extensive. A Google search for whatever you are interested in will get you started.</p>
 <section class="challenge panel panel-success">

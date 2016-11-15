@@ -1,12 +1,17 @@
 ---
 layout: page
-title: R for Cornerstone Research
+title: R for reproducible scientific analysis
 ---
 
-## Introduction to R
+**Introduction to R for social scientists using the Gapminder dataset**
 
-This is a two-day intensive introduction to modern computational techniques for data management, analysis, and visualization with an emphasis on the programming language R. The course is designed for quantitatively-oriented professionals but assumes no prior programming knowledge. By the end of the workshop, participants will understand the motivation for computational workflows including automation, collaboration, flexibility, and reproducability and be able to implement them. Participants will be able to efficiently clean data, organize it for analysis, estimate and work with the output of statistical models, produce a variety of publication-quality plots, and compose dynamic documents that integrate writing, code, and code output.
+This is a two-day intensive introduction to modern computational techniques for data management, analysis, and visualization with an emphasis on the programming language R. The course assumes no prior programming knowledge. By the end of the workshop, participants will be able to efficiently clean data, organize it for analysis, estimate and work with the output of statistical models, produce a variety of publication-quality plots, and compose dynamic documents that integrate writing, code, and code output.
 
+
+> ## Prerequisites {.prereq}
+>
+> Have installed R and RStudio.
+>
 
 ## Topics
 

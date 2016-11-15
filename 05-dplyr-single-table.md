@@ -49,8 +49,7 @@ gapminder
 
 
 ~~~{.output}
-Source: local data frame [1,704 x 6]
-
+# A tibble: 1,704 × 6
        country  year      pop continent lifeExp gdpPercap
          <chr> <int>    <dbl>     <chr>   <dbl>     <dbl>
 1  Afghanistan  1952  8425333      Asia  28.801  779.4453
@@ -63,7 +62,7 @@ Source: local data frame [1,704 x 6]
 8  Afghanistan  1987 13867957      Asia  40.822  852.3959
 9  Afghanistan  1992 16317921      Asia  41.674  649.3414
 10 Afghanistan  1997 22227415      Asia  41.763  635.3414
-..         ...   ...      ...       ...     ...       ...
+# ... with 1,694 more rows
 
 ~~~
 
@@ -183,8 +182,7 @@ filter(gapminder, country == "United States")
 
 
 ~~~{.output}
-Source: local data frame [12 x 6]
-
+# A tibble: 12 × 6
          country  year       pop continent lifeExp gdpPercap
            <chr> <int>     <dbl>     <chr>   <dbl>     <dbl>
 1  United States  1952 157553000  Americas  68.440  13990.48
@@ -212,8 +210,7 @@ filter(gapminder, country == "United States" & year > 2000)
 
 
 ~~~{.output}
-Source: local data frame [2 x 6]
-
+# A tibble: 2 × 6
         country  year       pop continent lifeExp gdpPercap
           <chr> <int>     <dbl>     <chr>   <dbl>     <dbl>
 1 United States  2002 287675526  Americas  77.310  39097.10
@@ -231,8 +228,7 @@ filter(gapminder, country == "United States" | country == "Mexico")
 
 
 ~~~{.output}
-Source: local data frame [24 x 6]
-
+# A tibble: 24 × 6
    country  year      pop continent lifeExp gdpPercap
      <chr> <int>    <dbl>     <chr>   <dbl>     <dbl>
 1   Mexico  1952 30144317  Americas  50.789  3478.126
@@ -245,7 +241,7 @@ Source: local data frame [24 x 6]
 8   Mexico  1987 80122492  Americas  69.498  8688.156
 9   Mexico  1992 88111030  Americas  71.455  9472.384
 10  Mexico  1997 95895146  Americas  73.670  9767.298
-..     ...   ...      ...       ...     ...       ...
+# ... with 14 more rows
 
 ~~~
 
@@ -270,8 +266,7 @@ select(gapminder, -continent, income = gdpPercap)
 
 
 ~~~{.output}
-Source: local data frame [1,704 x 5]
-
+# A tibble: 1,704 × 5
        country  year      pop lifeExp   income
          <chr> <int>    <dbl>   <dbl>    <dbl>
 1  Afghanistan  1952  8425333  28.801 779.4453
@@ -284,7 +279,7 @@ Source: local data frame [1,704 x 5]
 8  Afghanistan  1987 13867957  40.822 852.3959
 9  Afghanistan  1992 16317921  41.674 649.3414
 10 Afghanistan  1997 22227415  41.763 635.3414
-..         ...   ...      ...     ...      ...
+# ... with 1,694 more rows
 
 ~~~
 
@@ -298,8 +293,7 @@ select(gapminder, ThePlace = country, HowLongTheyLive = lifeExp)
 
 
 ~~~{.output}
-Source: local data frame [1,704 x 2]
-
+# A tibble: 1,704 × 2
       ThePlace HowLongTheyLive
          <chr>           <dbl>
 1  Afghanistan          28.801
@@ -312,7 +306,7 @@ Source: local data frame [1,704 x 2]
 8  Afghanistan          40.822
 9  Afghanistan          41.674
 10 Afghanistan          41.763
-..         ...             ...
+# ... with 1,694 more rows
 
 ~~~
 
@@ -328,8 +322,7 @@ USdata
 
 
 ~~~{.output}
-Source: local data frame [12 x 4]
-
+# A tibble: 12 × 4
     year       pop lifeExp gdpPercap
    <int>     <dbl>   <dbl>     <dbl>
 1   1952 157553000  68.440  13990.48
@@ -368,8 +361,7 @@ arrange(gapminder, pop)
 
 
 ~~~{.output}
-Source: local data frame [1,704 x 6]
-
+# A tibble: 1,704 × 6
                  country  year   pop continent lifeExp gdpPercap
                    <chr> <int> <dbl>     <chr>   <dbl>     <dbl>
 1  Sao Tome and Principe  1952 60011    Africa  46.471  879.5836
@@ -382,7 +374,7 @@ Source: local data frame [1,704 x 6]
 8  Sao Tome and Principe  1977 86796    Africa  58.550 1737.5617
 9               Djibouti  1962 89898    Africa  39.693 3020.9893
 10 Sao Tome and Principe  1982 98593    Africa  60.351 1890.2181
-..                   ...   ...   ...       ...     ...       ...
+# ... with 1,694 more rows
 
 ~~~
 
@@ -396,8 +388,7 @@ arrange(gapminder, desc(pop))
 
 
 ~~~{.output}
-Source: local data frame [1,704 x 6]
-
+# A tibble: 1,704 × 6
    country  year        pop continent  lifeExp gdpPercap
      <chr> <int>      <dbl>     <chr>    <dbl>     <dbl>
 1    China  2007 1318683096      Asia 72.96100 4959.1149
@@ -410,7 +401,7 @@ Source: local data frame [1,704 x 6]
 8    China  1982 1000281000      Asia 65.52500  962.4214
 9    India  1997  959000000      Asia 61.76500 1458.8174
 10   China  1977  943455000      Asia 63.96736  741.2375
-..     ...   ...        ...       ...      ...       ...
+# ... with 1,694 more rows
 
 ~~~
 
@@ -424,8 +415,7 @@ arrange(gapminder, desc(year), desc(gdpPercap))
 
 
 ~~~{.output}
-Source: local data frame [1,704 x 6]
-
+# A tibble: 1,704 × 6
            country  year       pop continent lifeExp gdpPercap
              <chr> <int>     <dbl>     <chr>   <dbl>     <dbl>
 1           Norway  2007   4627926    Europe  80.196  49357.19
@@ -438,7 +428,7 @@ Source: local data frame [1,704 x 6]
 8      Netherlands  2007  16570613    Europe  79.762  36797.93
 9           Canada  2007  33390141  Americas  80.653  36319.24
 10         Iceland  2007    301931    Europe  81.757  36180.79
-..             ...   ...       ...       ...     ...       ...
+# ... with 1,694 more rows
 
 ~~~
 
@@ -457,8 +447,7 @@ mutate(gapminder, total_gdp = gdpPercap * pop)
 
 
 ~~~{.output}
-Source: local data frame [1,704 x 7]
-
+# A tibble: 1,704 × 7
        country  year      pop continent lifeExp gdpPercap   total_gdp
          <chr> <int>    <dbl>     <chr>   <dbl>     <dbl>       <dbl>
 1  Afghanistan  1952  8425333      Asia  28.801  779.4453  6567086330
@@ -471,7 +460,7 @@ Source: local data frame [1,704 x 7]
 8  Afghanistan  1987 13867957      Asia  40.822  852.3959 11820990309
 9  Afghanistan  1992 16317921      Asia  41.674  649.3414 10595901589
 10 Afghanistan  1997 22227415      Asia  41.763  635.3414 14121995875
-..         ...   ...      ...       ...     ...       ...         ...
+# ... with 1,694 more rows
 
 ~~~
 
@@ -516,8 +505,7 @@ arrange(lifeExpGreater80, gdpPercap)
 
 
 ~~~{.output}
-Source: local data frame [21 x 8]
-
+# A tibble: 21 × 8
            country  year       pop continent lifeExp gdpPercap
              <chr> <int>     <dbl>     <chr>   <dbl>     <dbl>
 1      New Zealand  2007   4115771   Oceania  80.204  25185.01
@@ -530,8 +518,8 @@ Source: local data frame [21 x 8]
 8           Sweden  2002   8954175    Europe  80.040  29341.63
 9  Hong Kong China  2002   6762476      Asia  81.495  30209.02
 10          France  2007  61083916    Europe  80.657  30470.02
-..             ...   ...       ...       ...     ...       ...
-Variables not shown: total_gdp <dbl>, log_gdp <dbl>.
+# ... with 11 more rows, and 2 more variables: total_gdp <dbl>,
+#   log_gdp <dbl>
 
 ~~~
 
@@ -546,8 +534,7 @@ filter(gapminder, lifeExp > 80) %>%
 
 
 ~~~{.output}
-Source: local data frame [21 x 8]
-
+# A tibble: 21 × 8
            country  year       pop continent lifeExp gdpPercap
              <chr> <int>     <dbl>     <chr>   <dbl>     <dbl>
 1      New Zealand  2007   4115771   Oceania  80.204  25185.01
@@ -560,8 +547,8 @@ Source: local data frame [21 x 8]
 8           Sweden  2002   8954175    Europe  80.040  29341.63
 9  Hong Kong China  2002   6762476      Asia  81.495  30209.02
 10          France  2007  61083916    Europe  80.657  30470.02
-..             ...   ...       ...       ...     ...       ...
-Variables not shown: total_gdp <dbl>, log_gdp <dbl>.
+# ... with 11 more rows, and 2 more variables: total_gdp <dbl>,
+#   log_gdp <dbl>
 
 ~~~
 
@@ -605,8 +592,7 @@ gapminder %>%
 
 
 ~~~{.output}
-Source: local data frame [21 x 8]
-
+# A tibble: 21 × 8
            country  year       pop continent lifeExp gdpPercap
              <chr> <int>     <dbl>     <chr>   <dbl>     <dbl>
 1      New Zealand  2007   4115771   Oceania  80.204  25185.01
@@ -619,8 +605,8 @@ Source: local data frame [21 x 8]
 8           Sweden  2002   8954175    Europe  80.040  29341.63
 9  Hong Kong China  2002   6762476      Asia  81.495  30209.02
 10          France  2007  61083916    Europe  80.657  30470.02
-..             ...   ...       ...       ...     ...       ...
-Variables not shown: total_gdp <dbl>, log_gdp <dbl>.
+# ... with 11 more rows, and 2 more variables: total_gdp <dbl>,
+#   log_gdp <dbl>
 
 ~~~
 
@@ -629,7 +615,7 @@ Making your code easier for humans to read will save you lots of time. The human
 
 > #### Challenge: Data Reduction {.challenge}
 >
-> Copy the code you (or the instructor) wrote to solve the previous challenge
+> Copy the code you (or the instructor) wrote to solve the previous challenge  
 > Rewrite it using pipes (i.e. no assignment and no nested functions)
 >
 
@@ -648,8 +634,7 @@ gapminder %>%
 
 
 ~~~{.output}
-Source: local data frame [12 x 3]
-
+# A tibble: 12 × 3
     year  mean_gdp median_gdp
    <int>     <dbl>      <dbl>
 1   1952  3725.276   1968.528
@@ -681,8 +666,7 @@ gapminder %>%
 
 
 ~~~{.output}
-Source: local data frame [142 x 2]
-
+# A tibble: 142 × 2
        country number_entries
          <chr>          <int>
 1  Afghanistan             12
@@ -695,7 +679,7 @@ Source: local data frame [142 x 2]
 8      Bahrain             12
 9   Bangladesh             12
 10     Belgium             12
-..         ...            ...
+# ... with 132 more rows
 
 ~~~
 
@@ -708,8 +692,7 @@ count(gapminder, country)
 
 
 ~~~{.output}
-Source: local data frame [142 x 2]
-
+# A tibble: 142 × 2
        country     n
          <chr> <int>
 1  Afghanistan    12
@@ -722,7 +705,7 @@ Source: local data frame [142 x 2]
 8      Bahrain    12
 9   Bangladesh    12
 10     Belgium    12
-..         ...   ...
+# ... with 132 more rows
 
 ~~~
 
@@ -754,7 +737,7 @@ Groups: continent [?]
 8     Africa  1987       71.913
 9     Africa  1992       73.615
 10    Africa  1997       74.772
-..       ...   ...          ...
+# ... with 50 more rows
 
 ~~~
 
@@ -812,7 +795,7 @@ Groups: continent [?]
 8     Africa  1987       71.913   Reunion
 9     Africa  1992       73.615   Reunion
 10    Africa  1997       74.772   Reunion
-..       ...   ...          ...       ...
+# ... with 50 more rows
 
 ~~~
 

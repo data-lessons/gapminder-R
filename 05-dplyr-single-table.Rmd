@@ -213,7 +213,7 @@ Making your code easier for humans to read will save you lots of time. The human
 
 > #### Challenge: Data Reduction {.challenge}
 >
-> Copy the code you (or the instructor) wrote to solve the previous challenge
+> Copy the code you (or the instructor) wrote to solve the previous challenge  
 > Rewrite it using pipes (i.e. no assignment and no nested functions)
 >
 

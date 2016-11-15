@@ -112,147 +112,7 @@ F-statistic: 287.9 on 9 and 1694 DF,  p-value: < 2.2e-16
 
 ~~~
 
-### Lists
 
-Let's see what `model` really is. It's class is "lm" -- that's what R suggests we see it as. We can ask R, "Okay, but what do *you* see it as?" with the `typeof` function.
-
-
-~~~{.r}
-class(model)
-~~~
-
-
-
-~~~{.output}
-[1] "lm"
-
-~~~
-
-
-
-~~~{.r}
-typeof(model)
-~~~
-
-
-
-~~~{.output}
-[1] "list"
-
-~~~
-
-Lists are the most flexible data structures in R. A list can have any number of entries, and each entry can be anything, even another list. In fact, it's common to deeply nested lists. Because of this flexibility, it is a useful format for complicated objects like a statistical model. Let's ask R how many entries are in the list, and what the name of each entry is.
-
-
-~~~{.r}
-length(model)
-~~~
-
-
-
-~~~{.output}
-[1] 12
-
-~~~
-
-
-
-~~~{.r}
-names(model)
-~~~
-
-
-
-~~~{.output}
- [1] "coefficients"  "residuals"     "effects"       "rank"         
- [5] "fitted.values" "assign"        "qr"            "df.residual"  
- [9] "xlevels"       "call"          "terms"         "model"        
-
-~~~
-
-You can probably guess what at least some of those entries are. We can extract a single item from a list using double square brackets.
-
-
-~~~{.r}
-model[[1]] 
-~~~
-
-
-
-~~~{.output}
-  (Intercept)     gdpPercap          year 
--4.184243e+02  6.697323e-04  2.389828e-01 
-
-~~~
-
-To inspect any item, we could extract each of them using `[[`, but we can also "loop" over every item in a list and run a function on each. That's what `lapply` does. It takes a minimum of two arguments, a list and a function, and executes the function on each item in the list. And it always returns a list of the same length as the original list. Let's look at the class of each item in the model-list:
-
-
-~~~{.r}
-lapply(model, class)
-~~~
-
-
-
-~~~{.output}
-$coefficients
-[1] "numeric"
-
-$residuals
-[1] "numeric"
-
-$effects
-[1] "numeric"
-
-$rank
-[1] "integer"
-
-$fitted.values
-[1] "numeric"
-
-$assign
-[1] "integer"
-
-$qr
-[1] "qr"
-
-$df.residual
-[1] "integer"
-
-$xlevels
-[1] "list"
-
-$call
-[1] "call"
-
-$terms
-[1] "terms"   "formula"
-
-$model
-[1] "data.frame"
-
-~~~
-
-
-We can also extract items by name. Suppose we want the residuals, we can extract them by name, also with double square brackets. Since there are 1704 of them, we'll just look at a summary.
-
-
-~~~{.r}
-resid = model[["residuals"]]
-summary(resid)
-~~~
-
-
-
-~~~{.output}
-   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
--67.260  -6.954   1.219   0.000   7.759  19.550 
-
-~~~
-
-
-
-But there is a better way to work with model objects like residuals...
 
 ### `broom`
 
@@ -316,7 +176,7 @@ ggplot(modelOut, aes(lifeExp, .resid, color = year)) +
   geom_point()
 ~~~
 
-<img src="fig/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" style="display: block; margin: auto;" />
+<img src="fig/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" style="display: block; margin: auto;" />
 
 
 ### glm and beyond
