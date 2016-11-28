@@ -243,7 +243,7 @@ odds <- c(1, 3, 5)
 
 ### Subsetting
 
-#### Positional subsetting
+#### Subset by index
 
 We can extract items from a vector by specifying which positions, or indices, we want. R's syntax for subsetting is square brackets (`[ ]`) at the end of an object containing the positions to return. So to get the third element out of our `pop` vector:
 
@@ -343,7 +343,7 @@ pop[10]
 > - **Super-Bonus**: Returning to the multiples-of-three vector, what is the sum of numbers in positions that are not evenly divisible by three? That is the sum of the first, second, fourth, ... entries.
 >
 
-### Boolean type and subsetting 
+#### Subset by logical
 
 Note that the `continents` data frame contains the two most common kinds of variables: numbers (num) and strings (chr).
 

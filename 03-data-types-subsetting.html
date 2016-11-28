@@ -141,7 +141,7 @@ continents</code></pre></div>
 <p>Let’s store that vector in a new variable. We will use it again soon.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">odds &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>)</code></pre></div>
 <h3 id="subsetting">Subsetting</h3>
-<h4 id="positional-subsetting">Positional subsetting</h4>
+<h4 id="subset-by-index">Subset by index</h4>
 <p>We can extract items from a vector by specifying which positions, or indices, we want. R’s syntax for subsetting is square brackets (<code>[ ]</code>) at the end of an object containing the positions to return. So to get the third element out of our <code>pop</code> vector:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop</code></pre></div>
 <pre class="output"><code>[1] 1022234000  934611000       4490 4164252000  738199000   29127000
@@ -183,7 +183,7 @@ continents</code></pre></div>
 </ul>
 </div>
 </section>
-<h3 id="boolean-type-and-subsetting">Boolean type and subsetting</h3>
+<h4 id="subset-by-logical">Subset by logical</h4>
 <p>Note that the <code>continents</code> data frame contains the two most common kinds of variables: numbers (num) and strings (chr).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(continents)</code></pre></div>
 <pre class="output"><code>&#39;data.frame&#39;:   6 obs. of  5 variables:
