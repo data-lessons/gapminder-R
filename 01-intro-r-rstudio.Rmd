@@ -11,12 +11,12 @@ source("tools/chunk-options.R")
 
 > ## Learning objectives {.objectives}
 >
-> * To gain familiarity with the various panes in the RStudio IDE
-> * To gain familiarity with the buttons, short cuts and options in the Rstudio IDE
-> * To understand variables and how to assign to them
-> * To be able to use mathematical and comparison operations
-> * To be able to call functions
-> * To be able to manage your workspace in an interactive R session
+> * Appreciate why write code and why R specifically
+> * Gain familiarity with the various panes in the RStudio IDE
+> * Use basic math functions in R, with calculator and fun() notation
+> * Understand variables and how to assign to them
+> * Use comparison operations
+> * Manage your workspace in an interactive R session
 > * Understand errors and warnings
 > * To be able to seek help via `?` and Google
 >
@@ -212,17 +212,8 @@ We can also do comparison in R:
 ```
 
 ```{r}
-1 <= 1  # less than or equal to
-```
-
-```{r}
-1 > 0  # greater than
-```
-
-```{r}
 1 >= -9 # greater than or equal to
 ```
-
 
 #### Variables and assignment
 
@@ -246,7 +237,9 @@ have appeared. Our variable `x` can be used in place of a number in any calculat
 x + 1
 ```
 
-Notice also that variables can be reassigned:
+This doesn't change the value of `x` or store the result anywhere, it simply prints the answer to the console.
+
+Variables can be reassigned:
 
 ```{r}
 x <- 99
@@ -295,7 +288,7 @@ What you use is up to you, but **be consistent**.
 
 Use descriptive variable names, as they make your code easier to understand. It doesn't take any extra time because you can use tab-completion to avoid typing long names.
 
-*Demo tab completion*
+*Demo tab completion for variable names, function names, and arguments.*
 
 ### Understanding functions & getting help
 
@@ -322,7 +315,7 @@ Each help-file contains the following components.
 
 #### Other ways to get help
 
-- `??` if you're not sure exactly what, e.g. `??base`
+- `??` searches the text of all R help files, e.g. `??base` will find `log`.
 - Google
 - Stack Overflow
 - [Cookbook for R](http://www.cookbook-r.com/)
@@ -397,15 +390,10 @@ log(negativeNumber)
 
 > #### Challenge -- Assignment & Comparison {.challenge}
 >
-> What are the values of `mass` and `age` after each line of code?
+> Which elephant weighs more? Convert one's weight to the units of the other, and store the result in an appropriately-named new variable. Write a command to test whether elephant1 or elephant2 weights more (1 kg ≈ 2.2 lb).
 >
 > ```{r, eval=FALSE}
-> mass <- 40
-> age <- 100
-> mass <- mass * 2.2
-> age <- age - 10
+> elephant1_kg = 3492
+> elephant2_lb = 7757
 > ```
->
-> Run the above four lines, and write a command to
-> compare mass to age. Is mass larger than age?
 >

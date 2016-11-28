@@ -34,12 +34,12 @@
 </div>
 <div class="panel-body">
 <ul>
-<li>To gain familiarity with the various panes in the RStudio IDE</li>
-<li>To gain familiarity with the buttons, short cuts and options in the Rstudio IDE</li>
-<li>To understand variables and how to assign to them</li>
-<li>To be able to use mathematical and comparison operations</li>
-<li>To be able to call functions</li>
-<li>To be able to manage your workspace in an interactive R session</li>
+<li>Appreciate why write code and why R specifically</li>
+<li>Gain familiarity with the various panes in the RStudio IDE</li>
+<li>Use basic math functions in R, with calculator and fun() notation</li>
+<li>Understand variables and how to assign to them</li>
+<li>Use comparison operations</li>
+<li>Manage your workspace in an interactive R session</li>
 <li>Understand errors and warnings</li>
 <li>To be able to seek help via <code>?</code> and Google</li>
 </ul>
@@ -177,12 +177,6 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> &lt;<span class="st">  </span><span class="dv">2</span>  <span class="co"># less than</span></code></pre></div>
 <pre class="output"><code>[1] TRUE
 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> &lt;=<span class="st"> </span><span class="dv">1</span>  <span class="co"># less than or equal to</span></code></pre></div>
-<pre class="output"><code>[1] TRUE
-</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> &gt;<span class="st"> </span><span class="dv">0</span>  <span class="co"># greater than</span></code></pre></div>
-<pre class="output"><code>[1] TRUE
-</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> &gt;=<span class="st"> </span>-<span class="dv">9</span> <span class="co"># greater than or equal to</span></code></pre></div>
 <pre class="output"><code>[1] TRUE
 </code></pre>
@@ -197,7 +191,8 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x +<span class="st"> </span><span class="dv">1</span></code></pre></div>
 <pre class="output"><code>[1] 1.25
 </code></pre>
-<p>Notice also that variables can be reassigned:</p>
+<p>This doesn’t change the value of <code>x</code> or store the result anywhere, it simply prints the answer to the console.</p>
+<p>Variables can be reassigned:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">99</span></code></pre></div>
 <p><code>x</code> used to contain the value 0.25 and and now it has the value 99.</p>
 <p>Assignment values can contain the variable being assigned to:</p>
@@ -233,7 +228,7 @@ c </code></pre>
 <p>What you use is up to you, but <strong>be consistent</strong>.</p>
 <h5 id="tab-completion">Tab completion</h5>
 <p>Use descriptive variable names, as they make your code easier to understand. It doesn’t take any extra time because you can use tab-completion to avoid typing long names.</p>
-<p><em>Demo tab completion</em></p>
+<p><em>Demo tab completion for variable names, function names, and arguments.</em></p>
 <h3 id="understanding-functions-getting-help">Understanding functions &amp; getting help</h3>
 <h4 id="r-help-files">R help files</h4>
 <p>Once you figure out what function you want, you need to figure out how to use it. Every function has an associated help-file. They can be hard to read, especially at first, but it is important to learn how to make sense of them.</p>
@@ -251,7 +246,7 @@ c </code></pre>
 </ul>
 <h4 id="other-ways-to-get-help">Other ways to get help</h4>
 <ul>
-<li><code>??</code> if you’re not sure exactly what, e.g. <code>??base</code></li>
+<li><code>??</code> searches the text of all R help files, e.g. <code>??base</code> will find <code>log</code>.</li>
 <li>Google</li>
 <li>Stack Overflow</li>
 <li><a href="http://www.cookbook-r.com/">Cookbook for R</a></li>
@@ -321,12 +316,9 @@ d. log(10, 1000)</code></pre>
 <h4 id="challenge-assignment-comparison"><span class="glyphicon glyphicon-pencil"></span>Challenge – Assignment &amp; Comparison</h4>
 </div>
 <div class="panel-body">
-<p>What are the values of <code>mass</code> and <code>age</code> after each line of code?</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mass &lt;-<span class="st"> </span><span class="dv">40</span>
-age &lt;-<span class="st"> </span><span class="dv">100</span>
-mass &lt;-<span class="st"> </span>mass *<span class="st"> </span><span class="fl">2.2</span>
-age &lt;-<span class="st"> </span>age -<span class="st"> </span><span class="dv">10</span></code></pre></div>
-<p>Run the above four lines, and write a command to compare mass to age. Is mass larger than age?</p>
+<p>Which elephant weighs more? Convert one’s weight to the units of the other, and store the result in an appropriately-named new variable. Write a command to test whether elephant1 or elephant2 weights more (1 kg ≈ 2.2 lb).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">elephant1_kg =<span class="st"> </span><span class="dv">3492</span>
+elephant2_lb =<span class="st"> </span><span class="dv">7757</span></code></pre></div>
 </div>
 </section>
         </div>
