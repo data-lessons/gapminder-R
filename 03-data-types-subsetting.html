@@ -27,18 +27,23 @@
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
                     <a href="index.html"><h1 class="title">R for reproducible scientific analysis</h1></a>
-          <h2 class="subtitle">data.frame</h2>
+          <h2 class="subtitle">Vectors &amp; Data frames</h2>
           <section class="objectives panel panel-warning">
 <div class="panel-heading">
 <h2 id="learning-objectives"><span class="glyphicon glyphicon-certificate"></span>Learning objectives</h2>
 </div>
 <div class="panel-body">
 <ul>
-<li>Be able to load a saved .rda object</li>
-<li>Understand <code>data.frame</code> as common R object, composed of vectors</li>
-<li>Understand basic R data classes</li>
-<li>Be able to query the structure of an R object and its component parts.</li>
-<li>Be able to subset a data.frame and vector</li>
+<li>Understand <code>data.frame</code> as common R object and familiar research data table.
+<ul>
+<li>Columns = variables, rows = observations</li>
+<li>Columns = vectors</li>
+</ul></li>
+<li>Be able to examine the structure and content of a data frame.</li>
+<li>Understand vectors as fundamental R unit</li>
+<li>Understand and be able to use vectorized operations</li>
+<li>Be able to subset vectors with index and logical notation</li>
+<li>Be able to import .RDA and .CSV files</li>
 </ul>
 </div>
 </section>
@@ -89,7 +94,8 @@
 </div>
 </section>
 <h3 id="vectors">Vectors</h3>
-<p>We can extract a single variable from a data.frame with <code>$</code> operator.</p>
+<p>Vectors are a collection of observations of a single variable, ie a column in a data frame. They are the fundamental unit of R. Let’s explore why that’s useful and how to work with them.</p>
+<p>We can extract a vector (ie a single variable) from a data frame with the <code>$</code> operator.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents$population</code></pre></div>
 <pre class="output"><code>[1] 1022234000  934611000       4490 4164252000  738199000   29127000
 </code></pre>
@@ -127,81 +133,87 @@ continents</code></pre></div>
 5     Europe 10180000  738199000              11.0 7.251464e+01
 6    Oceania  9008500   29127000               0.4 3.233280e+00
 </code></pre>
+<h3 id="creating-vectors">Creating vectors</h3>
+<p>We can also manually create new vectors. There are many ways to do this, but the most flexible is the combine function, <code>c()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>)</code></pre></div>
+<pre class="output"><code>[1] 1 3 5
+</code></pre>
+<p>Let’s store that vector in a new variable. We will use it again soon.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">odds &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>)</code></pre></div>
 <h3 id="subsetting">Subsetting</h3>
-<h4 id="subsetting-vectors">Subsetting vectors</h4>
-<p>R uses square brackets (<code>[ ]</code>) to subset data. To get the first element out of our <code>pop</code> vector, we do:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop[<span class="dv">1</span>]</code></pre></div>
-<pre class="output"><code>[1] 1022234000
+<h4 id="positional-subsetting">Positional subsetting</h4>
+<p>We can extract items from a vector by specifying which positions, or indices, we want. R’s syntax for subsetting is square brackets (<code>[ ]</code>) at the end of an object containing the positions to return. So to get the third element out of our <code>pop</code> vector:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop</code></pre></div>
+<pre class="output"><code>[1] 1022234000  934611000       4490 4164252000  738199000   29127000
 </code></pre>
-<p>To get the first three elements, we need to put 1, 2, and 3 inside the <code>[ ]</code>, but we need a way to group them together. The function “combine”, <code>c</code> does that. This makes a vector of the numbers 1, 2, and 3:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</code></pre></div>
-<pre class="output"><code>[1] 1 2 3
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop[<span class="dv">3</span>]</code></pre></div>
+<pre class="output"><code>[1] 4490
 </code></pre>
-<p>Then we can get the first three elements in <code>pop</code> like this:</p>
+<p>To get the first three elements, we need to put a vector containing 1, 2, and 3 inside the <code>[ ]</code>. We just learned how to make such a vector using the combine function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)]</code></pre></div>
 <pre class="output"><code>[1] 1022234000  934611000       4490
+</code></pre>
+<p>Sometimes it will be more useful to provide the desired positions as a variable. Let’s pull out the odd-positioned entries from <code>pop</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop[odds]</code></pre></div>
+<pre class="output"><code>[1] 1022234000       4490  738199000
 </code></pre>
 <p>We can also tell R which elements we <em>don’t</em> want with a <code>-</code>. This returns each element in <code>pop</code> except the first one:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop[-<span class="dv">1</span>]</code></pre></div>
 <pre class="output"><code>[1]  934611000       4490 4164252000  738199000   29127000
 </code></pre>
 <p>If we try to ask for an element that doesn’t exist, R returns <code>NA</code>. <code>NA</code> is a special value in R that means “missing”.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop[<span class="dv">100</span>]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop[<span class="dv">10</span>]</code></pre></div>
 <pre class="output"><code>[1] NA
-</code></pre>
-<h4 id="subsetting-data.frames">Subsetting data.frames</h4>
-<p>Vectors are one-dimensional objects. data.frames are two-dimensional objects.</p>
-<p>We can subset a 2-D object by providing an index for each dimension. Rows come first, then columns, separated by a comma. E.g. this returns the 3rd entry in the 2nd column of <code>continents</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents[<span class="dv">3</span>, <span class="dv">2</span>]</code></pre></div>
-<pre class="output"><code>[1] 13720000
-</code></pre>
-<p>Leaving a dimension empty returns all the values for that dimension. So if we want all of the columns for the first row, we use:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents[<span class="dv">1</span>, ]</code></pre></div>
-<pre class="output"><code>  continent area_km2 population percent_total_pop pop_density
-1    Africa 30370000 1022234000                15    33.65933
-</code></pre>
-<p>And if we want all the rows for the 2nd and 4th columns:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents[, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)]</code></pre></div>
-<pre class="output"><code>  area_km2 percent_total_pop
-1 30370000              15.0
-2 42330000              14.0
-3 13720000               0.0
-4 43820000              60.0
-5 10180000              11.0
-6  9008500               0.4
 </code></pre>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
-<h4 id="challenge-subsetting-two-ways"><span class="glyphicon glyphicon-pencil"></span>Challenge – subsetting two ways</h4>
+<h4 id="challenge-create-and-subset-a-vector"><span class="glyphicon glyphicon-pencil"></span>Challenge – Create and subset a vector</h4>
 </div>
 <div class="panel-body">
-<p>Can you think of another way to extraact the entry in the third row and second column of <code>continents</code>?</p>
-<p>Hint: - We recently saw how to extract a vector (column) from a data.frame. - What vector does the value you want reside in? - Once you have that vector, how can you extract a single value?</p>
+<p>Similar to <code>c</code>, the <code>seq</code> function creates a vector: a <strong>seq</strong>uence of numbers.</p>
+<ul>
+<li>Your first task is to create a sequence of all the multiples of three from three to 300.</li>
+</ul>
+<p>Figure out how to do this. Some combination of playing with the function in the console and reading its helpfile (<code>?seq</code>) should work. Helpfiles are challenging at first, but it’s important to learn how to find the info you need in them. Hint: The arguments you need here are <code>from</code>, <code>to</code>, and <code>by</code>.</p>
+<ul>
+<li>Store your sequence in a variable.</li>
+<li>Extract the 33rd entry from the sequence</li>
+<li><strong>Bonus</strong>: Create a vector with ten evenly-spaced integers from one to one-million. What is the sum of the second and ninth entries in this vector?</li>
+<li><strong>Super-Bonus</strong>: Returning to the multiples-of-three vector, what is the sum of numbers in positions that are not evenly divisible by three? That is the sum of the first, second, fourth, … entries.</li>
+</ul>
 </div>
 </section>
 <h3 id="boolean-type-and-subsetting">Boolean type and subsetting</h3>
-<p>In <code>continents</code> we saw two of the three most common data types: characters and numeric. You saw the third when making logical comparisons like <code>1 &gt; 0</code>: Logical data. Logical data can only be TRUE or FALSE (or <code>NA</code> for missing). We can make vectorized logical comparisons too. Let’s find the sparsely-populated continents, those with fewer than ten people per square kilometer:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents$pop_density &lt;<span class="st"> </span><span class="dv">10</span></code></pre></div>
-<pre class="output"><code>[1] FALSE FALSE  TRUE FALSE FALSE  TRUE
+<p>Note that the <code>continents</code> data frame contains the two most common kinds of variables: numbers (num) and strings (chr).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(continents)</code></pre></div>
+<pre class="output"><code>&#39;data.frame&#39;:   6 obs. of  5 variables:
+ $ continent        : chr  &quot;Africa&quot; &quot;Americas&quot; &quot;Antarctica&quot; &quot;Asia&quot; ...
+ $ area_km2         : num  30370000 42330000 13720000 43820000 10180000 ...
+ $ population       : num  1.02e+09 9.35e+08 4.49e+03 4.16e+09 7.38e+08 ...
+ $ percent_total_pop: num  15 14 0 60 11 0.4
+ $ pop_density      : num  3.37e+01 2.21e+01 3.27e-04 9.50e+01 7.25e+01 ...
 </code></pre>
-<p>That went over each element in <code>pop_density</code> and compared it with 10. We say that R “recycled” 10 to compare it with each element in <code>pop_density</code>.</p>
-<p>In the same way that we subset by index before, we can subset by a logical vector, and we can do this in one or more dimensional subsetting.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents$continent[continents$pop_density &lt;<span class="st"> </span><span class="dv">10</span>]</code></pre></div>
-<pre class="output"><code>[1] &quot;Antarctica&quot; &quot;Oceania&quot;   
+<p>The third important data type in R is logicals. You saw this when making logical comparisons like <code>1 &gt; 0</code>. Logical data can only be <code>TRUE</code> or <code>FALSE</code> (or <code>NA</code> for missing).</p>
+<p>Logical comparisons are vectorized like other things in R. Let’s find the highly populated continents, those with more than one-billion people. One-billion is 10^9, so we can write it as <code>1e9</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop &gt;<span class="st"> </span><span class="fl">1e9</span></code></pre></div>
+<pre class="output"><code>[1]  TRUE FALSE FALSE  TRUE FALSE FALSE
 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents[continents$pop_density &lt;<span class="st"> </span><span class="dv">10</span>, ]</code></pre></div>
-<pre class="output"><code>   continent area_km2 population percent_total_pop  pop_density
-3 Antarctica 13720000       4490               0.0 0.0003272595
-6    Oceania  9008500   29127000               0.4 3.2332796803
+<p>That went over each element in <code>pop</code> and compared it with 10. We say that R “recycled” 10 to compare it with each element in <code>pop</code>.</p>
+<p>In the same way that we subset by index before, we can subset by a logical vector. To find the values of <code>pop</code> that were greater than one-billion, we subset it like so:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop[pop &gt;<span class="st"> </span><span class="fl">1e9</span>]</code></pre></div>
+<pre class="output"><code>[1] 1022234000 4164252000
 </code></pre>
-<h4 id="two-ways-to-subset">Two ways to subset</h4>
-<p>To be really clear, there are two similar ways to subset in R. Both use square-brackets. In one, you provide the indices of the elements you want:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents$continent[<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>)]</code></pre></div>
-<pre class="output"><code>[1] &quot;Americas&quot; &quot;Asia&quot;     &quot;Oceania&quot; 
-</code></pre>
-<p>In the other, you provide TRUE or FALSE for each element, TRUE if you want it, FALSE if you don’t.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents$continent[<span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>, <span class="ot">TRUE</span>)]</code></pre></div>
-<pre class="output"><code>[1] &quot;Americas&quot; &quot;Asia&quot;     &quot;Oceania&quot; 
+<section class="challenge panel panel-success">
+<div class="panel-heading">
+<h4 id="shoutout-1"><span class="glyphicon glyphicon-pencil"></span>Shoutout</h4>
+</div>
+<div class="panel-body">
+<p>How could you extract the names of the continents with more than one-billion people?</p>
+</div>
+</section>
+<p>Doing a logical test on one (or more) variables and using that to extract values from another is especially useful in the data frame context since all the observations are lined up on rows. For example to find the land-area of Africa, we can test the continent names for being Africa and then extract the area where that is true. Note that it is often useful to build code from the insight out, ie write the logical test first, then go left and write what you want to subset with it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents$area_km2[continents$continent ==<span class="st"> &quot;Africa&quot;</span>]</code></pre></div>
+<pre class="output"><code>[1] 30370000
 </code></pre>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
@@ -221,24 +233,6 @@ continents</code></pre></div>
 </ol>
 </div>
 </section>
-<h3 id="checking-data.type">Checking data.type</h3>
-<p>You can ask R what kind of data is assigned to a variable name with the <code>class</code> function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(continents)</code></pre></div>
-<pre class="output"><code>[1] &quot;data.frame&quot;
-</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(continents$continent)</code></pre></div>
-<pre class="output"><code>[1] &quot;character&quot;
-</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(continents$population[<span class="dv">1</span>])</code></pre></div>
-<pre class="output"><code>[1] &quot;numeric&quot;
-</code></pre>
-<p>You can also ask specifically whether data is a particular type:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">is.numeric</span>(<span class="dv">3</span>)</code></pre></div>
-<pre class="output"><code>[1] TRUE
-</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">is.numeric</span>(<span class="st">&quot;three&quot;</span>)</code></pre></div>
-<pre class="output"><code>[1] FALSE
-</code></pre>
 <h3 id="reading-csv-data">Reading csv data</h3>
 <p>The <code>continents</code> data.frame was useful for learning because it was so small, but it’s time to graduate to something more interesting and realistic. Data come in many forms, and we need to be able to load them in R. For our own use and with others who use R, there are R-specific data structures we can use, like the .RDA file-type we just saw, but we need to be able to work with more general data types too. Comma-separated value (csv) tables are perhaps the most universal data structure.</p>
 <p>The gapminder dataset provides country-by-year level data on gdp, population, and longevity. I downloaded it and put it in the data directory of my project. You will do the same in a minute.</p>

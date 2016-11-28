@@ -1,7 +1,7 @@
 ---
 layout: page
 title: R for reproducible scientific analysis
-subtitle: data.frame
+subtitle: Vectors & Data frames
 minutes: 30
 ---
 
@@ -10,11 +10,14 @@ minutes: 30
 
 > ## Learning objectives {.objectives}
 >
-> - Be able to load a saved .rda object
-> - Understand `data.frame` as common R object, composed of vectors
-> - Understand basic R data classes
-> - Be able to query the structure of an R object and its component parts.
-> - Be able to subset a data.frame and vector
+> - Understand `data.frame` as common R object and familiar research data table.
+>     - Columns = variables, rows = observations
+>     - Columns = vectors
+> - Be able to examine the structure and content of a data frame.
+> - Understand vectors as fundamental R unit
+> - Understand and be able to use vectorized operations
+> - Be able to subset vectors with index and logical notation
+> - Be able to import .RDA and .CSV files
 >
 
 
@@ -104,7 +107,9 @@ We get some summary information on `continents`: it's type and dimensions, and w
 
 ### Vectors 
 
-We can extract a single variable from a data.frame with `$` operator.
+Vectors are a collection of observations of a single variable, ie a column in a data frame. They are the fundamental unit of R. Let's explore why that's useful and how to work with them.
+
+We can extract a vector (ie a single variable) from a data frame with the `$` operator.
 
 
 ~~~{.r}
@@ -212,40 +217,62 @@ continents
 
 ~~~
 
+### Creating vectors
+
+We can also manually create new vectors. There are many ways to do this, but the most flexible is the combine function, `c()`.
+
+
+~~~{.r}
+c(1, 3, 5)
+~~~
+
+
+
+~~~{.output}
+[1] 1 3 5
+
+~~~
+
+Let's store that vector in a new variable. We will use it again soon.
+
+
+~~~{.r}
+odds <- c(1, 3, 5)
+~~~
+
 
 ### Subsetting
 
-#### Subsetting vectors 
+#### Positional subsetting
 
-R uses square brackets (`[ ]`) to subset data. To get the first element out of our `pop` vector, we do:
+We can extract items from a vector by specifying which positions, or indices, we want. R's syntax for subsetting is square brackets (`[ ]`) at the end of an object containing the positions to return. So to get the third element out of our `pop` vector:
 
 
 ~~~{.r}
-pop[1]
+pop
 ~~~
 
 
 
 ~~~{.output}
-[1] 1022234000
+[1] 1022234000  934611000       4490 4164252000  738199000   29127000
 
 ~~~
 
-To get the first three elements, we need to put 1, 2, and 3 inside the `[ ]`, but we need a way to group them together. The function "combine", `c` does that. This makes a vector of the numbers 1, 2, and 3:
 
 
 ~~~{.r}
-c(1, 2, 3)
+pop[3]
 ~~~
 
 
 
 ~~~{.output}
-[1] 1 2 3
+[1] 4490
 
 ~~~
 
-Then we can get the first three elements in `pop` like this:
+To get the first three elements, we need to put a vector containing 1, 2, and 3 inside the `[ ]`. We just learned how to make such a vector using the combine function.
 
 
 ~~~{.r}
@@ -256,6 +283,20 @@ pop[c(1, 2, 3)]
 
 ~~~{.output}
 [1] 1022234000  934611000       4490
+
+~~~
+
+Sometimes it will be more useful to provide the desired positions as a variable. Let's pull out the odd-positioned entries from `pop`:
+
+
+~~~{.r}
+pop[odds]
+~~~
+
+
+
+~~~{.output}
+[1] 1022234000       4490  738199000
 
 ~~~
 
@@ -277,7 +318,7 @@ If we try to ask for an element that doesn't exist, R returns `NA`. `NA` is a sp
 
 
 ~~~{.r}
-pop[100]
+pop[10]
 ~~~
 
 
@@ -288,148 +329,91 @@ pop[100]
 ~~~
 
 
-
-
-#### Subsetting data.frames
-
-Vectors are one-dimensional objects. data.frames are two-dimensional objects.
-
-We can subset a 2-D object by providing an index for each dimension. Rows come first, then columns, separated by a comma. E.g. this returns the 3rd entry in the 2nd column of `continents`:
-
-
-~~~{.r}
-continents[3, 2]
-~~~
-
-
-
-~~~{.output}
-[1] 13720000
-
-~~~
-
-Leaving a dimension empty returns all the values for that dimension. So if we want all of the columns for the first row, we use:
-
-
-~~~{.r}
-continents[1, ]
-~~~
-
-
-
-~~~{.output}
-  continent area_km2 population percent_total_pop pop_density
-1    Africa 30370000 1022234000                15    33.65933
-
-~~~
-
-And if we want all the rows for the 2nd and 4th columns:
-
-
-~~~{.r}
-continents[, c(2, 4)]
-~~~
-
-
-
-~~~{.output}
-  area_km2 percent_total_pop
-1 30370000              15.0
-2 42330000              14.0
-3 13720000               0.0
-4 43820000              60.0
-5 10180000              11.0
-6  9008500               0.4
-
-~~~
-
-
-> #### Challenge -- subsetting two ways {.challenge}
+> #### Challenge -- Create and subset a vector {.challenge}
 >
-> Can you think of another way to extraact the entry in the third row and second column of `continents`?
+> Similar to `c`, the `seq` function creates a vector: a **seq**uence of numbers. 
 >
-> Hint: 
-> - We recently saw how to extract a vector (column) from a data.frame. 
-> - What vector does the value you want reside in? 
-> - Once you have that vector, how can you extract a single value?
+> - Your first task is to create a sequence of all the multiples of three from three to 300.
+>
+> Figure out how to do this. Some combination of playing with the function in the console and reading its helpfile (`?seq`) should work. Helpfiles are challenging at first, but it's important to learn how to find the info you need in them. Hint: The arguments you need here are `from`, `to`, and `by`.
+>
+> - Store your sequence in a variable.
+> - Extract the 33rd entry from the sequence
+> - **Bonus**: Create a vector with ten evenly-spaced integers from one to one-million. What is the sum of the second and ninth entries in this vector?
+> - **Super-Bonus**: Returning to the multiples-of-three vector, what is the sum of numbers in positions that are not evenly divisible by three? That is the sum of the first, second, fourth, ... entries.
+>
 
 ### Boolean type and subsetting 
 
-In `continents` we saw two of the three most common data types: characters and numeric. You saw the third when making logical comparisons like `1 > 0`: Logical data. Logical data can only be TRUE or FALSE (or `NA` for missing). We can make vectorized logical comparisons too. Let's find the sparsely-populated continents, those with fewer than ten people per square kilometer:
+Note that the `continents` data frame contains the two most common kinds of variables: numbers (num) and strings (chr).
 
 
 ~~~{.r}
-continents$pop_density < 10
+str(continents)
 ~~~
 
 
 
 ~~~{.output}
-[1] FALSE FALSE  TRUE FALSE FALSE  TRUE
+'data.frame':	6 obs. of  5 variables:
+ $ continent        : chr  "Africa" "Americas" "Antarctica" "Asia" ...
+ $ area_km2         : num  30370000 42330000 13720000 43820000 10180000 ...
+ $ population       : num  1.02e+09 9.35e+08 4.49e+03 4.16e+09 7.38e+08 ...
+ $ percent_total_pop: num  15 14 0 60 11 0.4
+ $ pop_density      : num  3.37e+01 2.21e+01 3.27e-04 9.50e+01 7.25e+01 ...
 
 ~~~
 
-That went over each element in `pop_density` and compared it with 10. We say that R "recycled" 10 to compare it with each element in `pop_density`. 
+The third important data type in R is logicals. You saw this when making logical comparisons like `1 > 0`. Logical data can only be `TRUE` or `FALSE` (or `NA` for missing). 
 
-In the same way that we subset by index before, we can subset by a logical vector, and we can do this in one or more dimensional subsetting.
+Logical comparisons are vectorized like other things in R. Let's find the highly populated continents, those with more than one-billion people. One-billion is 10^9, so we can write it as `1e9`.
 
 
 ~~~{.r}
-continents$continent[continents$pop_density < 10]
+pop > 1e9
 ~~~
 
 
 
 ~~~{.output}
-[1] "Antarctica" "Oceania"   
+[1]  TRUE FALSE FALSE  TRUE FALSE FALSE
 
 ~~~
 
+That went over each element in `pop` and compared it with 10. We say that R "recycled" 10 to compare it with each element in `pop`. 
+
+In the same way that we subset by index before, we can subset by a logical vector. To find the values of `pop` that were greater than one-billion, we subset it like so:
 
 
 ~~~{.r}
-continents[continents$pop_density < 10, ]
+pop[pop > 1e9]
 ~~~
 
 
 
 ~~~{.output}
-   continent area_km2 population percent_total_pop  pop_density
-3 Antarctica 13720000       4490               0.0 0.0003272595
-6    Oceania  9008500   29127000               0.4 3.2332796803
+[1] 1022234000 4164252000
 
 ~~~
 
-#### Two ways to subset
+> #### Shoutout {.challenge}
+>
+> How could you extract the names of the continents with more than one-billion people?
+>
 
-To be really clear, there are two similar ways to subset in R. Both use square-brackets. In one, you provide the indices of the elements you want:
+Doing a logical test on one (or more) variables and using that to extract values from another is especially useful in the data frame context since all the observations are lined up on rows. For example to find the land-area of Africa, we can test the continent names for being Africa and then extract the area where that is true. Note that it is often useful to build code from the insight out, ie write the logical test first, then go left and write what you want to subset with it.
 
 
 ~~~{.r}
-continents$continent[c(2, 4, 6)]
+continents$area_km2[continents$continent == "Africa"]
 ~~~
 
 
 
 ~~~{.output}
-[1] "Americas" "Asia"     "Oceania" 
+[1] 30370000
 
 ~~~
-
-In the other, you provide TRUE or FALSE for each element, TRUE if you want it, FALSE if you don't.
-
-
-~~~{.r}
-continents$continent[c(FALSE, TRUE, FALSE, TRUE, FALSE, TRUE)]
-~~~
-
-
-
-~~~{.output}
-[1] "Americas" "Asia"     "Oceania" 
-
-~~~
-
 
 
 > #### MCQ -- Subset and vectorize {.challenge}
@@ -445,74 +429,7 @@ continents$continent[c(FALSE, TRUE, FALSE, TRUE, FALSE, TRUE)]
 > d. 100
 >
 
-### Checking data.type
 
-You can ask R what kind of data is assigned to a variable name with the `class` function:
-
-
-~~~{.r}
-class(continents)
-~~~
-
-
-
-~~~{.output}
-[1] "data.frame"
-
-~~~
-
-
-
-~~~{.r}
-class(continents$continent)
-~~~
-
-
-
-~~~{.output}
-[1] "character"
-
-~~~
-
-
-
-~~~{.r}
-class(continents$population[1])
-~~~
-
-
-
-~~~{.output}
-[1] "numeric"
-
-~~~
-
-You can also ask specifically whether data is a particular type:
-
-
-~~~{.r}
-is.numeric(3)
-~~~
-
-
-
-~~~{.output}
-[1] TRUE
-
-~~~
-
-
-
-~~~{.r}
-is.numeric("three")
-~~~
-
-
-
-~~~{.output}
-[1] FALSE
-
-~~~
 
 
 ### Reading csv data
