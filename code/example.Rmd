@@ -1,0 +1,49 @@
+---
+title: "An Example R Markdown Document"
+author: "Andrew Marder"
+date: "11/23/2016"
+output: html_document
+---
+
+R Markdown is really cool! It allows one to combine text and code smoothly. Text is written using Markdown syntax, and code is placed inside code chunks. In RStudio, clicking the **Knit** button will generate a document that knits together the text, code, and output from executing the code chunks. Let's jump into why R Markdown is so great.
+
+To start, let's use the `data()` function to load the `mtcars` dataset. This will set up a new data frame in memory called `mtcars`.
+
+```{r}
+data(mtcars)
+```
+
+Now that we've loaded the data into memory, we can take a look at the data. Let's use the `head()` function to view the first six rows.
+
+```{r}
+head(mtcars)
+```
+
+There are `r nrow(mtcars)` rows in the data set. Each observation corresponds to an automobile review from the 1974 Motor Trend magazine. One of R Markdown's awesome features is its ability to embed graphs. Let's create a graph examining how fuel efficiency relates to weight.
+
+```{r}
+library(ggplot2)
+
+ggplot(mtcars, aes(y = mpg, x = 1000 * wt)) +
+    geom_point() +
+    ylab("Miles Per Gallon") +
+    xlab("Weight (lbs)") +
+    ggtitle("Fuel Efficiency as a Quadratic Function of Weight") +
+    geom_smooth(method = lm, formula = y ~ poly(x, 2)) +
+    theme_bw()
+```
+
+How cool is that!? Rendering this R Markdown document creates an image file of the graph above and embeds that image file in the final HTML document.
+
+The default behavior of R Markdown is to "echo" each code chunk in the resulting document. The easiest way to remove code from the final document is the set the `echo` option to `FALSE`.
+
+```{r, echo = FALSE}
+mtcars$Transmission <- ifelse(mtcars$am, "Manual", "Automatic")
+
+ggplot(mtcars, aes(x = qsec, fill = Transmission)) +
+    geom_density(alpha = 0.5) +
+    ggtitle("Where did this plot come from?") +
+    xlab("1/4 Mile Time (Seconds)") +
+    ylab("Density") +
+    theme_bw()
+```
