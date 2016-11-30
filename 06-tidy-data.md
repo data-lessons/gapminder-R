@@ -37,25 +37,24 @@ blood
 
 
 ~~~{.output}
-Source: local data frame [14 x 5]
-
-   Blood albumin levels in four individuals (g / dL)    NA      NA
-                                               <chr> <chr>   <chr>
-1                                                 NA    NA      NA
-2                                            subject   sex control
-3                                                  1     M    4.49
-4                                                  2     F    5.98
-5                                                  3     F    3.77
-6                                                  4     M    2.60
-7                                                  5     m    5.20
-8                                                  6     F    4.22
-9                                                  7     F    2.25
-10                                                 8     F    3.76
-11                                                 9     M    4.93
-12                                                10     M    5.66
-13                                                11     F    3.30
-14                                                12     M    5.90
-Variables not shown: NA <chr>, NA <chr>.
+# A tibble: 14 × 5
+   `Blood albumin levels in four individuals (g / dL)`    X2      X3
+                                                 <chr> <chr>   <chr>
+1                                                 <NA>  <NA>    <NA>
+2                                              subject   sex control
+3                                                    1     M    4.49
+4                                                    2     F    5.98
+5                                                    3     F    3.77
+6                                                    4     M    2.60
+7                                                    5     m    5.20
+8                                                    6     F    4.22
+9                                                    7     F    2.25
+10                                                   8     F    3.76
+11                                                   9     M    4.93
+12                                                  10     M    5.66
+13                                                  11     F    3.30
+14                                                  12     M    5.90
+# ... with 2 more variables: X4 <chr>, X5 <chr>
 
 ~~~
 
@@ -70,8 +69,7 @@ blood
 
 
 ~~~{.output}
-Source: local data frame [12 x 5]
-
+# A tibble: 12 × 5
    subject   sex control treatment1 treatment2
      <int> <chr>   <dbl>      <dbl>      <dbl>
 1        1     M    4.49       1.61       3.03
@@ -129,8 +127,7 @@ blood
 
 
 ~~~{.output}
-Source: local data frame [12 x 5]
-
+# A tibble: 12 × 5
    subject   sex control treatment1 treatment2
      <int> <chr>   <dbl>      <dbl>      <dbl>
 1        1     M    4.49       1.61       3.03
@@ -152,20 +149,22 @@ It looks like we've got 12 individuals, each subjected to three conditions -- a 
 
 #### `gather()` 
 
-We can transform the data tidy form quite easily with the `gather` function from the `tidyr` package, which of course is part of the `tidyverse`.
+A typical analysis of data like these consists of calculating means and standard deviations by condition and sex. It is possible to do this with the data in their current form, but it will be much easier if we tidy the data first.
+
+We can transform the data to tidy form with the `gather` function from the `tidyr` package, which of course is part of the `tidyverse`.
 
 Let's look at the arguments to `gather` include the data.frame you're gathering, which columns to gather, and names for two columns in the new data.frame: the key and the value. The key will consist of the old names of gathered columns, and the value will consist of the entries in those columns. The order of arguments is data.frame, key, value, columns-to-gather:
 
 
 ~~~{.r}
-gather(blood, condition, albumin, control, treatment1, treatment2)
+gather(blood, key = condition, value = albumin,
+       control, treatment1, treatment2)
 ~~~
 
 
 
 ~~~{.output}
-Source: local data frame [36 x 4]
-
+# A tibble: 36 × 4
    subject   sex condition albumin
      <int> <chr>     <chr>   <dbl>
 1        1     M   control    4.49
@@ -178,39 +177,55 @@ Source: local data frame [36 x 4]
 8        8     F   control    3.76
 9        9     M   control    4.93
 10      10     M   control    5.66
-..     ...   ...       ...     ...
+# ... with 26 more rows
 
 ~~~
 
-You can also tell `gather` which columns not to gather -- these are the "ID variables"; that is, they identify the unit of analysis on each row.
+You can also tell `gather` which columns *not* to gather -- these are the "ID variables"; that is, they identify the unit of analysis on each row.
 
 
 ~~~{.r}
-gather(blood, condition, albumin, -subject, -sex)
+blood.tidy <- gather(blood, key = condition, value = albumin,
+                     -subject, -sex)
+~~~
+
+Note that the variables with `-` in front of them aren't removed from the data.frame. Instead we get one row for each combination of those variables.
+
+### Packages in the tidyverse expect tidy data
+
+Now that the `blood` data is in tidy form we can easily summarize and plot it using *dplyr* and *ggplot2*.
+
+
+~~~{.r}
+summarize(group_by(blood.tidy, sex, condition),
+          mean(albumin),
+          sd(albumin))
 ~~~
 
 
 
 ~~~{.output}
-Source: local data frame [36 x 4]
+Source: local data frame [6 x 4]
+Groups: sex [?]
 
-   subject   sex condition albumin
-     <int> <chr>     <chr>   <dbl>
-1        1     M   control    4.49
-2        2     F   control    5.98
-3        3     F   control    3.77
-4        4     M   control    2.60
-5        5     M   control    5.20
-6        6     F   control    4.22
-7        7     F   control    2.25
-8        8     F   control    3.76
-9        9     M   control    4.93
-10      10     M   control    5.66
-..     ...   ...       ...     ...
+    sex  condition `mean(albumin)` `sd(albumin)`
+  <chr>      <chr>           <dbl>         <dbl>
+1     F    control        3.880000      1.228446
+2     F treatment1        3.686667      1.737857
+3     F treatment2        5.376667      2.582337
+4     M    control        4.796667      1.188489
+5     M treatment1        3.073333      1.911499
+6     M treatment2        6.680000      3.170091
 
 ~~~
 
-Note that the variables with `-` in front of them aren't removed from the data.frame. Instead we get one row for each combination of those variables.
+
+~~~{.r}
+ggplot(blood.tidy, aes(x = condition, y = albumin, color = sex)) +
+          geom_violin()
+~~~
+
+<img src="fig/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" style="display: block; margin: auto;" />
 
 > #### Challenge -- Gather and plot {.challenge}
 >

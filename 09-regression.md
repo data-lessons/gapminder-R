@@ -10,18 +10,51 @@ minutes: 30
 > ## Learning Objectives {.objectives}
 >
 > * Understand how to execute and interpret basic statistical models
-> * Learn to querry and extract from lists
-> * Use `broom` to work with models
+> * Discover, learn, and use lm class methods
 
 ### Linear models
 
-This workshop can't and won't teach you statistical modeling, but here is the syntax you need to know to use R's basic statistical modeling infrastructure.
+This workshop can't and won't teach you statistical modeling, but we can teach you the basic syntax you need to know to use R's statistical modeling infrastructure.
 
-`lm` is the function for a linear model. `lm` expects a formula as its first argument. Formulas in R are specified with a tilde separating the left and right hand sides: `DV ~ IV1 + IV2 + ...`. The second argument to `lm` is the name of the data.frame in which the variables are to be found. For example, to model life expectancy as a function of gdp:
+To keep things simple we will start by filtering out just the data from 1977 from the *gapminder* data. Simplifying the data in this way will make it easier to focus on the mechanics of model fitting in R without getting distracted by the complexity of the data.
+
 
 
 ~~~{.r}
-lm(lifeExp ~ gdpPercap, gapminder)
+gapminder <- read_csv('data/gapminder-FiveYearData.csv')
+~~~
+
+
+
+~~~{.output}
+Parsed with column specification:
+cols(
+  country = col_character(),
+  year = col_integer(),
+  pop = col_double(),
+  continent = col_character(),
+  lifeExp = col_double(),
+  gdpPercap = col_double()
+)
+
+~~~
+
+
+
+~~~{.r}
+gapminder77 <- filter(gapminder, year == 1977)
+~~~
+
+
+#### Fitting linear models
+
+`lm` is the function for a linear model. `lm` expects a formula as its first argument. Formulas in R are specified with a tilde separating the left and right hand sides. For example, `DV ~ IV1` means "DV is a function of IV1".
+
+The second argument to `lm` is the name of the data.frame in which the variables are to be found. For example,  model life expectancy as a function of gdp:
+
+
+~~~{.r}
+lm(lifeExp ~ gdpPercap, gapminder77)
 ~~~
 
 
@@ -29,19 +62,21 @@ lm(lifeExp ~ gdpPercap, gapminder)
 ~~~{.output}
 
 Call:
-lm(formula = lifeExp ~ gdpPercap, data = gapminder)
+lm(formula = lifeExp ~ gdpPercap, data = gapminder77)
 
 Coefficients:
 (Intercept)    gdpPercap  
-  5.396e+01    7.649e-04  
+  5.348e+01    8.322e-04  
 
 ~~~
 
-We can include additional predictors by separating them with a `+`. Now we will assign the results of the model to a variable called `model` and then get a more detailed description of the results by calling the `summary` function.
+Arithmetic operators have different meanings inside a formula than they do elsewhere in R. For example, outside of a formula `+` means "addition", but inside a formula `+` means "include". For example, we can include both `gdpPercap` and `continent` as predictors of `lifeExp` by separating the right-hand-side variables with a `+`. 
+
+Now we will assign the results of the model to a variable called `model` and then get a more detailed description of the results by calling the `summary` function.
 
 
 ~~~{.r}
-model <- lm(lifeExp ~ gdpPercap + year, gapminder)
+model <- lm(lifeExp ~ gdpPercap + continent, gapminder77)
 summary(model)
 ~~~
 
@@ -50,33 +85,36 @@ summary(model)
 ~~~{.output}
 
 Call:
-lm(formula = lifeExp ~ gdpPercap + year, data = gapminder)
+lm(formula = lifeExp ~ gdpPercap + continent, data = gapminder77)
 
 Residuals:
-    Min      1Q  Median      3Q     Max 
--67.262  -6.954   1.219   7.759  19.553 
+     Min       1Q   Median       3Q      Max 
+-25.4014  -3.1606   0.1833   3.6260  16.7703 
 
 Coefficients:
-              Estimate Std. Error t value Pr(>|t|)    
-(Intercept) -4.184e+02  2.762e+01  -15.15   <2e-16 ***
-gdpPercap    6.697e-04  2.447e-05   27.37   <2e-16 ***
-year         2.390e-01  1.397e-02   17.11   <2e-16 ***
+                   Estimate Std. Error t value Pr(>|t|)    
+(Intercept)       4.852e+01  9.334e-01  51.981  < 2e-16 ***
+gdpPercap         4.114e-04  7.834e-05   5.251 5.68e-07 ***
+continentAmericas 1.285e+01  1.642e+00   7.826 1.26e-12 ***
+continentAsia     7.889e+00  1.518e+00   5.197 7.26e-07 ***
+continentEurope   1.755e+01  1.763e+00   9.951  < 2e-16 ***
+continentOceania  1.723e+01  4.872e+00   3.536 0.000556 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 9.694 on 1701 degrees of freedom
-Multiple R-squared:  0.4375,	Adjusted R-squared:  0.4368 
-F-statistic: 661.4 on 2 and 1701 DF,  p-value: < 2.2e-16
+Residual standard error: 6.57 on 136 degrees of freedom
+Multiple R-squared:  0.6697,	Adjusted R-squared:  0.6576 
+F-statistic: 55.15 on 5 and 136 DF,  p-value: < 2.2e-16
 
 ~~~
 
-Notice that the same `summary` function gives summary information of a different type depending on whether its argument is a data.frame, a linear model, or something else. That's handy.
+Notice that the same `summary` function gives summary information of a different type depending on whether its argument is a data.frame, a linear model, or something else. That's handy!
 
-We can specify interaction effects by separating variables with `*`:
+Other arithmetic operators have special meaning inside formula as well. For example, we can specify interaction effects by separating variables with `*`:
 
 
 ~~~{.r}
-interaction_model <- lm(lifeExp ~ gdpPercap * continent, gapminder)
+interaction_model <- lm(lifeExp ~ gdpPercap * continent, gapminder77)
 summary(interaction_model)
 ~~~
 
@@ -85,123 +123,174 @@ summary(interaction_model)
 ~~~{.output}
 
 Call:
-lm(formula = lifeExp ~ gdpPercap * continent, data = gapminder)
+lm(formula = lifeExp ~ gdpPercap * continent, data = gapminder77)
 
 Residuals:
-    Min      1Q  Median      3Q     Max 
--36.928  -4.312   0.308   5.042  21.202 
+     Min       1Q   Median       3Q      Max 
+-26.0089  -3.3857   0.0334   3.1294  16.4923 
 
 Coefficients:
                               Estimate Std. Error t value Pr(>|t|)    
-(Intercept)                 45.8442668  0.4127085 111.081  < 2e-16 ***
-gdpPercap                    0.0013771  0.0001154  11.937  < 2e-16 ***
-continentAmericas           12.9933944  0.8169417  15.905  < 2e-16 ***
-continentAsia               11.6704021  0.6252438  18.665  < 2e-16 ***
-continentEurope             19.4982172  0.8924238  21.849  < 2e-16 ***
-continentOceania            17.8506916  5.2591340   3.394 0.000704 ***
-gdpPercap:continentAmericas -0.0005614  0.0001369  -4.102 4.29e-05 ***
-gdpPercap:continentAsia     -0.0010544  0.0001190  -8.860  < 2e-16 ***
-gdpPercap:continentEurope   -0.0009237  0.0001242  -7.438 1.61e-13 ***
-gdpPercap:continentOceania  -0.0008062  0.0002909  -2.772 0.005639 ** 
+(Intercept)                  4.810e+01  1.079e+00  44.566  < 2e-16 ***
+gdpPercap                    5.717e-04  2.226e-04   2.569   0.0113 *  
+continentAmericas            1.055e+01  2.511e+00   4.203 4.83e-05 ***
+continentAsia                8.955e+00  1.751e+00   5.113 1.09e-06 ***
+continentEurope              1.826e+01  3.384e+00   5.398 3.03e-07 ***
+continentOceania             1.430e+01  7.677e+01   0.186   0.8525    
+gdpPercap:continentAmericas  2.088e-04  3.354e-04   0.623   0.5347    
+gdpPercap:continentAsia     -2.439e-04  2.434e-04  -1.002   0.3181    
+gdpPercap:continentEurope   -1.816e-04  3.047e-04  -0.596   0.5522    
+gdpPercap:continentOceania   3.294e-05  4.439e-03   0.007   0.9941    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 8.143 on 1694 degrees of freedom
-Multiple R-squared:  0.6047,	Adjusted R-squared:  0.6026 
-F-statistic: 287.9 on 9 and 1694 DF,  p-value: < 2.2e-16
+Residual standard error: 6.584 on 132 degrees of freedom
+Multiple R-squared:  0.678,	Adjusted R-squared:  0.6561 
+F-statistic: 30.89 on 9 and 132 DF,  p-value: < 2.2e-16
 
 ~~~
 
+In short you should never assume that an arithmetic operator does the same thing inside a formula that it does outside a formula. For details on the meaning of operators inside R formula refer to `help("formula")`.
 
+#### Working with model fit objects
 
-### `broom`
-
-The package `broom` is another `tidyverse`-family member. It is built to make working with models easier. Since you won't always be working with models, it doesn't load automatically with `tidyverse` (but does install with it), so we load it with library.
-
-
-~~~{.r}
-library(broom)
-~~~
-
-We can get a nice data.frame output of the model summary.
+Earlier we noted that the `summary` function does something different for linear model objects than it does for vectors, data.frames, or other things. This is because the `summary` function has a specific *method* for `lm` models. Many other functions in R have specific methods for `lm` models as well. We can ask R to show us these functions using the `methods` function, like this:
 
 
 ~~~{.r}
-tidy(model)
+class(interaction_model)
 ~~~
 
 
 
 ~~~{.output}
-         term      estimate    std.error statistic       p.value
-1 (Intercept) -4.184243e+02 2.761714e+01 -15.15089  9.759589e-49
-2   gdpPercap  6.697323e-04 2.447033e-05  27.36915 5.766430e-137
-3        year  2.389828e-01 1.397107e-02  17.10554  1.184970e-60
+[1] "lm"
 
 ~~~
 
-We can create a data.frame that has the data that went into the model plus a bunch of new columns based on the model, such as residuals and predicted values. Note that all the newly added columns' names start with ".".
 
 
 ~~~{.r}
-modelOut = augment(model)
-head(modelOut)
+methods(class = "lm")
 ~~~
 
 
 
 ~~~{.output}
-  lifeExp gdpPercap year  .fitted   .se.fit    .resid         .hat
-1  28.801  779.4453 1952 48.59210 0.4472722 -19.79110 0.0021289331
-2  30.332  820.8530 1957 49.81474 0.3950734 -19.48274 0.0016610162
-3  31.997  853.1007 1962 51.03125 0.3490783 -19.03425 0.0012967730
-4  34.020  836.1971 1967 52.21485 0.3124381 -18.19485 0.0010388340
-5  36.088  739.9811 1972 53.34532 0.2892826 -17.25732 0.0008905594
-6  38.438  786.1134 1977 54.57113 0.2803902 -16.13313 0.0008366498
-    .sigma      .cooksd .std.resid
-1 9.684667 0.0029706383  -2.043816
-2 9.685041 0.0022439588  -2.011501
-3 9.685571 0.0016709354  -1.964838
-4 9.686523 0.0012224824  -1.877946
-5 9.687535 0.0009424980  -1.781049
-6 9.688676 0.0007737577  -1.664982
+ [1] add1           alias          anova          case.names    
+ [5] confint        cooks.distance deviance       dfbeta        
+ [9] dfbetas        drop1          dummy.coef     effects       
+[13] extractAIC     family         formula        fortify       
+[17] hatvalues      influence      kappa          labels        
+[21] logLik         model.frame    model.matrix   nobs          
+[25] plot           predict        print          proj          
+[29] qr             residuals      rstandard      rstudent      
+[33] simulate       summary        variable.names vcov          
+see '?methods' for accessing help and source code
 
 ~~~
 
-This is useful for checking model assumptions, looking for anomalous points that may indicate omitted variables, etc. For example, it looks like our model underpredicts short life expectancies:
+Using this technique we've learned (among other things) that we can ask R to display the ANOVA table for linear models like this:
 
 
 ~~~{.r}
-ggplot(modelOut, aes(lifeExp, .resid, color = year)) + 
+anova(interaction_model)
+~~~
+
+
+
+~~~{.output}
+Analysis of Variance Table
+
+Response: lifeExp
+                     Df Sum Sq Mean Sq  F value Pr(>F)    
+gdpPercap             1 6829.0  6829.0 157.5231 <2e-16 ***
+continent             4 5073.6  1268.4  29.2578 <2e-16 ***
+gdpPercap:continent   4  148.1    37.0   0.8538 0.4937    
+Residuals           132 5722.5    43.4                    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+~~~
+
+and that we can compute confidence intervals around the regression estimates like this:
+
+
+~~~{.r}
+confint(interaction_model)
+~~~
+
+
+
+~~~{.output}
+                                    2.5 %       97.5 %
+(Intercept)                  4.596704e+01 5.023711e+01
+gdpPercap                    1.314193e-04 1.011956e-03
+continentAmericas            5.584992e+00 1.551742e+01
+continentAsia                5.490166e+00 1.241942e+01
+continentEurope              1.157077e+01 2.495682e+01
+continentOceania            -1.375552e+02 1.661605e+02
+gdpPercap:continentAmericas -4.547025e-04 8.723375e-04
+gdpPercap:continentAsia     -7.253885e-04 2.375353e-04
+gdpPercap:continentEurope   -7.843824e-04 4.211678e-04
+gdpPercap:continentOceania  -8.747124e-03 8.812996e-03
+
+~~~
+
+We can also use the `predict` and `residuals` functions to extract predictions and errors of prediction from our model. It can be useful to store these as columns in the original data to make visualizing the model easier.
+
+
+~~~{.r}
+gapminder77 <- mutate(ungroup(gapminder77),
+                    mod_pred = predict(model),
+                    mod_resid = resid(model))
+~~~
+
+Now that we have augmented the data with predicted values and residuals from the model we can plot those values to better understand what our model says about our data. For example we can inspect a scatter plot of the residuals versus predicted values to see if there are trends in the residuals:
+
+
+~~~{.r}
+ggplot(gapminder77, aes(x = mod_pred, y = mod_resid, color = continent)) +
   geom_point()
 ~~~
 
-<img src="fig/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" style="display: block; margin: auto;" />
+<img src="fig/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" style="display: block; margin: auto;" />
 
+and we can plot the predicted values from out model:
+
+~~~{.r}
+ggplot(gapminder77, aes(x = gdpPercap, y = mod_pred, color = continent)) +
+  geom_point(aes(y = lifeExp)) +
+  geom_line()
+~~~
+
+<img src="fig/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" style="display: block; margin: auto;" />
 
 ### glm and beyond
 
-Finally, the specification of generalized linear models such as logistic or Poisson regressions is very similar via the `glm` command. See `?glm` and the web for help. Beyond glm's, the statistical capabilities of R are extensive. A Google search for whatever you are interested in will get you started.
+Finally, the specification of generalized linear models such as logistic or Poisson regressions is very similar via the `glm` command. See `?glm` and the web for help. Beyond glm's, the statistical capabilities of R are extensive. Recommended packages and functions orgainized by topic are available at https://cran.r-project.org/web/views/. The Social Sciences task view at https://cran.r-project.org/web/views/SocialSciences.html is a good place to start looking for model-fitting function recommendations.
 
 
 
 > ## Challenge - A plot and a model {.challenge}
 >
-> - Make a scatterplot of gdpPercap versus year.  
-> - Add a smoother and specify `method = lm` to get a linear fit.  
-> - Run a linear regression of gpdPercap on year and use `tidy` to extract the model results.  
+> - Filter the `gapminder` data to extract just the data for the most recent year. 
+> - Using the filtered data, make a scatterplot of lifeExp versus gdpPercap.
+> - Add a smoother and specify `method = lm` to get a linear fit.
+> - Run a linear regression of lifeExp on gpdPercap and use `summary` to view the model results.
 > - Do your plot and model point to the same conclusions? Which do you find easier to interpret?
 >
-> Advanced  
+> Advanced
 >
-> - Does the change in gdpPercap over time vary across continents?  
+> - Does the relationship between lifeExp and gdpPercap vary across continents?
 >   - Hint: An interaction model can answer that question.
 
 
-> ## Alternatve challenge - Stock prices {.challenge}
+> ## Bonus challenge - Stock prices {.challenge}
 >
-> - Using the stock data you tidy'd earlier, fit a simple linear model of stock performance.   
-> - Extract the model coefficients into a data.frame.  
-> - Fortify the data with residuals, predicted values, etc.  
-> - Examine (however you wish) residuals by stock. Is the model particularly over or underpredicting any particular stock? How could you improve the model?  
+> If you have finished the above exercise while other learners are still working...
+> - Using the stock data you tidy'd earlier, fit a simple linear model of stock performance.
+> - Extract the model coefficients into a data.frame.
+> - Fortify the data with residuals, predicted values, etc.
+> - Examine (however you wish) residuals by stock. Is the model particularly over or underpredicting any particular stock? How could you improve the model?
 > - **Advanced**: Build that better model.

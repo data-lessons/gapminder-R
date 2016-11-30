@@ -55,31 +55,29 @@
 <p>An example will clarify. Download <a href="https://raw.githubusercontent.com/michaellevy/gapminder-R/gh-pages/data/wide_eg.csv">this fake data</a> on blood readings under several medical treatments. Save it to your data directory and read it into R. Is this data in tidy format? Why not – which of the three principles does it not satisfy?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">blood &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&#39;data/wide_eg.csv&#39;</span>)
 blood</code></pre></div>
-<pre class="output"><code>Source: local data frame [14 x 5]
-
-   Blood albumin levels in four individuals (g / dL)    NA      NA
-                                               &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;
-1                                                 NA    NA      NA
-2                                            subject   sex control
-3                                                  1     M    4.49
-4                                                  2     F    5.98
-5                                                  3     F    3.77
-6                                                  4     M    2.60
-7                                                  5     m    5.20
-8                                                  6     F    4.22
-9                                                  7     F    2.25
-10                                                 8     F    3.76
-11                                                 9     M    4.93
-12                                                10     M    5.66
-13                                                11     F    3.30
-14                                                12     M    5.90
-Variables not shown: NA &lt;chr&gt;, NA &lt;chr&gt;.
+<pre class="output"><code># A tibble: 14 × 5
+   `Blood albumin levels in four individuals (g / dL)`    X2      X3
+                                                 &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;
+1                                                 &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;
+2                                              subject   sex control
+3                                                    1     M    4.49
+4                                                    2     F    5.98
+5                                                    3     F    3.77
+6                                                    4     M    2.60
+7                                                    5     m    5.20
+8                                                    6     F    4.22
+9                                                    7     F    2.25
+10                                                   8     F    3.76
+11                                                   9     M    4.93
+12                                                  10     M    5.66
+13                                                  11     F    3.30
+14                                                  12     M    5.90
+# ... with 2 more variables: X4 &lt;chr&gt;, X5 &lt;chr&gt;
 </code></pre>
 <p>Hmm, that doesn’t look quite right? What do you think happened? How could we fix it? The answer, of course, is in the <code>?read_csv</code> helpfile.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">blood &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&#39;data/wide_eg.csv&#39;</span>, <span class="dt">skip =</span> <span class="dv">2</span>)
 blood</code></pre></div>
-<pre class="output"><code>Source: local data frame [12 x 5]
-
+<pre class="output"><code># A tibble: 12 × 5
    subject   sex control treatment1 treatment2
      &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
 1        1     M    4.49       1.61       3.03
@@ -107,8 +105,7 @@ blood</code></pre></div>
 blood =<span class="st"> </span><span class="kw">mutate</span>(blood, <span class="dt">sex =</span> <span class="kw">toupper</span>(sex))
 <span class="co"># Note that those accomplish the exact same thing in very different ways. Studying the difference may be useful. </span>
 blood</code></pre></div>
-<pre class="output"><code>Source: local data frame [12 x 5]
-
+<pre class="output"><code># A tibble: 12 × 5
    subject   sex control treatment1 treatment2
      &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
 1        1     M    4.49       1.61       3.03
@@ -126,11 +123,12 @@ blood</code></pre></div>
 </code></pre>
 <p>It looks like we’ve got 12 individuals, each subjected to three conditions – a control and two treatments. Each observation here is a person in a treatment (we don’t know what the measured value is), so each row should be defined by a person-treatment; that is, we should have 12 rows with four columns: subject, sex, condition, and the measured value.</p>
 <h4 id="gather"><code>gather()</code></h4>
-<p>We can transform the data tidy form quite easily with the <code>gather</code> function from the <code>tidyr</code> package, which of course is part of the <code>tidyverse</code>.</p>
+<p>A typical analysis of data like these consists of calculating means and standard deviations by condition and sex. It is possible to do this with the data in their current form, but it will be much easier if we tidy the data first.</p>
+<p>We can transform the data to tidy form with the <code>gather</code> function from the <code>tidyr</code> package, which of course is part of the <code>tidyverse</code>.</p>
 <p>Let’s look at the arguments to <code>gather</code> include the data.frame you’re gathering, which columns to gather, and names for two columns in the new data.frame: the key and the value. The key will consist of the old names of gathered columns, and the value will consist of the entries in those columns. The order of arguments is data.frame, key, value, columns-to-gather:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gather</span>(blood, condition, albumin, control, treatment1, treatment2)</code></pre></div>
-<pre class="output"><code>Source: local data frame [36 x 4]
-
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gather</span>(blood, <span class="dt">key =</span> condition, <span class="dt">value =</span> albumin,
+       control, treatment1, treatment2)</code></pre></div>
+<pre class="output"><code># A tibble: 36 × 4
    subject   sex condition albumin
      &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;   &lt;dbl&gt;
 1        1     M   control    4.49
@@ -143,27 +141,32 @@ blood</code></pre></div>
 8        8     F   control    3.76
 9        9     M   control    4.93
 10      10     M   control    5.66
-..     ...   ...       ...     ...
+# ... with 26 more rows
 </code></pre>
-<p>You can also tell <code>gather</code> which columns not to gather – these are the “ID variables”; that is, they identify the unit of analysis on each row.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gather</span>(blood, condition, albumin, -subject, -sex)</code></pre></div>
-<pre class="output"><code>Source: local data frame [36 x 4]
-
-   subject   sex condition albumin
-     &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;   &lt;dbl&gt;
-1        1     M   control    4.49
-2        2     F   control    5.98
-3        3     F   control    3.77
-4        4     M   control    2.60
-5        5     M   control    5.20
-6        6     F   control    4.22
-7        7     F   control    2.25
-8        8     F   control    3.76
-9        9     M   control    4.93
-10      10     M   control    5.66
-..     ...   ...       ...     ...
-</code></pre>
+<p>You can also tell <code>gather</code> which columns <em>not</em> to gather – these are the “ID variables”; that is, they identify the unit of analysis on each row.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">blood.tidy &lt;-<span class="st"> </span><span class="kw">gather</span>(blood, <span class="dt">key =</span> condition, <span class="dt">value =</span> albumin,
+                     -subject, -sex)</code></pre></div>
 <p>Note that the variables with <code>-</code> in front of them aren’t removed from the data.frame. Instead we get one row for each combination of those variables.</p>
+<h3 id="packages-in-the-tidyverse-expect-tidy-data">Packages in the tidyverse expect tidy data</h3>
+<p>Now that the <code>blood</code> data is in tidy form we can easily summarize and plot it using <em>dplyr</em> and <em>ggplot2</em>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summarize</span>(<span class="kw">group_by</span>(blood.tidy, sex, condition),
+          <span class="kw">mean</span>(albumin),
+          <span class="kw">sd</span>(albumin))</code></pre></div>
+<pre class="output"><code>Source: local data frame [6 x 4]
+Groups: sex [?]
+
+    sex  condition `mean(albumin)` `sd(albumin)`
+  &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt;         &lt;dbl&gt;
+1     F    control        3.880000      1.228446
+2     F treatment1        3.686667      1.737857
+3     F treatment2        5.376667      2.582337
+4     M    control        4.796667      1.188489
+5     M treatment1        3.073333      1.911499
+6     M treatment2        6.680000      3.170091
+</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(blood.tidy, <span class="kw">aes</span>(<span class="dt">x =</span> condition, <span class="dt">y =</span> albumin, <span class="dt">color =</span> sex)) +
+<span class="st">          </span><span class="kw">geom_violin</span>()</code></pre></div>
+<p><img src="fig/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" style="display: block; margin: auto;" /></p>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
 <h4 id="challenge-gather-and-plot"><span class="glyphicon glyphicon-pencil"></span>Challenge – Gather and plot</h4>
