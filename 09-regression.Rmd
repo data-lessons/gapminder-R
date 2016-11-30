@@ -8,95 +8,125 @@ minutes: 30
 ```{r setup, include = FALSE}
 library(tidyverse)
 source("tools/chunk-options.R")
-gapminder <- read_csv('data/gapminder-FiveYearData.csv')
 ```
 
 > ## Learning Objectives {.objectives}
 >
 > * Understand how to execute and interpret basic statistical models
-> * Learn to querry and extract from lists
-> * Use `broom` to work with models
+> * Discover, learn, and use lm class methods
 
 ### Linear models
 
-This workshop can't and won't teach you statistical modeling, but here is the syntax you need to know to use R's basic statistical modeling infrastructure.
+This workshop can't and won't teach you statistical modeling, but we can teach you the basic syntax you need to know to use R's statistical modeling infrastructure.
 
-`lm` is the function for a linear model. `lm` expects a formula as its first argument. Formulas in R are specified with a tilde separating the left and right hand sides: `DV ~ IV1 + IV2 + ...`. The second argument to `lm` is the name of the data.frame in which the variables are to be found. For example, to model life expectancy as a function of gdp:
+To keep things simple we will start by filtering out just the data from 1977 from the *gapminder* data. Simplifying the data in this way will make it easier to focus on the mechanics of model fitting in R without getting distracted by the complexity of the data.
 
-```{r}
-lm(lifeExp ~ gdpPercap, gapminder)
+
+```{R}
+gapminder <- read_csv('data/gapminder-FiveYearData.csv')
+gapminder77 <- filter(gapminder, year == 1977)
+
 ```
 
-We can include additional predictors by separating them with a `+`. Now we will assign the results of the model to a variable called `model` and then get a more detailed description of the results by calling the `summary` function.
+
+#### Fitting linear models
+
+`lm` is the function for a linear model. `lm` expects a formula as its first argument. Formulas in R are specified with a tilde separating the left and right hand sides. For example, `DV ~ IV1` means "DV is a function of IV1".
+
+The second argument to `lm` is the name of the data.frame in which the variables are to be found. For example,  model life expectancy as a function of gdp:
 
 ```{r}
-model <- lm(lifeExp ~ gdpPercap + year, gapminder)
+lm(lifeExp ~ gdpPercap, gapminder77)
+```
+
+Arithmetic operators have different meanings inside a formula than they do elsewhere in R. For example, outside of a formula `+` means "addition", but inside a formula `+` means "include". For example, we can include both `gdpPercap` and `continent` as predictors of `lifeExp` by separating the right-hand-side variables with a `+`. 
+
+Now we will assign the results of the model to a variable called `model` and then get a more detailed description of the results by calling the `summary` function.
+
+```{r}
+model <- lm(lifeExp ~ gdpPercap + continent, gapminder77)
 summary(model)
 ```
 
-Notice that the same `summary` function gives summary information of a different type depending on whether its argument is a data.frame, a linear model, or something else. That's handy.
+Notice that the same `summary` function gives summary information of a different type depending on whether its argument is a data.frame, a linear model, or something else. That's handy!
 
-We can specify interaction effects by separating variables with `*`:
+Other arithmetic operators have special meaning inside formula as well. For example, we can specify interaction effects by separating variables with `*`:
 
 ```{r}
-interaction_model <- lm(lifeExp ~ gdpPercap * continent, gapminder)
+interaction_model <- lm(lifeExp ~ gdpPercap * continent, gapminder77)
 summary(interaction_model)
 ```
 
+In short you should never assume that an arithmetic operator does the same thing inside a formula that it does outside a formula. For details on the meaning of operators inside R formula refer to `help("formula")`.
 
+#### Working with model fit objects
 
-### `broom`
-
-The package `broom` is another `tidyverse`-family member. It is built to make working with models easier. Since you won't always be working with models, it doesn't load automatically with `tidyverse` (but does install with it), so we load it with library.
+Earlier we noted that the `summary` function does something different for linear model objects than it does for vectors, data.frames, or other things. This is because the `summary` function has a specific *method* for `lm` models. Many other functions in R have specific methods for `lm` models as well. We can ask R to show us these functions using the `methods` function, like this:
 
 ```{r}
-library(broom)
+class(interaction_model)
+methods(class = "lm")
 ```
 
-We can get a nice data.frame output of the model summary.
+Using this technique we've learned (among other things) that we can ask R to display the ANOVA table for linear models like this:
 
 ```{r}
-tidy(model)
+anova(interaction_model)
 ```
 
-We can create a data.frame that has the data that went into the model plus a bunch of new columns based on the model, such as residuals and predicted values. Note that all the newly added columns' names start with ".".
+and that we can compute confidence intervals around the regression estimates like this:
 
 ```{r}
-modelOut = augment(model)
-head(modelOut)
+confint(interaction_model)
 ```
 
-This is useful for checking model assumptions, looking for anomalous points that may indicate omitted variables, etc. For example, it looks like our model underpredicts short life expectancies:
+We can also use the `predict` and `residuals` functions to extract predictions and errors of prediction from our model. It can be useful to store these as columns in the original data to make visualizing the model easier.
 
 ```{r}
-ggplot(modelOut, aes(lifeExp, .resid, color = year)) + 
+gapminder77 <- mutate(ungroup(gapminder77),
+                    mod_pred = predict(model),
+                    mod_resid = resid(model))
+```
+
+Now that we have augmented the data with predicted values and residuals from the model we can plot those values to better understand what our model says about our data. For example we can inspect a scatter plot of the residuals versus predicted values to see if there are trends in the residuals:
+
+```{r}
+ggplot(gapminder77, aes(x = mod_pred, y = mod_resid, color = continent)) +
   geom_point()
+
 ```
 
+and we can plot the predicted values from out model:
+```{r}
+ggplot(gapminder77, aes(x = gdpPercap, y = mod_pred, color = continent)) +
+  geom_point(aes(y = lifeExp)) +
+  geom_line()
+```
 
 ### glm and beyond
 
-Finally, the specification of generalized linear models such as logistic or Poisson regressions is very similar via the `glm` command. See `?glm` and the web for help. Beyond glm's, the statistical capabilities of R are extensive. A Google search for whatever you are interested in will get you started.
+Finally, the specification of generalized linear models such as logistic or Poisson regressions is very similar via the `glm` command. See `?glm` and the web for help. Beyond glm's, the statistical capabilities of R are extensive. Recommended packages and functions orgainized by topic are available at https://cran.r-project.org/web/views/. The Social Sciences task view at https://cran.r-project.org/web/views/SocialSciences.html is a good place to start looking for model-fitting function recommendations.
 
 
 
 > ## Challenge - A plot and a model {.challenge}
 >
-> - Make a scatterplot of gdpPercap versus year.  
-> - Add a smoother and specify `method = lm` to get a linear fit.  
-> - Run a linear regression of gpdPercap on year and use `tidy` to extract the model results.  
+> - Filter the `gapminder` data to extract just the data for the most recent year. 
+> - Using the filtered data, make a scatterplot of lifeExp versus gdpPercap.
+> - Add a smoother and specify `method = lm` to get a linear fit.
+> - Run a linear regression of lifeExp on gpdPercap and use `summary` to view the model results.
 > - Do your plot and model point to the same conclusions? Which do you find easier to interpret?
 >
-> Advanced  
+> Advanced
 >
-> - Does the change in gdpPercap over time vary across continents?  
+> - Does the relationship between lifeExp and gdpPercap vary across continents?
 >   - Hint: An interaction model can answer that question.
 
 
 > ## Alternatve challenge - Stock prices {.challenge}
 >
-> - Using the stock data you tidy'd earlier, fit a simple linear model of stock performance.   
-> - Extract the model coefficients into a data.frame.  
-> - Fortify the data with residuals, predicted values, etc.  
-> - Examine (however you wish) residuals by stock. Is the model particularly over or underpredicting any particular stock? How could you improve the model?  
+> - Using the stock data you tidy'd earlier, fit a simple linear model of stock performance.
+> - Extract the model coefficients into a data.frame.
+> - Fortify the data with residuals, predicted values, etc.
+> - Examine (however you wish) residuals by stock. Is the model particularly over or underpredicting any particular stock? How could you improve the model?
 > - **Advanced**: Build that better model.
