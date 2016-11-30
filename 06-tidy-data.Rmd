@@ -62,21 +62,40 @@ It looks like we've got 12 individuals, each subjected to three conditions -- a 
 
 #### `gather()` 
 
-We can transform the data tidy form quite easily with the `gather` function from the `tidyr` package, which of course is part of the `tidyverse`.
+A typical analysis of data like these consists of calculating means and standard deviations by condition and sex. It is possible to do this with the data in their current form, but it will be much easier if we tidy the data first.
+
+We can transform the data to tidy form with the `gather` function from the `tidyr` package, which of course is part of the `tidyverse`.
 
 Let's look at the arguments to `gather` include the data.frame you're gathering, which columns to gather, and names for two columns in the new data.frame: the key and the value. The key will consist of the old names of gathered columns, and the value will consist of the entries in those columns. The order of arguments is data.frame, key, value, columns-to-gather:
 
 ```{r tidyr}
-gather(blood, condition, albumin, control, treatment1, treatment2)
+gather(blood, key = condition, value = albumin,
+       control, treatment1, treatment2)
 ```
 
-You can also tell `gather` which columns not to gather -- these are the "ID variables"; that is, they identify the unit of analysis on each row.
+You can also tell `gather` which columns *not* to gather -- these are the "ID variables"; that is, they identify the unit of analysis on each row.
 
 ```{r tidyr 2}
-gather(blood, condition, albumin, -subject, -sex)
+blood.tidy <- gather(blood, key = condition, value = albumin,
+                     -subject, -sex)
 ```
 
 Note that the variables with `-` in front of them aren't removed from the data.frame. Instead we get one row for each combination of those variables.
+
+### Packages in the tidyverse expect tidy data
+
+Now that the `blood` data is in tidy form we can easily summarize and plot it using *dplyr* and *ggplot2*.
+
+```{r}
+summarize(group_by(blood.tidy, sex, condition),
+          mean(albumin),
+          sd(albumin))
+```
+
+```{r}
+ggplot(blood.tidy, aes(x = condition, y = albumin, color = sex)) +
+          geom_violin()
+```
 
 > #### Challenge -- Gather and plot {.challenge}
 >
