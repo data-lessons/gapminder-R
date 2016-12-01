@@ -12,8 +12,8 @@ This is a two-day intensive introduction to modern computational techniques for 
 
 #### Data Management
 
-1.  [Spreadsheets](https://www.dropbox.com/sh/ajj02pi61cmd41g/AAC47QAQHlw8EHufgowHYJpla?dl=0)
-1.  [OpenRefine](https://www.dropbox.com/sh/h8wew89uy22w8yd/AAA0AO4vGoEuBsCZnvYPtZH0a?dl=0)
+1.  [Spreadsheets](https://www.dropbox.com/sh/h8wew89uy22w8yd/AAA0AO4vGoEuBsCZnvYPtZH0a?dl=0)
+1.  [OpenRefine](https://www.dropbox.com/sh/ajj02pi61cmd41g/AAC47QAQHlw8EHufgowHYJpla?dl=0)
 
 #### R
 
