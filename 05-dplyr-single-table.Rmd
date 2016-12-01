@@ -17,10 +17,10 @@ source("tools/chunk-options.R")
 
 It is an often bemoaned fact that a data scientist spends much, and often most, of her time wrangling data: getting it organized and clean. In this lesson we will learn an efficient set of tools that can handle the vast majority of most data management tasks. 
 
-Enter `dplyr`, a package for making data manipulation easier; more on `deplyr` later. Load the `dplyr` package individually or part of `tidyverse` if it's not already:
+Enter `dplyr`, a package for making data manipulation easier. More on `dplyr` later. `dplyr` is part of `tidyverse`, so it is already installed on your machine. You can load it individually, or with the other tidyverse packages like this:
 
-```{r install, eval = FALSE}
-install.packages('dplyr')
+```{r}
+library(tidyverse)
 ```
 
 Remember that you only have to install each package once (per computer), but you have to load them for each R session in which you want to use them.
@@ -28,7 +28,6 @@ Remember that you only have to install each package once (per computer), but you
 You also have to load any data you want to use each time you start a new R session. So, if it's not already loaded, read in the gapminder data. We're going to use tidyverse's `read_csv` instead of base R's `read.csv` here. It has a few nice features; the most obvious is that it makes a special kind of data.frame that only prints the first ten rows instead of all 1704.
 
 ```{r load, warning = FALSE, message = FALSE}
-library(tidyverse)
 gapminder <- read_csv('data/gapminder-FiveYearData.csv')
 class(gapminder)
 gapminder

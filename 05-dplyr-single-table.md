@@ -15,11 +15,45 @@ minutes: 90
 
 It is an often bemoaned fact that a data scientist spends much, and often most, of her time wrangling data: getting it organized and clean. In this lesson we will learn an efficient set of tools that can handle the vast majority of most data management tasks. 
 
-Enter `dplyr`, a package for making data manipulation easier; more on `deplyr` later. Load the `dplyr` package individually or part of `tidyverse` if it's not already:
+Enter `dplyr`, a package for making data manipulation easier. More on `dplyr` later. `dplyr` is part of `tidyverse`, so it is already installed on your machine. You can load it individually, or with the other tidyverse packages like this:
 
 
 ~~~{.r}
-install.packages('dplyr')
+library(tidyverse)
+~~~
+
+
+
+~~~{.output}
+Loading tidyverse: ggplot2
+Loading tidyverse: tibble
+Loading tidyverse: tidyr
+Loading tidyverse: readr
+Loading tidyverse: purrr
+Loading tidyverse: dplyr
+
+~~~
+
+
+
+~~~{.output}
+Warning: package 'ggplot2' was built under R version 3.3.2
+
+~~~
+
+
+
+~~~{.output}
+Conflicts with tidy packages ----------------------------------------------
+
+~~~
+
+
+
+~~~{.output}
+filter(): dplyr, stats
+lag():    dplyr, stats
+
 ~~~
 
 Remember that you only have to install each package once (per computer), but you have to load them for each R session in which you want to use them.
@@ -28,7 +62,6 @@ You also have to load any data you want to use each time you start a new R sessi
 
 
 ~~~{.r}
-library(tidyverse)
 gapminder <- read_csv('data/gapminder-FiveYearData.csv')
 class(gapminder)
 ~~~

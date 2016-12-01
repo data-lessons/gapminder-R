@@ -40,12 +40,25 @@
 </div>
 </section>
 <p>It is an often bemoaned fact that a data scientist spends much, and often most, of her time wrangling data: getting it organized and clean. In this lesson we will learn an efficient set of tools that can handle the vast majority of most data management tasks.</p>
-<p>Enter <code>dplyr</code>, a package for making data manipulation easier; more on <code>deplyr</code> later. Load the <code>dplyr</code> package individually or part of <code>tidyverse</code> if it’s not already:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;dplyr&#39;</span>)</code></pre></div>
+<p>Enter <code>dplyr</code>, a package for making data manipulation easier. More on <code>dplyr</code> later. <code>dplyr</code> is part of <code>tidyverse</code>, so it is already installed on your machine. You can load it individually, or with the other tidyverse packages like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)</code></pre></div>
+<pre class="output"><code>Loading tidyverse: ggplot2
+Loading tidyverse: tibble
+Loading tidyverse: tidyr
+Loading tidyverse: readr
+Loading tidyverse: purrr
+Loading tidyverse: dplyr
+</code></pre>
+<pre class="output"><code>Warning: package &#39;ggplot2&#39; was built under R version 3.3.2
+</code></pre>
+<pre class="output"><code>Conflicts with tidy packages ----------------------------------------------
+</code></pre>
+<pre class="output"><code>filter(): dplyr, stats
+lag():    dplyr, stats
+</code></pre>
 <p>Remember that you only have to install each package once (per computer), but you have to load them for each R session in which you want to use them.</p>
 <p>You also have to load any data you want to use each time you start a new R session. So, if it’s not already loaded, read in the gapminder data. We’re going to use tidyverse’s <code>read_csv</code> instead of base R’s <code>read.csv</code> here. It has a few nice features; the most obvious is that it makes a special kind of data.frame that only prints the first ten rows instead of all 1704.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-gapminder &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&#39;data/gapminder-FiveYearData.csv&#39;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapminder &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&#39;data/gapminder-FiveYearData.csv&#39;</span>)
 <span class="kw">class</span>(gapminder)</code></pre></div>
 <pre class="output"><code>[1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;
 </code></pre>
