@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="generator" content="pandoc">
-    <title>Software Carpentry: R for reproducible scientific analysis</title>
+    <title>Software Carpentry: R for Reproducible Scientific Analysis</title>
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
@@ -26,65 +26,141 @@
       <article>
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
-                    <a href="index.html"><h1 class="title">R for reproducible scientific analysis</h1></a>
-          <h2 class="subtitle">Dynamic reports with knitr</h2>
+                    <a href="index.html"><h1 class="title">R for Reproducible Scientific Analysis</h1></a>
+          <h2 class="subtitle">Dynamic Reports with R Markdown</h2>
           <section class="objectives panel panel-warning">
 <div class="panel-heading">
 <h2 id="learning-objectives"><span class="glyphicon glyphicon-certificate"></span>Learning Objectives</h2>
 </div>
 <div class="panel-body">
 <ul>
-<li>Understand the value of <code>knitr</code>: Generate dynamic documents that include text, code, and results.</li>
-<li>Control basic formatting using markdown syntax.</li>
-<li>Be able to create, edit, and compile an .Rmd document including code chunks and inline code.</li>
+<li>Learn how to render R Markdown documents. Generate dynamic documents that include text, code, and results.</li>
+<li>Control basic formatting using Markdown syntax.</li>
+<li>Create, edit, and compile an R Markdown document including code chunks and inline code.</li>
 </ul>
 </div>
 </section>
-<h3 id="the-what-and-why-of-rmarkdown">The What and Why of RMarkdown</h3>
-<p>RMarkdown is a way to keep our notes, code, and results organized in a single document. It is a great tool for “literate programming” – the idea that your code should be readable by humans as well as computers. It keeps your writing and results together, so if you collect some new data or change how you clean the data, you just have to re-compile the document and you’re up to date.</p>
-<p>RMarkdown uses a simple syntax, which is then converted by the R package <code>knitr</code> and the utility pandoc, to html, pdf (if you have LaTeX on your machine), or Word files. You can write websites in RMarkdown, articles that conform to publishing standards, CVs, presentations… People have even written dissertations in RMarkdown. The syntax of the language is designed to be super simple, but you still get high quality output.</p>
-<h3 id="organization-of-an-rmarkdown-document">Organization of an RMarkdown document</h3>
-<p>To get started, install the <code>knitr</code> package and create a new RMarkdown document.</p>
+<h3 id="the-what-and-why-of-r-markdown">The What and Why of R Markdown</h3>
+<p>R Markdown is a way to keep our notes, code, and results organized in a single document. It is a great tool for literate programming – the idea that your code should be readable by humans as well as computers. It keeps your writing and results together, so if you collect some new data or change how you clean the data, you just have to re-compile the document and the results are up to date.</p>
+<p>One point of confusion is that R Markdown is a syntax for writing dynamic documents and <code>rmarkdown</code> is an R package that allows one to <code>render()</code> an R Markdown document. Under the hood, the <code>rmarkdown::render()</code> function calls <code>knitr::knit()</code> to convert the R Markdown file into a Markdown file, and then it calls the utility <code>pandoc</code> to convert the intermediate Markdown file into a variety of output formats. Output formats include html, pdf (if you have LaTeX installed), Microsoft Word, and many others. You can write websites in R Markdown, articles that conform to publishing standards, CVs, presentations… People have even written dissertations in R Markdown. The syntax of the language is designed to be simple, but you still get high quality output.</p>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
-<h2 id="challenge---create-and-render-an-rmarkdown-document"><span class="glyphicon glyphicon-pencil"></span>Challenge - Create and render an RMarkdown document</h2>
+<h2 id="challenge---render-an-r-markdown-document"><span class="glyphicon glyphicon-pencil"></span>Challenge - Render an R Markdown document</h2>
 </div>
 <div class="panel-body">
 <ul>
-<li>Install <code>knitr</code> via <code>install.packages(&quot;knitr&quot;)</code></li>
-<li>Click on File -&gt; New File, and select the “R Markdown…” option.</li>
-<li>Accept the default options in the dialog box that follows.</li>
-<li>Save the file as <code>firstRMarkdown.Rmd</code> in the <code>papers</code> directory of your project.</li>
-<li>Click on the “Knit HTML” button at the top of the script (or press ctrl-shift-k/cmd-shift-k) and compare the output to the source.</li>
+<li>Right-click on this <a href="./code/example.Rmd">link</a> to “Save Link As…”</li>
+<li>Open <code>example.Rmd</code> in RStudio.</li>
+<li>Render the R Markdown document by pressing the “Knit” button at the top of document.</li>
+<li>Compare the output (html) file to the input (Rmd) file.</li>
 </ul>
 </div>
 </section>
-<p>The top of the source (.Rmd) file has some header material in YAML format (enclosed by triple dashes). Some of this gets displayed in the output header, other of it provides formatting information to the conversion engine. This is the only required part of an RMarkdown document.</p>
-<p>After the header, there is a mix of plain-text, formatted with markdown syntax, and R-code chunks.</p>
-<h4 id="markdown-syntax">Markdown syntax</h4>
-<p>This page – <a href="http://RMarkdown.rstudio.com/authoring_basics.html" class="uri">http://RMarkdown.rstudio.com/authoring_basics.html</a> – covers the basics of formatting text in RMarkdown. You can create section headers and sub-headers with <code>#</code>, <code>##</code>, etc. Emphasis is achieved by surrounding text with one or two asterisks: *italics* and **bold**. Lists via <code>-</code> and numbered lists using <code>1.</code>, <code>2.</code>, etc. Even creating a table is simple.</p>
-<p>Markdown also supports LaTeX equation editing. We can display pretty equations by enclosing them in <code>$</code>. E.g. <code>$\alpha = \dfrac{1}{(1 - \beta)^2}$</code> renders as: <span class="math inline">$\alpha = \dfrac{1}{(1 - \beta)^2}$</span>.</p>
-<h4 id="code-chunks">Code chunks</h4>
-<p>To distinguish R code from text, RMarkdown uses three back-ticks followed by <code>{r}</code> to distinguish a “code chunk”. In RStudio, the keyboard shortcut to create a code chunk is command-option-i or control-alt-i. You can set options for how that code chunk renders after the <code>r</code>. For example, <code>echo = FALSE</code> will prevent the code from being displayed, but its output will still be rendered. <code>fig.height = 8</code> will make plots generated in that code chunk 8 inches in height. You can set the options for the entire document by including this in a code chunk in your document: <code>opts_chunk$set( ... )</code>. Check out the full suite of code-chunk options at <a href="http://yihui.name/knitr/options/">Yihui’s (the author of <code>knitr</code>) website</a>.</p>
-<p>A code chunk will set off the code and its results in the output document, but you can also print the results of code within a text block by enclosing code like so: <code>`r code-here`</code>. For example, this:</p>
-<p><code>There were `r length(unique(gapminder$country))` countries in the dataset with a mean per-capita gdp of $`r round(mean(gapminder$gdpPercap), 1)`.</code></p>
-<p>Renders to:</p>
-<p>There were 142 countries in the dataset with a mean per-capita gdp of $7215.33.</p>
-<h4 id="rmarkdown-documents-are-self-contained">RMarkdown documents are self-contained</h4>
-<p>Any data or package you use in an RMarkdown document must be loaded in that document. <code>knitr</code> will not look in the Environment for data or functions. It is sometimes useful to include a code-chunk at the beginning of your document where you load data and packages and perhaps set <code>knitr</code> options for the whole document. You may or may not want to include this code in the output. If not, you can give it the option <code>include = FALSE</code>.</p>
+<h3 id="organization-of-an-r-markdown-document">Organization of an R Markdown Document</h3>
+<p>The top of the an Rmd file has some header material in YAML format (enclosed by triple dashes). Some of this (<code>title</code>, <code>author</code>, …) gets displayed in the output header, other parts provide formatting information to the conversion engine.</p>
+<p>After the header, there is a mix of plain-text, formatted with markdown syntax, and R code chunks.</p>
+<h4 id="markdown-syntax">Markdown Syntax</h4>
+<blockquote>
+<p>The overriding design goal for Markdown’s formatting syntax is to make it as readable as possible. The idea is that a Markdown-formatted document should be publishable as-is, as plain text, without looking like it’s been marked up with tags or formatting instructions. - John Gruber</p>
+</blockquote>
+<pre><code># A Markdown Example
+
+Paragraphs are separated by a blank line.
+
+This is a new paragraph. Words and phrases can be made _italic_,
+__bold__, or `monospace`. Use asterisks to create bullet items:
+
+* Item-A
+* Item-B
+* Item-C
+
+Enumerated lists look like this:
+
+1. Item-1
+2. Item-2
+3. Item-3
+
+Here&#39;s a code snippet:
+
+```
+for (i in 1:10) {
+    print(i)
+}
+```
+
+Here&#39;s a link to [a website](https://www.google.com/) and images
+can be included like so:
+
+![My Image Caption](https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png)
+
+## MathJax Support
+
+Inline math is placed between dollar signs: $y = mx + b$. Display
+math should get its own line and be put between double dollar
+signs:
+
+$$ y = ax^2 + bx + c $$</code></pre>
+<p><a href="http://rmarkdown.rstudio.com/authoring_basics.html">This page</a> covers the basics of formatting text in R Markdown.</p>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
-<h2 id="challenge---use-knitr-to-produce-a-report"><span class="glyphicon glyphicon-pencil"></span>Challenge - Use knitr to produce a report</h2>
+<h2 id="challenge---practice-writing-markdown"><span class="glyphicon glyphicon-pencil"></span>Challenge - Practice writing Markdown</h2>
 </div>
 <div class="panel-body">
+<ul>
+<li>In RStudio, create a new R Markdown file.</li>
+<li>Try to write the Markdown that when rendered turns into this:</li>
+</ul>
+<p>Markdown syntax is plain and <strong>bold</strong>. I particularly like:</p>
 <ol style="list-style-type: decimal">
-<li>Open an new .Rmd script and save it as life_expectancy.Rmd</li>
-<li>Create a plot of life_expectancy versus year. Start simple, when you’re finished with the rest of this challenge, return to this to improve it.</li>
-<li>Add a few notes describing what the code does and what the main findings are. Include an in-line calculation of the global average life expectancy over the whole dataset.</li>
-<li><code>knit</code> the document and view the html result.</li>
+<li>enumerated lists, and</li>
+<li><a href="https://www.google.com/">links</a></li>
 </ol>
 </div>
 </section>
+<h4 id="code-chunks-and-inline-code">Code Chunks and Inline Code</h4>
+<p>To distinguish R code from text, R Markdown uses three back-ticks followed by <code>{r}</code> to distinguish a “code chunk”. In RStudio, the keyboard shortcut to create a code chunk is command-option-i or control-alt-i. You can set options for how that code chunk renders after the <code>r</code>. For example, <code>echo = FALSE</code> will prevent the code from being displayed, but its output will still be rendered. <code>fig.height = 8</code> will make plots generated in that code chunk 8 inches in height. It is also possible to set the chunk options for the entire document by calling <a href="http://kbroman.org/knitr_knutshell/pages/Rmarkdown.html#global-chunk-options"><code>knitr::opts_chunk$set()</code></a>. Check out the full suite of chunk options in the <a href="http://yihui.name/knitr/options/">knitr documentation</a>.</p>
+<p>A code chunk will set off the code and its results in the output document, but you can also print the results of code within a text block by enclosing code like so: <code>`r code-here`</code>.</p>
+<pre><code>Below is a code chunk. Rendering the chunk will result in the code
+being highlighted for R syntax and the output being included below
+the code.
+
+```{r}
+1 + 1
+```
+
+`r 1 + 1` is inline code. Rendering inline code will replace the
+code with the result.
+
+The following code snippet will not be evaluated:
+
+```
+1 + 1
+```
+
+Similarly, this inline code snippet will not be evaluated: `1 + 1`</code></pre>
+<h4 id="r-markdown-documents-are-self-contained">R Markdown Documents are Self-Contained</h4>
+<p>Any data or package you use in an R Markdown document must be loaded in that document. <code>knitr</code> will not look in the Environment for data or functions. It is sometimes useful to include a code-chunk at the beginning of your document where you load data and packages and perhaps set <code>knitr</code> options for the whole document. You may or may not want to include this code in the output. If not, you can give it the option <code>include = FALSE</code>.</p>
+<section class="challenge panel panel-success">
+<div class="panel-heading">
+<h2 id="challenge---write-a-new-r-markdown-document-and-render-it"><span class="glyphicon glyphicon-pencil"></span>Challenge - Write a new R Markdown document and render it</h2>
+</div>
+<div class="panel-body">
+<ol style="list-style-type: decimal">
+<li>Create a new R Markdown file and save it as life_expectancy.Rmd</li>
+<li>Create a plot of life_expectancy versus year. Start simple, when you’re finished with the rest of this challenge, return to this to improve it.</li>
+<li>Add a few notes describing what the code does and what the main findings are. Include an in-line calculation of the average life expectancy over the whole dataset.</li>
+<li>Knit the document and view the html result.</li>
+</ol>
+</div>
+</section>
+<h3 id="further-reading">Further Reading</h3>
+<ul>
+<li><a href="http://rmarkdown.rstudio.com/lesson-1.html">RStudio’s Lessons on R Markdown</a></li>
+<li>RStudio &gt; Help &gt; Cheatsheets &gt; R Markdown Cheat Sheet</li>
+<li>RStudio &gt; Help &gt; Markdown Quick Reference</li>
+<li><a href="https://daringfireball.net/projects/markdown/syntax">Markdown Syntax</a></li>
+<li><a href="http://rmarkdown.rstudio.com/formats.html">R Markdown Output Formats</a></li>
+</ul>
         </div>
       </div>
       </article>
