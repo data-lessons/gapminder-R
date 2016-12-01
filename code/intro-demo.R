@@ -1,13 +1,12 @@
 # Author: Michael Levy
 # Date: 2016-06-15
-# To use: Update the import of learners' names.
+# To use: Update the import and filtering of learners' names.
 # Purpose: Introduce the power of R and preview what's in store for learners.
 # Don't teach from it. Walk through quickly, explaining in broad strokes.
 
+library(tidyverse)
 library(googlesheets)
-library(dplyr)
 library(babynames)
-library(ggplot2)
 
 babynames
 
@@ -40,16 +39,16 @@ sample(babynames$name, 1) %>%
     plotTheName()
 
 # How about for everyone who registered for this class?
-participants = gs_title('DC-participants-2016-06-16') %>% gs_read()
+participants = gs_title('HBS-DC') %>% gs_read()
 
 ## Keep only the names that are in the babynames dataset
-names = participants$FirstName[participants$FirstName %in% babynames$name] %>% 
+names = participants$`First Name`[participants$`First Name` %in% babynames$name] %>% 
     unique() %>% sort()
 
 ## Save all plots to one file
-cowplot::save_plot('~/Desktop/nameplots.png', 
-          cowplot::plot_grid(plotlist = lapply(names, plotTheName)),
-          base_height = 20)
+ggsave('~/Desktop/nameplots.png', 
+       cowplot::plot_grid(plotlist = lapply(names, plotTheName)),
+       height = 8, width = 10, units = 'in')
 
 ## Or, make a new folder and save each name as a separate file
 location = '~/Desktop/namePlots/'
