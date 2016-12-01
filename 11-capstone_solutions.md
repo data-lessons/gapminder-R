@@ -1,7 +1,7 @@
 ---
 title: "Capstone Project"
 author: "Data Carpentry"
-date: "2016-06-18"
+date: "2016-11-30"
 output: html_document
 ---
 
@@ -27,11 +27,11 @@ library(ggplot2)
 
 We can calculate all of these statistics directly in the text of our writeup...
 
-The batting data range from 1871 - 2014, while the salary data start at 1985. 
+The batting data range from 1871 - 2015, while the salary data start at 1985. 
 
-<!-- There are 223251 missing data points in the Batting dataset, which represents 10.2% of the cells in the table. -->
+<!-- There are 223251 missing data points in the Batting dataset, which represents 10% of the cells in the table. -->
 
-There are 18405 players in the batting dataset, and 4826 in the salary dataset.
+There are 18659 players in the batting dataset, and 4963 in the salary dataset.
 
 The maximum salary earned is $33000000, which was earned by rodrial01 in 2009.
 
@@ -125,15 +125,14 @@ group_by(Batting, playerID) %>%
 ```
 
 ```
-## Source: local data frame [5 x 3]
-## 
+## # A tibble: 5 × 3
 ##    playerID careerHR seasons
-##       (chr)    (int)   (int)
+##       <chr>    <int>   <int>
 ## 1 bondsba01      762      22
 ## 2 aaronha01      755      23
 ## 3  ruthba01      714      22
-## 4  mayswi01      660      22
-## 5 rodrial01      654      20
+## 4 rodrial01      687      21
+## 5  mayswi01      660      22
 ```
 
 
@@ -174,10 +173,9 @@ group_by(Batting, playerID, yearID) %>%
 ```
 
 ```
-## Source: local data frame [10 x 3]
-## 
+## # A tibble: 10 × 3
 ##     playerID yearID yearHR
-##        (chr)  (int)  (int)
+##        <chr>  <int>  <int>
 ## 1  bondsba01   2001     73
 ## 2  mcgwima01   1998     70
 ## 3   sosasa01   1998     66
@@ -256,7 +254,7 @@ gather(battingSalaries, stat, value, BA, RBI, HR) %>%
 ![plot of chunk batting stats 2](fig/capstoneSolutions/batting stats 2-1.png)
 
 
-> Run a multiple linear regression of salary on the three batting statistics. Are the results of the model parsimonious with the conclusions from your plots?
+> Run a multiple linear regression of salary on the three batting statistics. Are the results of the model consistent with the conclusions from your plots?
 
 No! After accounting for home runs, it looks like batting average and RBI are *negatively* associated with salary! Of course, there are many factors to consider before concluding that players should start getting fewer hits if they want to make more money (e.g. filtering players with very few at-bats or weighting data-points by the number of at bats, accounting for clustering at the team level, filtering pitchers who are paid for skills other than batting, etc.)
 
@@ -272,22 +270,22 @@ lm(salary ~ HR + BA + RBI, data = battingSalaries) %>%
 ## lm(formula = salary ~ HR + BA + RBI, data = battingSalaries)
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -9784059 -1808692 -1300712   643130 31182465 
+##       Min        1Q    Median        3Q       Max 
+## -10081343  -1883915  -1362903    659325  31108185 
 ## 
 ## Coefficients:
 ##               Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)  2085040.9    15673.1 133.033  < 2e-16 ***
-## HR            118074.4     1995.3  59.176  < 2e-16 ***
-## BA          -1279767.8    69776.8 -18.341  < 2e-16 ***
-## RBI            -3216.4      605.2  -5.314 1.07e-07 ***
+## (Intercept)  2171217.5    15989.1 135.794  < 2e-16 ***
+## HR            121082.2     2043.3  59.258  < 2e-16 ***
+## BA          -1338866.6    71271.7 -18.785  < 2e-16 ***
+## RBI            -3136.7      620.3  -5.057 4.27e-07 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 3576000 on 227708 degrees of freedom
-##   (61544 observations deleted due to missingness)
-## Multiple R-squared:  0.07473,	Adjusted R-squared:  0.07472 
-## F-statistic:  6130 on 3 and 227708 DF,  p-value: < 2.2e-16
+## Residual standard error: 3716000 on 235277 degrees of freedom
+##   (63861 observations deleted due to missingness)
+## Multiple R-squared:  0.07336,	Adjusted R-squared:  0.07335 
+## F-statistic:  6208 on 3 and 235277 DF,  p-value: < 2.2e-16
 ```
 
 

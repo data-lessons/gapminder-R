@@ -48,9 +48,15 @@ What is the most home runs in a single season?
 
 We want to examine how batting ability relates to salaries earned. For only the entries where salary data is available, join the two data.frames.
 
+*Joining data.frames is in a [lesson](http://data-lessons.github.io/gapminder-R/12-joins.html) that is not taught as part of the standard curriculum of this workshop, so here is a line of code you can copy and paste to do this operation. To learn more about joining tables in R, see the above-linked lesson or RStudio's cheatsheet. 
+
+```
+battingSalaries <- right_join(Batting, Salaries, "playerID", "yearID")
+```
+
 The three components of the batting triple crown are batting average, runs batted in (RBI), and home runs. Plot salary against each of the three statistics. Which appears to have the strongest relationship with a player's salary? 
 
-Run a multiple linear regression of salary on the three batting statistics. Are the results of the model parsimonious with the conclusions from your plots?
+Run a multiple linear regression of salary on the three batting statistics. Are the results of the model consistent with the conclusions from your plots?
 
 #### Advanced: triple crown winners
 

@@ -171,7 +171,7 @@ gather(battingSalaries, stat, value, BA, RBI, HR) %>%
 ```
 
 
-> Run a multiple linear regression of salary on the three batting statistics. Are the results of the model parsimonious with the conclusions from your plots?
+> Run a multiple linear regression of salary on the three batting statistics. Are the results of the model consistent with the conclusions from your plots?
 
 No! After accounting for home runs, it looks like batting average and RBI are *negatively* associated with salary! Of course, there are many factors to consider before concluding that players should start getting fewer hits if they want to make more money (e.g. filtering players with very few at-bats or weighting data-points by the number of at bats, accounting for clustering at the team level, filtering pitchers who are paid for skills other than batting, etc.)
 

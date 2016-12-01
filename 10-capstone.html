@@ -55,8 +55,10 @@
 <p>What is the most home runs in a single season?</p>
 <h4 id="batting-salaries">Batting &amp; Salaries</h4>
 <p>We want to examine how batting ability relates to salaries earned. For only the entries where salary data is available, join the two data.frames.</p>
+<p>*Joining data.frames is in a <a href="http://data-lessons.github.io/gapminder-R/12-joins.html">lesson</a> that is not taught as part of the standard curriculum of this workshop, so here is a line of code you can copy and paste to do this operation. To learn more about joining tables in R, see the above-linked lesson or RStudio’s cheatsheet.</p>
+<pre><code>battingSalaries &lt;- right_join(Batting, Salaries, &quot;playerID&quot;, &quot;yearID&quot;)</code></pre>
 <p>The three components of the batting triple crown are batting average, runs batted in (RBI), and home runs. Plot salary against each of the three statistics. Which appears to have the strongest relationship with a player’s salary?</p>
-<p>Run a multiple linear regression of salary on the three batting statistics. Are the results of the model parsimonious with the conclusions from your plots?</p>
+<p>Run a multiple linear regression of salary on the three batting statistics. Are the results of the model consistent with the conclusions from your plots?</p>
 <h4 id="advanced-triple-crown-winners">Advanced: triple crown winners</h4>
 <p>To win the triple crown is to have the most home runs and RBI and the highest batting average in a league for a year. Since 1957, only batters with at least 502 at-bats are eligible for the highest batting average. There have been three triple crown winners since 1957 – can you identify them?</p>
 <ul>
