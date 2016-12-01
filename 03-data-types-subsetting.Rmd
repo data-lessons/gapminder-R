@@ -25,7 +25,7 @@ source("tools/chunk-options.R")
 
 ### Loading data 
 
-We can load the dataset we just saved with the `load` function. Load needs the location of the saved file, provided as character string file-path, starting with the working directory. We won't get into working directories now, except to say that when your project's root directory will usually be your working directory. It is displayed at the top of your console pane in RStudio. File-paths should be provided relative to that location. So, to load the file we just saved:
+R has a variety functions to load specific kinds of data, e.g. `read.csv` to read a comma-separated value table. Two R-specific data-types are `.RDA` and `.RDS`. `.RDA` files, like the one you just saved, are created with the `save` function and accessed with the `load` function. Load needs the location of the saved file, provided as character string file-path, starting with the working directory. We won't get into working directories now, except to say that RStudio's projects makes this easier, by making the location of your project (where the `.Rproj` file is located) the default working directory. It is displayed at the top of your console pane in RStudio. File-paths should be provided relative to that location. So, to load the file we just saved:
 
 ```{r load data}
 load('data/continents.RDA')
@@ -173,25 +173,23 @@ pop[10]
 >
 > Similar to `c`, the `seq` function creates a vector: a **seq**uence of numbers. 
 >
-> - Your first task is to create a sequence of all the multiples of three from three to 300.
->
-> Figure out how to do this. Some combination of playing with the function in the console and reading its helpfile (`?seq`) should work. Helpfiles are challenging at first, but it's important to learn how to find the info you need in them. Hint: The arguments you need here are `from`, `to`, and `by`.
+> - Your first task is to create a sequence of all the multiples of three from three to 300. Figure out how to do this. Some combination of playing with the function in the console and reading its helpfile (`?seq`) should work. Helpfiles are challenging at first, but it's important to learn how to find the info you need in them. Hint: The arguments you need here are `from`, `to`, and `by`.
 >
 > - Store your sequence in a variable.
 > - Extract the 33rd entry from the sequence
-> - **Bonus**: Create a vector with ten evenly-spaced integers from one to one-million. What is the sum of the second and ninth entries in this vector?
-> - **Super-Bonus**: Returning to the multiples-of-three vector, what is the sum of numbers in positions that are not evenly divisible by three? That is the sum of the first, second, fourth, ... entries.
+> - **Bonus**: Create a vector with ten evenly-spaced numbers starting with one and ending with one-million. What is the sum of the second and ninth entries in this vector?
+> - **Super-Bonus**: Returning to the multiples-of-three vector, what is the sum of the numbers in positions that are not evenly divisible by three? That is, the sum of the first, second, fourth, fifth, seventh, etc. entries.
 >
 
 #### Subset by logical
 
-Note that the `continents` data frame contains the two most common kinds of variables: numbers (num) and strings (chr).
+Note that the `continents` data frame contains two common kinds of variables: numbers (num) and strings (chr).
 
 ```{r}
 str(continents)
 ```
 
-The third important data type in R is logicals. You saw this when making logical comparisons like `1 > 0`. Logical data can only be `TRUE` or `FALSE` (or `NA` for missing). 
+A third important data type in R is logicals. You saw this when making logical comparisons like `1 > 0`. Logical data can only be `TRUE` or `FALSE` (or `NA` for missing; any variable type in R can have `NA`-missing values). 
 
 Logical comparisons are vectorized like other things in R. Let's find the highly populated continents, those with more than one-billion people. One-billion is 10^9, so we can write it as `1e9`.
 
@@ -212,7 +210,9 @@ pop[pop > 1e9]
 > How could you extract the names of the continents with more than one-billion people?
 >
 
-Doing a logical test on one (or more) variables and using that to extract values from another is especially useful in the data frame context since all the observations are lined up on rows. For example to find the land-area of Africa, we can test the continent names for being Africa and then extract the area where that is true. Note that it is often useful to build code from the insight out, ie write the logical test first, then go left and write what you want to subset with it.
+Recall that in a data frame, each row constitutes a single observation. This makes it especially useful to test one column and use it to subset another -- we often want the entries of some variable where a condition on another variable is met. For example, to find the land-area of Africa, we can test the continent names for being "Africa" and extract the area where that is true. 
+
+Here as elsewhere, it is often useful to build code from the insight out, ie, write the logical test first, then go left and write what you want to subset with it.
 
 ```{r}
 continents$area_km2[continents$continent == "Africa"]
@@ -257,10 +257,10 @@ Now, a data.frame called `gapminder` is in my Environment, and I can see that it
 
 > #### Challenge -- read csv data {.challenge}
 >
-> The gapminder data are available at [this link](https://raw.githubusercontent.com/resbaz/r-novice-gapminder-files/master/data/gapminder-FiveYearData.csv). 
-> - Right click on the link to "save file as..."
-> - Save the .csv file in the `/data` directory of your project.
-> - Read the data with the `read.csv` function and assign it to the variable `gapminder`.
+> The gapminder data are available at [this link](https://raw.githubusercontent.com/resbaz/r-novice-gapminder-files/master/data/gapminder-FiveYearData.csv).  
+> - Right click on the link to "save file as..."  
+> - Save the .csv file in the `/data` directory of your project.  
+> - Read the data with the `read.csv` function and assign it to the variable `gapminder`.  
 > - Inspect the data.frame using the `summary` function. What is the most recent year for which we have data? 
 > 
 > **Advanced challenge**

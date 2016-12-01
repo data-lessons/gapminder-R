@@ -47,23 +47,23 @@
 </section>
 <p>Plotting is essential to understanding your data and the relationships in it. You should be making plots throughout the analysis and modeling process. There are three main plotting systems in R, the <a href="http://www.statmethods.net/graphs/">base plotting system</a>, the <a href="http://www.statmethods.net/advgraphs/trellis.html">lattice</a> package, and the <a href="http://www.statmethods.net/advgraphs/ggplot2.html">ggplot2</a> package.</p>
 <p>We will learn <code>ggplot</code>, because it is effective and efficient, makes publication-quality graphics, and is theoretically grounded in the grammar of graphics – the idea that any plot can be expressed from the same set of components: a <strong>data</strong> set, a <strong>coordinate system</strong>, and a set of <strong>geoms</strong>–the visual representation of data points.</p>
-<h3 id="install-and-load-ggplot2">Install and load ggplot2</h3>
-<p>The first thing we have to do is install the <code>ggplot2</code> package. This downloads <code>R</code> code that someone else wrote, packaged, and submitted to the CRAN repository. There are over 7,000 such packages on CRAN! We can download a package via the menu bar Tools -&gt; Install Packages…, or with a line of code:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;ggplot2&#39;</span>)</code></pre></div>
+<h3 id="installing-and-loading-packages">Installing and loading packages</h3>
+<p><code>ggplot</code> is not part of “base R”; rather it is a package – a library of functions that an R user wrote. This extensibility is part of the beauty of R. As of December 2016, there are 9,600 such packages in the official Comprehensive R Archive Network, better known as <a href="https://cran.r-project.org/">CRAN</a>.</p>
+<p><code>ggplot</code> is one of the most popular packages for R. It is part of a suite of R tools that make up “The Tidyverse”. Its author conveniently bundled these tools together in a super-package called <code>tidyverse</code>. To use the tidyverse tools, you first need to download them to your machine (once) and then load them (each R session you want to use them). You can download a package via the RStudio menu bar Tools -&gt; Install Packages…, or with a line of code:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;tidyverse&#39;</span>)</code></pre></div>
 <p>You only have to download the code once. But whenever you want to <em>use</em> a package, you have to load it in your R session. For that, use the <code>library</code> function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)</code></pre></div>
-<p>Now <code>ggplot</code> is ready to go!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)</code></pre></div>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
-<h4 id="challenge-install-and-load-ggplot"><span class="glyphicon glyphicon-pencil"></span>Challenge – Install and load ggplot</h4>
+<h4 id="challenge-install-and-load-tidyverse"><span class="glyphicon glyphicon-pencil"></span>Challenge – Install and load tidyverse</h4>
 </div>
 <div class="panel-body">
 <ul>
-<li>Install the <code>ggplot2</code> package, either with <code>install.packages('ggplot2')</code> or via the menu bar: Tools -&gt; Install Packages…<br />
+<li>Install the <code>tidyverse</code> package, either with <code>install.packages('tidyverse')</code> or via the menu bar: Tools -&gt; Install Packages…<br />
 </li>
-<li>While you’re at it, go ahead and install three more packages: <code>dplyr</code>, <code>tidyr</code>, and <code>knitr</code>. We will learn and use those later.<br />
+<li>Load <code>tidyverse</code> with <code>library(tidyverse)</code><br />
 </li>
-<li>Load <code>ggplot2</code> with <code>library(ggplot2)</code></li>
+<li>You will see some warnings about conflicts. That’s okay.</li>
 </ul>
 </div>
 </section>
@@ -91,14 +91,7 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> gdpPercap, <span class="dt">y =</span> lifeExp)) +<span class="st"> </span>
 <span class="kw">geom_point</span>()</code></pre></div>
 <p>Hint: Inspect the data with <code>head(gapminder)</code> or <code>str(gapminder)</code> to find the name of the variable representing time. It should go on the x-axis.</p>
-</div>
-</section>
-<section class="challenge panel panel-success">
-<div class="panel-heading">
-<h4 id="challenge-adding-an-element"><span class="glyphicon glyphicon-pencil"></span>Challenge – Adding an element</h4>
-</div>
-<div class="panel-body">
-<p>So far, we have only mapped variables to the <strong>x</strong> and <strong>y</strong> locations of each point. Another <em>aesthetic</em> property we can modify is the point <code>color</code>. Modify the code from the previous challenge to <strong>color</strong> the points by the “continent” column. What trends do you see in the data? Are they what you expected?</p>
+<p><strong>Bonus</strong>: So far, we have only mapped variables to the <strong>x</strong> and <strong>y</strong> locations of each point. Another <em>aesthetic</em> property we can modify is the point <code>color</code>. Modify the code from the previous challenge to <strong>color</strong> the points by the “continent” column. What trends do you see in the data? Are they what you expected?</p>
 </div>
 </section>
 <h3 id="layers">Layers</h3>
@@ -147,7 +140,7 @@
 <li>Tip: Try out the <code>fill</code> aesthetic.</li>
 </ul></li>
 </ul>
-<p>Advanced: Suppose you want to examine the distribution of life expectencies across all countries together; that is, you want a single plot of showing the distribution of all life-expectancy values. There are a few geom’s that can do this: Can you make one?</p>
+<p><strong>Bonus</strong>: Suppose you want to examine the distribution of life expectencies across all countries together; that is, you want a single plot of showing the distribution of all life-expectancy values. There are a few geom’s that can do this: Can you make one?</p>
 </div>
 </section>
 <h3 id="transformations">Transformations</h3>
@@ -178,7 +171,7 @@
 <ul>
 <li>Tip: This can be done in one place, with fewer than 20 characters.</li>
 </ul></li>
-<li>Advanced: Color the points by continent, but have only one line, fit to all of the data.</li>
+<li><strong>Bonus</strong>: Color the points by continent, but have only one line, fit to all of the data.</li>
 </ul>
 </div>
 </section>
@@ -220,20 +213,21 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> lifeExp, <span class="dt">by =</span> country)) +
 <span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">color =</span> continent))</code></pre></div>
 <p><img src="fig/04-plot-ggplot2/unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" style="display: block; margin: auto;" /></p>
-<p>That’s a mess! It’s hard to see patterns because there is so much information on top of itself. We can split this out over multiple panels by adding another layer: <strong>facet</strong> panels. The <code>facet_wrap</code> layer takes a “formula” as its argument, denoted by the tilde (~). You can read this as “by country”. It tells R to draw a panel for each unique value in the country variable in the gapminder dataset.</p>
+<p>That’s a mess! It’s hard to see patterns because there is so much information on top of itself. We can split this out over multiple panels by adding another layer: <strong>facet</strong> panels. The <code>facet_wrap</code> layer takes a “formula” as its argument, denoted by the tilde (~). You can read this as “by continent”. It tells R to draw a panel for each unique value of continent.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> lifeExp, <span class="dt">by =</span> country)) +
 <span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">color =</span> continent)) +
-<span class="st">    </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>country)</code></pre></div>
+<span class="st">    </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>continent)</code></pre></div>
 <p><img src="fig/04-plot-ggplot2/facet-1.png" title="plot of chunk facet" alt="plot of chunk facet" style="display: block; margin: auto;" /></p>
 <h3 id="modifying-text">Modifying text</h3>
 <p>To clean this figure up for a publication we need to change some of the text elements. The x-axis is way too cluttered, and the axis labels should read “Life expectancy” and “Year”, rather than the column name in the data frame. Also, the country names don’t fit in the strips at the top of each plot, and we might like to add an overall title to the figure.</p>
 <p>We can do this by adding a few new layers. The <code>xlab</code> and <code>ylab</code> layers control the names of the x and y axes. The <strong>theme</strong> layer is where we change lots of minor details of a plot. here we’ll rotate the axis text (with <code>angle</code>) so that they’ll fit, and then make sure they’re lined up right with <code>vjust</code> for vertical-adjustment. And let’s add a plot title for fun; we can do that with <code>ggtitle</code> layer.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> lifeExp, <span class="dt">by =</span> country)) +
 <span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">color =</span> continent)) +
-<span class="st">    </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>country) +
+<span class="st">    </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>continent) +
 <span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;Year&quot;</span>) +<span class="st"> </span>
 <span class="st">    </span><span class="kw">ylab</span>(<span class="st">&quot;Life expectancy&quot;</span>) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">8</span>) +
+<span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">10</span>) +
+<span class="st">    </span><span class="kw">scale_color_brewer</span>(<span class="dt">guide =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">palette =</span> <span class="st">&quot;Dark2&quot;</span>) +
 <span class="st">    </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">270</span>, <span class="dt">vjust =</span> .<span class="dv">5</span>)) +
 <span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&#39;Life expectancy over time by country&#39;</span>)</code></pre></div>
 <p><img src="fig/04-plot-ggplot2/cleaned up-1.png" title="plot of chunk cleaned up" alt="plot of chunk cleaned up" style="display: block; margin: auto;" /></p>
@@ -243,16 +237,19 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggsave</span>(<span class="st">&#39;results/lifeExpByYear.png&#39;</span>)</code></pre></div>
 <pre class="output"><code>Saving 7 x 7 in image
 </code></pre>
-<p>Some of the country names are still getting squeezed, so let’s make the canvas a little bigger. Let’s also assign our plot to an object and explicitly save that plot to disk. You assign a ggplot object to a variable just like any other object.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">myplot &lt;-<span class="st"> </span><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> lifeExp, <span class="dt">by =</span> country)) +
+<p>Some of the country names are still getting squeezed, so let’s make the canvas a little bigger, and we’ll save a pdf file instead of a png. Let’s also assign our plot to an object and explicitly save that plot to disk. You assign a ggplot object to a variable just like any other object.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">myplot &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(gapminder, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> lifeExp, <span class="dt">by =</span> country)) +
 <span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">color =</span> continent)) +
-<span class="st">    </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>country) +
+<span class="st">    </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>continent) +
 <span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;Year&quot;</span>) +<span class="st"> </span>
 <span class="st">    </span><span class="kw">ylab</span>(<span class="st">&quot;Life expectancy&quot;</span>) +<span class="st"> </span>
-<span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">8</span>) +
+<span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_size =</span> <span class="dv">14</span>) +
+<span class="st">    </span><span class="kw">scale_color_brewer</span>(<span class="dt">guide =</span> <span class="st">&quot;none&quot;</span>, <span class="dt">palette =</span> <span class="st">&quot;Dark2&quot;</span>) +
 <span class="st">    </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">270</span>, <span class="dt">vjust =</span> .<span class="dv">5</span>)) +
 <span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&#39;Life expectancy over time by country&#39;</span>)
-<span class="kw">ggsave</span>(<span class="dt">filename =</span> <span class="st">&#39;results/lifeExpByYear-bigger.png&#39;</span>, <span class="dt">plot =</span> myplot, 
+<span class="kw">ggsave</span>(<span class="dt">filename =</span> <span class="st">&#39;results/lifeExpByYear-bigger.pdf&#39;</span>, 
+       <span class="dt">plot =</span> myplot, 
        <span class="dt">width =</span> <span class="dv">12</span>, <span class="dt">height =</span> <span class="dv">8</span>)</code></pre></div>
 <h3 id="wrap-up">Wrap-up</h3>
 <p>This is just a taste of what you can do with <code>ggplot2</code>. RStudio provides a really useful <a href="http://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf">cheat sheet</a> of the different layers available, and more extensive documentation is available on the <a href="http://docs.ggplot2.org/current/">ggplot2 website</a>. Finally, if you have no idea how to change something, a quick Google search will usually send you to a relevant question and answer on Stack Overflow with reusable code to modify!</p>
@@ -262,7 +259,7 @@
 </div>
 <div class="panel-body">
 <p>Create a density plot of GDP per capita, with a separate curve for each continent, with color filled by continent. Save the plot to your <code>results/</code> directory.</p>
-<p>Advanced:</p>
+<p><strong>Advanced</strong>:</p>
 <ul>
 <li>Adjust the opacity (<code>alpha</code>) of the density curves so all are visible.</li>
 <li>Transform the-x axis to better visualize the data spread.</li>

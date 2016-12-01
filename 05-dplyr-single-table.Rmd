@@ -136,10 +136,10 @@ USdata
 > - Remove the continent column
 > - Make a scatter plot of gdpPercap vs. population colored by country
 >
-> **Advanced** Yesterday we learned how to do this using base R's subsetting. Do the same thing without the `filter` and `select` functions.
-> 
-> **More Advanced** How would you determine the median population for the North American countries between 1970 and 1980?
+> **Advanced** How would you determine the median population for the North American countries between 1970 and 1980?
 >
+> **Bonus** This can be done using base R's subsetting, but this class doesn't teach how. Do the original challenge without the `filter` and `select` functions. Feel free to consult Google, helpfiles, etc. to figure out how.
+> 
 
 
 #### `arrange()`
@@ -200,7 +200,8 @@ gapminder = mutate(gapminder,
 > c. $331
 > d. $339
 >
-> **Advanced** Graph a log10 of the population in North American countries after 1970 versus the GDP to determine the largest growth. Regraph this use Google and StackOverflow to change the y-axis to a log scale.
+> **Advanced**: Use dplyr functions and ggplot to plot per-capita GDP versus population for North American countries after 1970.
+> - Once you've made the graph, transform both axes to a log10 scale. There are two ways to do this, one by creating new columns in the data frame, and another using functions provided by ggplot to transform the axes. Implement both, in that order. Which do you prefer and why?
 >
 
 
@@ -253,7 +254,6 @@ Making your code easier for humans to read will save you lots of time. The human
 > Copy the code you (or the instructor) wrote to solve the previous MCQ Data Reduction challenge  
 > Rewrite it using pipes (i.e. no assignment and no nested functions)
 >
-> **Advanced** Do the same thing for the log10 population vs GDP graph. How can you do this within one line of code? Once you've accomplished this, how can this be written so that it is something that you can be proud of?
 >
 
 

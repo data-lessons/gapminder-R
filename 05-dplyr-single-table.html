@@ -40,7 +40,7 @@
 </div>
 </section>
 <p>It is an often bemoaned fact that a data scientist spends much, and often most, of her time wrangling data: getting it organized and clean. In this lesson we will learn an efficient set of tools that can handle the vast majority of most data management tasks.</p>
-<p>Load the <code>dplyr</code> package individually or part of <code>tidyverse</code> if it’s not already:</p>
+<p>Enter <code>dplyr</code>, a package for making data manipulation easier; more on <code>deplyr</code> later. Load the <code>dplyr</code> package individually or part of <code>tidyverse</code> if it’s not already:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;dplyr&#39;</span>)</code></pre></div>
 <p>Remember that you only have to install each package once (per computer), but you have to load them for each R session in which you want to use them.</p>
 <p>You also have to load any data you want to use each time you start a new R session. So, if it’s not already loaded, read in the gapminder data. We’re going to use tidyverse’s <code>read_csv</code> instead of base R’s <code>read.csv</code> here. It has a few nice features; the most obvious is that it makes a special kind of data.frame that only prints the first ten rows instead of all 1704.</p>
@@ -67,6 +67,9 @@ gapminder &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span c
 </code></pre>
 <p>You can always convert a data.frame into this special kind of data.frame like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapminder &lt;-<span class="st"> </span><span class="kw">tbl_df</span>(gapminder)</code></pre></div>
+<h2 id="what-is-dplyr">What is dplyr?</h2>
+<p>The package <code>dplyr</code> is a fairly new (2014) package that tries to provide easy tools for the most common data manipulation tasks. It is built to work directly with data frames. The thinking behind it was largely inspired by the package <code>plyr</code> which has been in use for some time but suffered from being slow in some cases.<code>dplyr</code> addresses this by porting much of the computation to C++. An additional feature is the ability to work with data stored directly in an external database. The benefits of doing this are that the data can be managed natively in a relational database, queries can be conducted on that database, and only the results of the query returned.</p>
+<p>This addresses a common problem with R in that all operations are conducted in memory and thus the amount of data you can work with is limited by available memory. The database connections essentially remove that limitation in that you can have a database of many 100s GB, conduct queries on it directly and pull back just what you need for analysis in R.</p>
 <h3 id="the-five-tasks-of-dplyr">The five tasks of <code>dplyr</code></h3>
 <p>There are five actions we often want to apply to a tabular dataset:</p>
 <ul>
@@ -195,6 +198,7 @@ gapminder &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span c
 10  Mexico  1997 95895146  Americas  73.670  9767.298
 # ... with 14 more rows
 </code></pre>
+<p>A good, handy reference list for the operators (and, or, etc) can be found <a href="http://www.statmethods.net/management/operators.html">here</a>.</p>
 <h4 id="select"><code>select()</code></h4>
 <p><code>filter</code> returned a subset of the data.frame’s rows. <code>select</code> returns a subset of the data.frame’s columns.</p>
 <p>Suppose we only want to see country and life expectancy.</p>
@@ -263,11 +267,12 @@ USdata</code></pre></div>
 <li>Remove the continent column</li>
 <li>Make a scatter plot of gdpPercap vs. population colored by country</li>
 </ul>
-<p><strong>Advanced</strong> Yesterday we learned how to do this using base R’s subsetting. Do the same thing without the <code>filter</code> and <code>select</code> functions.</p>
+<p><strong>Advanced</strong> How would you determine the median population for the North American countries between 1970 and 1980?</p>
+<p><strong>Bonus</strong> This can be done using base R’s subsetting, but this class doesn’t teach how. Do the original challenge without the <code>filter</code> and <code>select</code> functions. Feel free to consult Google, helpfiles, etc. to figure out how.</p>
 </div>
 </section>
 <h4 id="arrange"><code>arrange()</code></h4>
-<p>You can order the rows of a data.frame by a variable using <code>arrange</code>. Suppose we want to see the most populous countries. Again, we wrap the results in <code>head</code> to just print the first few rows:</p>
+<p>You can order the rows of a data.frame by a variable using <code>arrange</code>. Suppose we want to see the most populous countries:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">arrange</span>(gapminder, pop)</code></pre></div>
 <pre class="output"><code># A tibble: 1,704 × 6
                  country  year   pop continent lifeExp gdpPercap
@@ -320,7 +325,7 @@ USdata</code></pre></div>
 </code></pre>
 <p><strong>Shoutout Q: Would we get the same output if we switched the order of <code>desc(year)</code> and <code>desc(gdpPercap)</code> in the last line?</strong></p>
 <h4 id="mutate"><code>mutate()</code></h4>
-<p>We have learned how to drop rows, drop columns, and rearrange rows. To make a new column we use the <code>mutate</code> function. As usual, the first argument is a data.frame. The second argument is the name of the new column you want to create, followed by an equal sign, followed by what to put in that column. You can reference other variables in the data.frame, and <code>mutate</code> will treat each row independently. E.g. we can calculate the total GDP of each country in each year by multiplying the per-capita GDP by the population. We pass the output of <code>mutate</code> to <code>head</code> to keep the display under control. How would we view the highest-total-gdp countries?</p>
+<p>We have learned how to drop rows, drop columns, and rearrange rows. To make a new column we use the <code>mutate</code> function. As usual, the first argument is a data.frame. The second argument is the name of the new column you want to create, followed by an equal sign, followed by what to put in that column. You can reference other variables in the data.frame, and <code>mutate</code> will treat each row independently. E.g. we can calculate the total GDP of each country in each year by multiplying the per-capita GDP by the population.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mutate</span>(gapminder, <span class="dt">total_gdp =</span> gdpPercap *<span class="st"> </span>pop)</code></pre></div>
 <pre class="output"><code># A tibble: 1,704 × 7
        country  year      pop continent lifeExp gdpPercap   total_gdp
@@ -337,6 +342,7 @@ USdata</code></pre></div>
 10 Afghanistan  1997 22227415      Asia  41.763  635.3414 14121995875
 # ... with 1,694 more rows
 </code></pre>
+<p><strong>Shoutout Q: How would we view the highest-total-gdp countries?</strong></p>
 <p>Note that didn’t change gapminder: We didn’t assign the output to anything, so it was just printed, with the new column. If we want to modify our gapminder data.frame, we can assign the output of <code>mutate</code> back to the gapminder variable, but be careful doing this – if you make a mistake, you can’t just re-run that line of code, you’ll need to go back to loading the gapminder data.frame.</p>
 <p>Also, you can create multiple columns in one call to <code>mutate</code>, even using variables that you just created, separating them with commas:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapminder =<span class="st"> </span><span class="kw">mutate</span>(gapminder, 
@@ -359,12 +365,13 @@ USdata</code></pre></div>
 <li>$331</li>
 <li>$339</li>
 </ol>
+<p><strong>Advanced</strong>: Use dplyr functions and ggplot to plot per-capita GDP versus population for North American countries after 1970. - Once you’ve made the graph, transform both axes to a log10 scale. There are two ways to do this, one by creating new columns in the data frame, and another using functions provided by ggplot to transform the axes. Implement both, in that order. Which do you prefer and why?</p>
 </div>
 </section>
 <h4 id="cest-ne-pas-une-pipe">C’est ne pas une pipe</h4>
 <p>Suppose we want to look at all the countries where life expectancy is greater than 80 years, sorted from poorest to richest. First, we <code>filter</code>, then we <code>arrange</code>. We could assign the intermediate data.frame to a variable:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lifeExpGreater80 =<span class="st"> </span><span class="kw">filter</span>(gapminder, lifeExp &gt;<span class="st"> </span><span class="dv">80</span>)
-<span class="kw">arrange</span>(lifeExpGreater80, gdpPercap)</code></pre></div>
+(<span class="dt">lifeExpGreater80sorted =</span> <span class="kw">arrange</span>(lifeExpGreater80, gdpPercap))</code></pre></div>
 <pre class="output"><code># A tibble: 21 × 8
            country  year       pop continent lifeExp gdpPercap
              &lt;chr&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;
@@ -381,7 +388,15 @@ USdata</code></pre></div>
 # ... with 11 more rows, and 2 more variables: total_gdp &lt;dbl&gt;,
 #   log_gdp &lt;dbl&gt;
 </code></pre>
-<p>In this case it doesn’t much matter, but we make a whole new data.frame (<code>lifeExpGreater80</code>) and only use it once; that’s a little wasteful of system resources, and it clutters our environment. If the data are large, that can be a big problem. There is a better way, and it makes both writing and reading the code easier. The pipe from the <code>magrittr</code> package (which is automatically installed and loaded with <code>dplyr</code> and <code>tidyverse</code>) takes the output of first line, and plugs it in as the first argument of the next line. Since many <code>tidyverse</code> functions expect a data.frame as the first argument and output a data.frame, this works fluidly.</p>
+<p>In this case it doesn’t much matter, but we make a whole new data.frame (<code>lifeExpGreater80</code>) and only use it once; that’s a little wasteful of system resources, and it clutters our environment. If the data are large, that can be a big problem.</p>
+<p>Or, we could nest each function so that it appears on one line:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">arrange</span>(<span class="kw">filter</span>(gapminder, lifeExp &gt;<span class="st"> </span><span class="dv">80</span>), gdpPercap)<span class="er">)</span></code></pre></div>
+<pre class="output"><code>Error: &lt;text&gt;:1:52: unexpected &#39;)&#39;
+1: arrange(filter(gapminder, lifeExp &gt; 80), gdpPercap))
+                                                       ^
+</code></pre>
+<p>This would become difficult to read if we are performing a number of operations that would require a repeated nesting. But…</p>
+<p>There is a better way, and it makes both writing and reading the code easier. The pipe from the <code>magrittr</code> package (which is automatically installed and loaded with <code>dplyr</code> and <code>tidyverse</code>) takes the output of first line, and plugs it in as the first argument of the next line. Since many <code>tidyverse</code> functions expect a data.frame as the first argument and output a data.frame, this works fluidly.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">filter</span>(gapminder, lifeExp &gt;<span class="st"> </span><span class="dv">80</span>) %&gt;%
 <span class="st">    </span><span class="kw">arrange</span>(gdpPercap)</code></pre></div>
 <pre class="output"><code># A tibble: 21 × 8
@@ -433,7 +448,7 @@ USdata</code></pre></div>
 <h4 id="challenge-data-reduction"><span class="glyphicon glyphicon-pencil"></span>Challenge: Data Reduction</h4>
 </div>
 <div class="panel-body">
-<p>Copy the code you (or the instructor) wrote to solve the previous challenge<br />
+<p>Copy the code you (or the instructor) wrote to solve the previous MCQ Data Reduction challenge<br />
 Rewrite it using pipes (i.e. no assignment and no nested functions)</p>
 </div>
 </section>
@@ -458,7 +473,12 @@ Rewrite it using pipes (i.e. no assignment and no nested functions)</p>
 11  2002  9917.848   5319.805
 12  2007 11680.072   6124.371
 </code></pre>
-<p>Note that <code>summarize</code> eliminates any other columns. Why? What else can it do? E.g. What country should it list for the year 1952!?</p>
+<p><strong>Shoutout Q: Note that <code>summarize</code> eliminates any other columns. Why? What else can it do? E.g. What country should it list for the year 1952!?</strong></p>
+<p>There are several different summary statistics that can be generated from our data. The R base package provides many built-in functions such as <code>mean</code>, <code>median</code>, <code>min</code>, <code>max</code>, and <code>range</code>. By default, all <strong>R functions operating on vectors that contains missing data will return NA</strong>. It’s a way to make sure that users know they have missing data, and make a conscious decision on how to deal with it. When dealing with simple statistics like the mean, the easiest way to ignore <code>NA</code> (the missing data) is to use <code>na.rm=TRUE</code> (<code>rm</code> stands for remove). An alternate option is to use the function <code>is.na()</code>, which evaluates to true if the value passed to it is not a number. This function is more useful as a part of a filter, where you can filter out everything that is not a number. For that purpose you would do something like</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapminder %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(!<span class="kw">is.na</span>(someColumn)) %&gt;%
+<span class="st">  </span>head</code></pre></div>
+<p>The <code>!</code> symbol negates it, so we’re asking for everything that is not an <code>NA</code>.</p>
 <p>We often want to calculate the number of entries within a group. E.g. we might wonder if our dataset is balanced by country. We can do this with the <code>n()</code> function, or <code>dplyr</code> provides a <code>count</code> function as a convenience:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapminder %&gt;%
 <span class="st">    </span><span class="kw">group_by</span>(country) %&gt;%

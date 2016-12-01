@@ -2,7 +2,7 @@
 layout: page
 title: R for reproducible scientific analysis
 subtitle: Manipulating data.frames
-minutes: 45
+minutes: 90
 ---
 
 
@@ -15,7 +15,7 @@ minutes: 45
 
 It is an often bemoaned fact that a data scientist spends much, and often most, of her time wrangling data: getting it organized and clean. In this lesson we will learn an efficient set of tools that can handle the vast majority of most data management tasks. 
 
-Load the `dplyr` package individually or part of `tidyverse` if it's not already:
+Enter `dplyr`, a package for making data manipulation easier; more on `deplyr` later. Load the `dplyr` package individually or part of `tidyverse` if it's not already:
 
 
 ~~~{.r}
@@ -72,6 +72,24 @@ You can always convert a data.frame into this special kind of data.frame like th
 ~~~{.r}
 gapminder <- tbl_df(gapminder)
 ~~~
+
+## What is dplyr?
+
+The package `dplyr` is a fairly new (2014) package that tries to provide easy
+tools for the most common data manipulation tasks. It is built to work directly
+with data frames. The thinking behind it was largely inspired by the package
+`plyr` which has been in use for some time but suffered from being slow in some
+cases.` dplyr` addresses this by porting much of the computation to C++. An
+additional feature is the ability to work with data stored directly in an
+external database. The benefits of doing this are that the data can be managed
+natively in a relational database, queries can be conducted on that database,
+and only the results of the query returned.
+
+This addresses a common problem with R in that all operations are conducted in
+memory and thus the amount of data you can work with is limited by available
+memory. The database connections essentially remove that limitation in that you
+can have a database of many 100s GB, conduct queries on it directly and pull
+back just what you need for analysis in R.
 
 
 ### The five tasks of `dplyr`
@@ -245,6 +263,8 @@ filter(gapminder, country == "United States" | country == "Mexico")
 
 ~~~
 
+A good, handy reference list for the operators (and, or, etc) can be found [here](http://www.statmethods.net/management/operators.html).
+
 #### `select()`
 
 `filter` returned a subset of the data.frame's rows. `select` returns a subset of the data.frame's columns.
@@ -340,18 +360,22 @@ USdata
 
 ~~~
 
+
 > #### Subsetting {.challenge}
 >
 > - Subset the gapminder data to only Oceania countries post-1980.
 > - Remove the continent column
 > - Make a scatter plot of gdpPercap vs. population colored by country
 >
-> **Advanced** Yesterday we learned how to do this using base R's subsetting. Do the same thing without the `filter` and `select` functions.
+> **Advanced** How would you determine the median population for the North American countries between 1970 and 1980?
+>
+> **Bonus** This can be done using base R's subsetting, but this class doesn't teach how. Do the original challenge without the `filter` and `select` functions. Feel free to consult Google, helpfiles, etc. to figure out how.
 > 
+
 
 #### `arrange()`
 
-You can order the rows of a data.frame by a variable using `arrange`. Suppose we want to see the most populous countries. Again, we wrap the results in `head` to just print the first few rows: 
+You can order the rows of a data.frame by a variable using `arrange`. Suppose we want to see the most populous countries: 
 
 
 ~~~{.r}
@@ -437,7 +461,7 @@ arrange(gapminder, desc(year), desc(gdpPercap))
 
 #### `mutate()`
 
-We have learned how to drop rows, drop columns, and rearrange rows. To make a new column we use the `mutate` function. As usual, the first argument is a data.frame. The second argument is the name of the new column you want to create, followed by an equal sign, followed by what to put in that column. You can reference other variables in the data.frame, and `mutate` will treat each row independently. E.g. we can calculate the total GDP of each country in each year by multiplying the per-capita GDP by the population. We pass the output of `mutate` to `head` to keep the display under control. How would we view the highest-total-gdp countries?
+We have learned how to drop rows, drop columns, and rearrange rows. To make a new column we use the `mutate` function. As usual, the first argument is a data.frame. The second argument is the name of the new column you want to create, followed by an equal sign, followed by what to put in that column. You can reference other variables in the data.frame, and `mutate` will treat each row independently. E.g. we can calculate the total GDP of each country in each year by multiplying the per-capita GDP by the population. 
 
 
 ~~~{.r}
@@ -463,6 +487,8 @@ mutate(gapminder, total_gdp = gdpPercap * pop)
 # ... with 1,694 more rows
 
 ~~~
+
+**Shoutout Q: How would we view the highest-total-gdp countries?**
 
 Note that didn't change gapminder: We didn't assign the output to anything, so it was just printed, with the new column. If we want to modify our gapminder data.frame, we can assign the output of `mutate` back to the gapminder variable, but be careful doing this -- if you make a mistake, you can't just re-run that line of code, you'll need to go back to loading the gapminder data.frame.
 
@@ -490,6 +516,10 @@ gapminder = mutate(gapminder,
 > c. $331
 > d. $339
 >
+> **Advanced**: Use dplyr functions and ggplot to plot per-capita GDP versus population for North American countries after 1970.
+> - Once you've made the graph, transform both axes to a log10 scale. There are two ways to do this, one by creating new columns in the data frame, and another using functions provided by ggplot to transform the axes. Implement both, in that order. Which do you prefer and why?
+>
+
 
 
 #### C'est ne pas une pipe
@@ -499,7 +529,7 @@ Suppose we want to look at all the countries where life expectancy is greater th
 
 ~~~{.r}
 lifeExpGreater80 = filter(gapminder, lifeExp > 80)
-arrange(lifeExpGreater80, gdpPercap)
+(lifeExpGreater80sorted = arrange(lifeExpGreater80, gdpPercap))
 ~~~
 
 
@@ -523,7 +553,27 @@ arrange(lifeExpGreater80, gdpPercap)
 
 ~~~
 
-In this case it doesn't much matter, but we make a whole new data.frame (`lifeExpGreater80`) and only use it once; that's a little wasteful of system resources, and it clutters our environment. If the data are large, that can be a big problem. There is a better way, and it makes both writing and reading the code easier. The pipe from the `magrittr` package (which is automatically installed and loaded with `dplyr` and `tidyverse`) takes the output of first line, and plugs it in as the first argument of the next line. Since many `tidyverse` functions expect a data.frame as the first argument and output a data.frame, this works fluidly.
+In this case it doesn't much matter, but we make a whole new data.frame (`lifeExpGreater80`) and only use it once; that's a little wasteful of system resources, and it clutters our environment. If the data are large, that can be a big problem. 
+
+Or, we could nest each function so that it appears on one line:
+
+
+~~~{.r}
+arrange(filter(gapminder, lifeExp > 80), gdpPercap))
+~~~
+
+
+
+~~~{.output}
+Error: <text>:1:52: unexpected ')'
+1: arrange(filter(gapminder, lifeExp > 80), gdpPercap))
+                                                       ^
+
+~~~
+
+This would become difficult to read if we are performing a number of operations that would require a repeated nesting. But...
+
+There is a better way, and it makes both writing and reading the code easier. The pipe from the `magrittr` package (which is automatically installed and loaded with `dplyr` and `tidyverse`) takes the output of first line, and plugs it in as the first argument of the next line. Since many `tidyverse` functions expect a data.frame as the first argument and output a data.frame, this works fluidly.
 
 
 ~~~{.r}
@@ -582,7 +632,6 @@ To demonstrate how it works, here are some examples where it's unnecessary.
 Whatever goes through the pipe becomes the first argument of the function after the pipe. This is convenient, because all `dplyr` functions produce a data.frame as their output and take a data.frame as the first argument. Since R ignores white-space, we can put each function on a new line, which RStudio will automatically indent, making everything easy to read. Now each line represents a step in a sequential operation. You can read this as "Take the gapminder data.frame, filter to the rows where lifeExp is greater than 80, and arrange by gdpPercap." 
 
 
-
 ~~~{.r}
 gapminder %>%
     filter(lifeExp > 80) %>%
@@ -610,13 +659,13 @@ gapminder %>%
 
 ~~~
 
-
 Making your code easier for humans to read will save you lots of time. The human reading it is usually future-you, and operations that seem simple when you're writing them will look like gibberish when you're three weeks removed from them, let alone three months or three years or another person. Make your code as easy to read as possible by using the pipe where appropriate, leaving white space, using descriptive variable names, being consistent with spacing and naming, and liberally commenting code.
 
 > #### Challenge: Data Reduction {.challenge}
 >
-> Copy the code you (or the instructor) wrote to solve the previous challenge  
+> Copy the code you (or the instructor) wrote to solve the previous MCQ Data Reduction challenge  
 > Rewrite it using pipes (i.e. no assignment and no nested functions)
+>
 >
 
 
@@ -652,7 +701,19 @@ gapminder %>%
 
 ~~~
 
-Note that `summarize` eliminates any other columns. Why? What else can it do? E.g. What country should it list for the year 1952!?
+**Shoutout Q: Note that `summarize` eliminates any other columns. Why? What else can it do? E.g. What country should it list for the year 1952!?**
+
+There are several different summary statistics that can be generated from our data. The R base package provides many built-in functions such as `mean`, `median`, `min`, `max`, and `range`.  By default, all **R functions operating on vectors that contains missing data will return NA**. It's a way to make sure that users know they have missing data, and make a conscious decision on how to deal with it. When dealing with simple statistics like the mean, the easiest way to ignore `NA` (the missing data) is to use `na.rm=TRUE` (`rm` stands for remove). An alternate option is to use the function `is.na()`, which evaluates to true if the value passed to it is not a number. This function is more useful as a part of a filter, where you can filter out everything that is not a number. For that purpose you would do something like
+
+
+~~~{.r}
+gapminder %>%
+  filter(!is.na(someColumn)) %>%
+  head
+~~~
+
+The `!` symbol negates it, so we're asking for everything that is not an `NA`. 
+
 
 We often want to calculate the number of entries within a group. E.g. we might wonder if our dataset is balanced by country. We can do this with the `n()` function, or `dplyr` provides a `count` function as a convenience:
 

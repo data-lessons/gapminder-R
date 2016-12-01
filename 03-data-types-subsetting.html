@@ -48,7 +48,7 @@
 </div>
 </section>
 <h3 id="loading-data">Loading data</h3>
-<p>We can load the dataset we just saved with the <code>load</code> function. Load needs the location of the saved file, provided as character string file-path, starting with the working directory. We won’t get into working directories now, except to say that when your project’s root directory will usually be your working directory. It is displayed at the top of your console pane in RStudio. File-paths should be provided relative to that location. So, to load the file we just saved:</p>
+<p>R has a variety functions to load specific kinds of data, e.g. <code>read.csv</code> to read a comma-separated value table. Two R-specific data-types are <code>.RDA</code> and <code>.RDS</code>. <code>.RDA</code> files, like the one you just saved, are created with the <code>save</code> function and accessed with the <code>load</code> function. Load needs the location of the saved file, provided as character string file-path, starting with the working directory. We won’t get into working directories now, except to say that RStudio’s projects makes this easier, by making the location of your project (where the <code>.Rproj</code> file is located) the default working directory. It is displayed at the top of your console pane in RStudio. File-paths should be provided relative to that location. So, to load the file we just saved:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">&#39;data/continents.RDA&#39;</span>)</code></pre></div>
 <h3 id="intro-to-data.frames">Intro to data.frames</h3>
 <p>Check your “Environment” tab – a new object called <code>continents</code> has appeared. If your environment is in “list” mode, switch to “grid” as it’s more informative. We can see that <code>continents</code> has Type data.frame and contains 6 observations of 4 variables. Click on the spreadsheet icon at far-right to view it.</p>
@@ -172,19 +172,16 @@ continents</code></pre></div>
 <div class="panel-body">
 <p>Similar to <code>c</code>, the <code>seq</code> function creates a vector: a <strong>seq</strong>uence of numbers.</p>
 <ul>
-<li>Your first task is to create a sequence of all the multiples of three from three to 300.</li>
-</ul>
-<p>Figure out how to do this. Some combination of playing with the function in the console and reading its helpfile (<code>?seq</code>) should work. Helpfiles are challenging at first, but it’s important to learn how to find the info you need in them. Hint: The arguments you need here are <code>from</code>, <code>to</code>, and <code>by</code>.</p>
-<ul>
+<li><p>Your first task is to create a sequence of all the multiples of three from three to 300. Figure out how to do this. Some combination of playing with the function in the console and reading its helpfile (<code>?seq</code>) should work. Helpfiles are challenging at first, but it’s important to learn how to find the info you need in them. Hint: The arguments you need here are <code>from</code>, <code>to</code>, and <code>by</code>.</p></li>
 <li>Store your sequence in a variable.</li>
 <li>Extract the 33rd entry from the sequence</li>
-<li><strong>Bonus</strong>: Create a vector with ten evenly-spaced integers from one to one-million. What is the sum of the second and ninth entries in this vector?</li>
-<li><strong>Super-Bonus</strong>: Returning to the multiples-of-three vector, what is the sum of numbers in positions that are not evenly divisible by three? That is the sum of the first, second, fourth, … entries.</li>
+<li><strong>Bonus</strong>: Create a vector with ten evenly-spaced numbers starting with one and ending with one-million. What is the sum of the second and ninth entries in this vector?</li>
+<li><p><strong>Super-Bonus</strong>: Returning to the multiples-of-three vector, what is the sum of the numbers in positions that are not evenly divisible by three? That is, the sum of the first, second, fourth, fifth, seventh, etc. entries.</p></li>
 </ul>
 </div>
 </section>
 <h4 id="subset-by-logical">Subset by logical</h4>
-<p>Note that the <code>continents</code> data frame contains the two most common kinds of variables: numbers (num) and strings (chr).</p>
+<p>Note that the <code>continents</code> data frame contains two common kinds of variables: numbers (num) and strings (chr).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(continents)</code></pre></div>
 <pre class="output"><code>&#39;data.frame&#39;:   6 obs. of  5 variables:
  $ continent        : chr  &quot;Africa&quot; &quot;Americas&quot; &quot;Antarctica&quot; &quot;Asia&quot; ...
@@ -193,7 +190,7 @@ continents</code></pre></div>
  $ percent_total_pop: num  15 14 0 60 11 0.4
  $ pop_density      : num  3.37e+01 2.21e+01 3.27e-04 9.50e+01 7.25e+01 ...
 </code></pre>
-<p>The third important data type in R is logicals. You saw this when making logical comparisons like <code>1 &gt; 0</code>. Logical data can only be <code>TRUE</code> or <code>FALSE</code> (or <code>NA</code> for missing).</p>
+<p>A third important data type in R is logicals. You saw this when making logical comparisons like <code>1 &gt; 0</code>. Logical data can only be <code>TRUE</code> or <code>FALSE</code> (or <code>NA</code> for missing; any variable type in R can have <code>NA</code>-missing values).</p>
 <p>Logical comparisons are vectorized like other things in R. Let’s find the highly populated continents, those with more than one-billion people. One-billion is 10^9, so we can write it as <code>1e9</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop &gt;<span class="st"> </span><span class="fl">1e9</span></code></pre></div>
 <pre class="output"><code>[1]  TRUE FALSE FALSE  TRUE FALSE FALSE
@@ -211,7 +208,8 @@ continents</code></pre></div>
 <p>How could you extract the names of the continents with more than one-billion people?</p>
 </div>
 </section>
-<p>Doing a logical test on one (or more) variables and using that to extract values from another is especially useful in the data frame context since all the observations are lined up on rows. For example to find the land-area of Africa, we can test the continent names for being Africa and then extract the area where that is true. Note that it is often useful to build code from the insight out, ie write the logical test first, then go left and write what you want to subset with it.</p>
+<p>Recall that in a data frame, each row constitutes a single observation. This makes it especially useful to test one column and use it to subset another – we often want the entries of some variable where a condition on another variable is met. For example, to find the land-area of Africa, we can test the continent names for being “Africa” and extract the area where that is true.</p>
+<p>Here as elsewhere, it is often useful to build code from the insight out, ie, write the logical test first, then go left and write what you want to subset with it.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">continents$area_km2[continents$continent ==<span class="st"> &quot;Africa&quot;</span>]</code></pre></div>
 <pre class="output"><code>[1] 30370000
 </code></pre>
@@ -246,7 +244,11 @@ continents</code></pre></div>
 <h4 id="challenge-read-csv-data"><span class="glyphicon glyphicon-pencil"></span>Challenge – read csv data</h4>
 </div>
 <div class="panel-body">
-<p>The gapminder data are available at <a href="https://raw.githubusercontent.com/resbaz/r-novice-gapminder-files/master/data/gapminder-FiveYearData.csv">this link</a>. - Right click on the link to “save file as…” - Save the .csv file in the <code>/data</code> directory of your project. - Read the data with the <code>read.csv</code> function and assign it to the variable <code>gapminder</code>. - Inspect the data.frame using the <code>summary</code> function. What is the most recent year for which we have data?</p>
+<p>The gapminder data are available at <a href="https://raw.githubusercontent.com/resbaz/r-novice-gapminder-files/master/data/gapminder-FiveYearData.csv">this link</a>.<br />
+- Right click on the link to “save file as…”<br />
+- Save the .csv file in the <code>/data</code> directory of your project.<br />
+- Read the data with the <code>read.csv</code> function and assign it to the variable <code>gapminder</code>.<br />
+- Inspect the data.frame using the <code>summary</code> function. What is the most recent year for which we have data?</p>
 <p><strong>Advanced challenge</strong></p>
 <p>Suppose you get a .csv file from a colleague in Europe. Because they use “,” (comma) as a decimal separator, they use “;” (semi-colons) to separate fields. How can you read it into R?</p>
 <p>Feel free to use the web and/or R’s helpfiles.</p>
