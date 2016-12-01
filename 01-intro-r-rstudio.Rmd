@@ -277,7 +277,8 @@ x <- x + 1
 > b. 3
 > c. 4
 > d. ::nothing::
-
+>
+> **Advanced** What do you think is the answer for "2" == 2? Why do you think this is? How about "2.0" == 2?
 
 #### Variable name conventions
 
