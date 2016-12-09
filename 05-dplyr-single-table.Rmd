@@ -219,7 +219,7 @@ In this case it doesn't much matter, but we make a whole new data.frame (`lifeEx
 Or, we could nest each function so that it appears on one line:
 
 ```{r filter and arrange assign oneline}
-arrange(filter(gapminder, lifeExp > 80), gdpPercap))
+arrange(filter(gapminder, lifeExp > 80), gdpPercap)
 ```
 
 This would become difficult to read if we are performing a number of operations that would require a repeated nesting. But...
