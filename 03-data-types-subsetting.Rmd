@@ -2,7 +2,7 @@
 layout: page
 title: R for reproducible scientific analysis
 subtitle: Vectors & Data frames
-minutes: 30
+minutes: 50
 ---
 
 ```{r, include=FALSE}
