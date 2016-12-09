@@ -2,7 +2,7 @@
 layout: page
 title: R for reproducible scientific analysis
 subtitle: Creating publication quality graphics
-minutes: 70
+minutes: 105 (1.75 hrs)
 ---
 
 
@@ -51,6 +51,33 @@ You only have to download the code once. But whenever you want to *use* a packag
 
 ~~~{.r}
 library(tidyverse)
+~~~
+
+
+
+~~~{.output}
+Loading tidyverse: ggplot2
+Loading tidyverse: tibble
+Loading tidyverse: tidyr
+Loading tidyverse: readr
+Loading tidyverse: purrr
+Loading tidyverse: dplyr
+
+~~~
+
+
+
+~~~{.output}
+Conflicts with tidy packages ----------------------------------------------
+
+~~~
+
+
+
+~~~{.output}
+filter(): dplyr, stats
+lag():    dplyr, stats
+
 ~~~
 
 

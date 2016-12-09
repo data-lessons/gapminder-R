@@ -1,8 +1,8 @@
 ---
 layout: page
-title: R for Reproducible Scientific Analysis
-subtitle: Dynamic Reports with R Markdown
-minutes: 45
+title: R for reproducible scientific analysis
+subtitle: Dynamic reports with knitr
+minutes: 30
 ---
 
 
@@ -15,9 +15,9 @@ minutes: 45
 
 ### The What and Why of R Markdown
 
-R Markdown is a way to keep our notes, code, and results organized in a single document. It is a great tool for literate programming -- the idea that your code should be readable by humans as well as computers. It keeps your writing and results together, so if you collect some new data or change how you clean the data, you just have to re-compile the document and the results are up to date.
+R Markdown is a way to keep our notes, code, and results organized in a single document. It is a great tool for "reproducible research" -- the idea that your research output should be easy for others to reproduce. It keeps your writing and results together, so if you collect some new data or change how you clean the data, you just have to re-compile the document and you're up to date.
 
-One point of confusion is that R Markdown is a syntax for writing dynamic documents and `rmarkdown` is an R package that allows one to `render()` an R Markdown document. Under the hood, the `rmarkdown::render()` function calls `knitr::knit()` to convert the R Markdown file into a Markdown file, and then it calls the utility `pandoc` to convert the intermediate Markdown file into a variety of output formats. Output formats include html, pdf (if you have LaTeX installed), Microsoft Word, and many others. You can write websites in R Markdown, articles that conform to publishing standards, CVs, presentations... People have even written dissertations in R Markdown. The syntax of the language is designed to be simple, but you still get high quality output.
+An R Markdown file is a plain text file containing content in a simple document markup language called *markdown* interspersed with R code blocks. R Markdown files can be converted to html, pdf (if you have LaTeX on your machine), or Word files for dissemination. You can write websites in R Markdown, articles that conform to publishing standards, CVs, presentations... People have even written dissertations in RMarkdown. The syntax of the language is designed to be super simple, but you still get high quality output.
 
 > ## Challenge - Render an R Markdown document {.challenge}
 > 
@@ -79,12 +79,11 @@ After the header, there is a mix of plain-text, formatted with markdown syntax, 
 > ## Challenge - Practice writing Markdown {.challenge}
 > 
 > - In RStudio, create a new R Markdown file.
-> - Try to write the Markdown that when rendered turns into this:
+> - Write a top level section heading with the content `Text formatting`.
+> - Under the heading write `R Markdown makes writing easy and fun`. Make the word `easy` italic and the word `fun` bold.
+> - Create another top level section heading with the content `Lists are easy`
+> - Under the heading write a numbered list of your four favorite foods.
 > 
-> Markdown syntax is plain and __bold__. I particularly like:
-> 
-> 1. enumerated lists, and
-> 2. [links](https://www.google.com/)
 
 #### Code Chunks and Inline Code
 
