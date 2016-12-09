@@ -13,3 +13,4 @@ _site
 .DS_Store
 .Rproj.user
 .httr-oauth
+04-ggplot_cache
