@@ -2,7 +2,7 @@
 layout: page
 title: R for reproducible scientific analysis
 subtitle: Multi-Table Joins
-minutes: 20
+minutes: ?20
 ---
 
 ```{r, include=FALSE}

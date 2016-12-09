@@ -2,7 +2,7 @@
 layout: page
 title: R for reproducible scientific analysis
 subtitle: Tidy Data
-minutes: 20
+minutes: 75
 ---
 
 ```{r, include=FALSE}

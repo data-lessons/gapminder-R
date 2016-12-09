@@ -2,7 +2,7 @@
 layout: page
 title: R for reproducible scientific analysis
 subtitle: Statistical Models
-minutes: 30
+minutes: 45
 ---
 
 ```{r setup, include = FALSE}
