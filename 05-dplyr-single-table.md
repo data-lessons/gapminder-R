@@ -2,7 +2,7 @@
 layout: page
 title: R for reproducible scientific analysis
 subtitle: Manipulating data.frames
-minutes: 90
+minutes: 130
 ---
 
 
@@ -31,13 +31,6 @@ Loading tidyverse: tidyr
 Loading tidyverse: readr
 Loading tidyverse: purrr
 Loading tidyverse: dplyr
-
-~~~
-
-
-
-~~~{.output}
-Warning: package 'ggplot2' was built under R version 3.3.2
 
 ~~~
 
@@ -592,15 +585,27 @@ Or, we could nest each function so that it appears on one line:
 
 
 ~~~{.r}
-arrange(filter(gapminder, lifeExp > 80), gdpPercap))
+arrange(filter(gapminder, lifeExp > 80), gdpPercap)
 ~~~
 
 
 
 ~~~{.output}
-Error: <text>:1:52: unexpected ')'
-1: arrange(filter(gapminder, lifeExp > 80), gdpPercap))
-                                                       ^
+# A tibble: 21 × 8
+           country  year       pop continent lifeExp gdpPercap
+             <chr> <int>     <dbl>     <chr>   <dbl>     <dbl>
+1      New Zealand  2007   4115771   Oceania  80.204  25185.01
+2           Israel  2007   6426679      Asia  80.745  25523.28
+3            Italy  2002  57926999    Europe  80.240  27968.10
+4            Italy  2007  58147733    Europe  80.546  28569.72
+5            Japan  2002 127065841      Asia  82.000  28604.59
+6            Japan  1997 125956499      Asia  80.690  28816.58
+7            Spain  2007  40448191    Europe  80.941  28821.06
+8           Sweden  2002   8954175    Europe  80.040  29341.63
+9  Hong Kong China  2002   6762476      Asia  81.495  30209.02
+10          France  2007  61083916    Europe  80.657  30470.02
+# ... with 11 more rows, and 2 more variables: total_gdp <dbl>,
+#   log_gdp <dbl>
 
 ~~~
 

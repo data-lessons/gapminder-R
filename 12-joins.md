@@ -2,7 +2,7 @@
 layout: page
 title: R for reproducible scientific analysis
 subtitle: Multi-Table Joins
-minutes: 20
+minutes: ?20
 ---
 
 
@@ -64,8 +64,7 @@ left_join(gapminder, continents)
 
 
 ~~~{.output}
-Source: local data frame [1,704 x 9]
-
+# A tibble: 1,704 × 9
        country  year      pop continent lifeExp gdpPercap area_km2
          <chr> <int>    <dbl>     <chr>   <dbl>     <dbl>    <dbl>
 1  Afghanistan  1952  8425333      Asia  28.801  779.4453 43820000
@@ -78,8 +77,8 @@ Source: local data frame [1,704 x 9]
 8  Afghanistan  1987 13867957      Asia  40.822  852.3959 43820000
 9  Afghanistan  1992 16317921      Asia  41.674  649.3414 43820000
 10 Afghanistan  1997 22227415      Asia  41.763  635.3414 43820000
-..         ...   ...      ...       ...     ...       ...      ...
-Variables not shown: population <dbl>, percent_total_pop <dbl>.
+# ... with 1,694 more rows, and 2 more variables: population <dbl>,
+#   percent_total_pop <dbl>
 
 ~~~
 
@@ -92,8 +91,7 @@ right_join(gapminder, continents)
 
 
 ~~~{.output}
-Source: local data frame [1,705 x 9]
-
+# A tibble: 1,705 × 9
    country  year      pop continent lifeExp gdpPercap area_km2 population
      <chr> <int>    <dbl>     <chr>   <dbl>     <dbl>    <dbl>      <dbl>
 1  Algeria  1952  9279525    Africa  43.077  2449.008 30370000 1022234000
@@ -106,8 +104,7 @@ Source: local data frame [1,705 x 9]
 8  Algeria  1987 23254956    Africa  65.799  5681.359 30370000 1022234000
 9  Algeria  1992 26298373    Africa  67.744  5023.217 30370000 1022234000
 10 Algeria  1997 29072015    Africa  69.152  4797.295 30370000 1022234000
-..     ...   ...      ...       ...     ...       ...      ...        ...
-Variables not shown: percent_total_pop <dbl>.
+# ... with 1,695 more rows, and 1 more variables: percent_total_pop <dbl>
 
 ~~~
 
@@ -122,12 +119,11 @@ right_join(gapminder, continents) %>%
 
 
 ~~~{.output}
-Source: local data frame [1 x 9]
-
+# A tibble: 1 × 9
   country  year   pop  continent lifeExp gdpPercap area_km2 population
     <chr> <int> <dbl>      <chr>   <dbl>     <dbl>    <dbl>      <dbl>
-1      NA    NA    NA Antarctica      NA        NA 13720000       4490
-Variables not shown: percent_total_pop <dbl>.
+1    <NA>    NA    NA Antarctica      NA        NA 13720000       4490
+# ... with 1 more variables: percent_total_pop <dbl>
 
 ~~~
 
@@ -142,8 +138,7 @@ right_join(gapminder, continents) %>%
 
 
 ~~~{.output}
-Source: local data frame [1,705 x 9]
-
+# A tibble: 1,705 × 9
    country  year country_pop continent lifeExp gdpPercap area_km2
      <chr> <int>       <dbl>     <chr>   <dbl>     <dbl>    <dbl>
 1  Algeria  1952     9279525    Africa  43.077  2449.008 30370000
@@ -156,8 +151,8 @@ Source: local data frame [1,705 x 9]
 8  Algeria  1987    23254956    Africa  65.799  5681.359 30370000
 9  Algeria  1992    26298373    Africa  67.744  5023.217 30370000
 10 Algeria  1997    29072015    Africa  69.152  4797.295 30370000
-..     ...   ...         ...       ...     ...       ...      ...
-Variables not shown: continent_pop <dbl>, percent_total_pop <dbl>.
+# ... with 1,695 more rows, and 2 more variables: continent_pop <dbl>,
+#   percent_total_pop <dbl>
 
 ~~~
 
