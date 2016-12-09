@@ -248,10 +248,9 @@ gapminder %>%
 
 Making your code easier for humans to read will save you lots of time. The human reading it is usually future-you, and operations that seem simple when you're writing them will look like gibberish when you're three weeks removed from them, let alone three months or three years or another person. Make your code as easy to read as possible by using the pipe where appropriate, leaving white space, using descriptive variable names, being consistent with spacing and naming, and liberally commenting code.
 
-> #### Challenge: Data Reduction {.challenge}
+> #### Challenge: Data Reduction with Pipes {.challenge}
 >
-> Copy the code you (or the instructor) wrote to solve the previous MCQ Data Reduction challenge  
-> Rewrite it using pipes (i.e. no assignment and no nested functions)
+> Copy the code you (or the instructor) wrote to solve the previous MCQ Data Reduction challenge. Rewrite it using pipes (i.e. no assignment and no nested functions)
 >
 >
 
@@ -339,3 +338,155 @@ gapminder %>%
 #### Resources
 
 That is the core of `dplyr`'s functionality, but it does more. RStudio makes a great [cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) that covers all the `dplyr` functions we just learned, plus what we will learn in the next lesson: keeping data tidy.
+
+
+## Challenge solutions
+
+> #### Solution to challenge Subsetting {.challenge}
+>
+> - Subset the gapminder data to only Oceania countries post-1980.
+> - Remove the continent column
+> - Make a scatter plot of gdpPercap vs. population colored by country
+>
+> ```{r challenge subsetting a}
+> oc1980 = filter(gapminder, continent == "Oceania" & year > 1980)
+> oc1980less = select(oc1980, -continent)
+> library('ggplot2')
+> ggplot(oc1980less, aes(x = gdpPercap, y = lifeExp, color = country)) +
+>   geom_point()
+> ```
+>
+> **Advanced** How would you determine the median population for the North American countries between 1970 and 1980?
+>
+> ```{r challenge subsetting b}
+> noAm = filter(gapminder, country == "United States" | 
+>                 country == "Canada" | country == "Mexico" | 
+>                 country == "Puerto Rico" & (year > 1970 & year < 1980)
+>               )
+> noAmPop = select(noAm, pop)
+> median(noAmPop)
+> noAmPop
+> as.integer(noAmPop)
+> median(unlist(noAmPop))
+> ```
+>
+> **Bonus** This can be done using base R's subsetting, but this class doesn't teach how. Do the original challenge without the `filter` and `select` functions. Feel free to consult Google, helpfiles, etc. to figure out how.
+> 
+> ```{r challenge subsetting c}
+> noAm2 = gapminder[(gapminder$country == "United States") |
+>                     (gapminder$country == "Mexico") |
+>                     (gapminder$country == "Canada") |
+>                     (gapminder$country == "Puerto Rico") &
+>                     ((gapminder$year > 1970) &
+>                     (gapminder$year < 1980)),]
+> median(noAm2$pop)
+> ```
+>
+
+> #### Solution to challenge MCQ: Data Reduction {.challenge}
+>
+> Produce a data.frame with only the names, years, and per-capita GDP of countries where per capita gdp is less than a dollar a day sorted from most- to least-recent.
+>
+> - Tip: The `gdpPercap` variable is annual gdp. You'll need to adjust.
+> - Tip: For complex tasks, it often helps to use pencil and paper to write/draw/map the various steps needed and how they fit together before writing any code.
+> 
+> What is the annual per-capita gdp, rounded to the nearest dollar, of the first row in the data.frame?
+>
+> a. $278
+> b. $312
+> c. $331
+> d. $339
+> 
+> ```{r data reduction A}
+> dailyGDP = mutate(gapminder, onedayGDP = gdpPercap / 365)
+> dailyGDP = filter(dailyGDP, onedayGDP < 1)
+> dailyGDP = select(dailyGDP, country, year, gdpPercap)
+> dailyGDP[1,]
+> ```
+>
+> **Advanced**: Use dplyr functions and ggplot to plot per-capita GDP versus population for North American countries after 1970.
+> - Once you've made the graph, transform both axes to a log10 scale. There are two ways to do this, one by creating new columns in the data frame, and another using functions provided by ggplot to transform the axes. Implement both, in that order. Which do you prefer and why?
+>
+> ```{r data reduction B}
+> noAm = filter(gapminder, country == "United States" | 
+>                 country == "Canada" | country == "Mexico" | 
+>                 country == "Puerto Rico" & year > 1970
+>               )
+> ggplot(noAm, aes(x = gdpPercap, y = pop, color = country)) +
+>   geom_point() + 
+>   scale_x_log10() +
+>   scale_y_log10()
+> # OR
+> noAmlog10 = mutate(noAm, log10pop = log10(pop),
+>                    log10gdp = log10(gdpPercap))
+> ggplot(noAmlog10, aes(x = log10gdp, y = log10pop, color = country)) +
+>   geom_point()
+> ```
+>
+
+> #### Challenge: Data Reduction with Pipes {.challenge}
+>
+> Copy the code you (or the instructor) wrote to solve the previous MCQ Data Reduction challenge. Rewrite it using pipes (i.e. no assignment and no nested functions)
+>
+> ```{r data reduction pipes}
+> # previous challenge with pipes
+> dailyGDP = mutate(gapminder, onedayGDP = gdpPercap / 365)
+> dailyGDP = filter(dailyGDP, onedayGDP < 1)
+> dailyGDP = select(dailyGDP, country, year, gdpPercap)
+> # BECOMES
+> smallGDP = gapminder %>%
+>   mutate(onedayGDP = gdpPercap / 365) %>%
+>   filter(onedayGDP < 1) %>%
+>   select(country, year, gdpPercap)
+> smallGDP[1,]
+> # OR, more fancy (without an intermediate temp variable)
+> (gapminder %>%
+>   mutate(onedayGDP = gdpPercap / 365) %>%
+>   filter(onedayGDP < 1) %>%
+>   select(country, year, gdpPercap))[1,]
+> ```
+>
+
+> #### Challenge -- Part 1 {.challenge}
+>
+> - Calculate a new column: the total GDP of each country in each year. 
+> - Calculate the variance -- `var()` of countries' gdps in each year.
+> - Is country-level GDP getting more or less equal over time?
+> - Plot your findings.
+> 
+> ```{r challenge LessonEnd part1}
+> varGDP = gapminder %>%
+>   mutate(totalGDP = gdpPercap * pop) %>%
+>   group_by(year) %>%
+>   summarize(varTotGDP = var(totalGDP))
+> ggplot(varGDP, aes(x = year, y = varTotGDP)) +
+>   geom_point()
+> ```
+>
+
+> #### Challenge -- Part 2 {.challenge}
+> 
+> - Modify the code you just wrote to calculate the variance in both country-level GDP and per-capita GDP.
+> - Do both measures support the conclusion you arrived at above?
+> 
+> ```{r challenge LessonEnd part2}
+> varGDP = gapminder %>%
+>   mutate(totalGDP = gdpPercap * pop) %>%
+>   group_by(year) %>%
+>   summarize(varTotGDP = var(totalGDP),
+>             varPerCapGDP = var(gdpPercap)
+>             )
+> ggplot(varGDP) +
+>   geom_point(color = "red", aes(x = year, y = varTotGDP)) +
+>   geom_point(color = "blue", aes(x = year, y = varPerCapGDP))
+> ```
+
+> #### Challenge -- Part 3 (Advanced) {.challenge}
+> 
+> The above plotting exercise asked you to plot summarized information, but it is generally preferable to avoid summarizing before plotting. Can you generate a plot that shows the information you calculated in Part 1 without summarizing?  
+>
+> - Hint: `ggplot` interprets the `gapminder$year` as a numeric variable, which may be okay, but there are some plot types for which you need `ggplot` to see `gapminder$year` as a category. You can accomplish this by wrapping it in `factor` -- e.g. `ggplot(gapminder, aes(x = factor(year) ...`
+>
+
+
+
