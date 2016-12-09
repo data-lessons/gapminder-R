@@ -49,6 +49,8 @@ lag():    dplyr, stats
 
 ~~~
 
+Those messages and conflicts are normal. The conflicts are R telling you that there are two packages with functions named "filter" and "lag". When R gives you red text, it's not always a bad thing, but it does mean you should pay attention and try to understand what it's trying to tell you.
+
 Remember that you only have to install each package once (per computer), but you have to load them for each R session in which you want to use them.
 
 You also have to load any data you want to use each time you start a new R session. So, if it's not already loaded, read in the gapminder data. We're going to use tidyverse's `read_csv` instead of base R's `read.csv` here. It has a few nice features; the most obvious is that it makes a special kind of data.frame that only prints the first ten rows instead of all 1704.
@@ -699,10 +701,9 @@ gapminder %>%
 
 Making your code easier for humans to read will save you lots of time. The human reading it is usually future-you, and operations that seem simple when you're writing them will look like gibberish when you're three weeks removed from them, let alone three months or three years or another person. Make your code as easy to read as possible by using the pipe where appropriate, leaving white space, using descriptive variable names, being consistent with spacing and naming, and liberally commenting code.
 
-> #### Challenge: Data Reduction {.challenge}
+> #### Challenge: Data Reduction with Pipes {.challenge}
 >
-> Copy the code you (or the instructor) wrote to solve the previous MCQ Data Reduction challenge  
-> Rewrite it using pipes (i.e. no assignment and no nested functions)
+> Copy the code you (or the instructor) wrote to solve the previous MCQ Data Reduction challenge. Rewrite it using pipes (i.e. no assignment and no nested functions)
 >
 >
 
@@ -746,8 +747,7 @@ There are several different summary statistics that can be generated from our da
 
 ~~~{.r}
 gapminder %>%
-  filter(!is.na(someColumn)) %>%
-  head
+  filter(!is.na(someColumn)) 
 ~~~
 
 The `!` symbol negates it, so we're asking for everything that is not an `NA`. 
@@ -925,3 +925,283 @@ Groups: continent [?]
 #### Resources
 
 That is the core of `dplyr`'s functionality, but it does more. RStudio makes a great [cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) that covers all the `dplyr` functions we just learned, plus what we will learn in the next lesson: keeping data tidy.
+
+
+## Challenge solutions
+
+> #### Solution to challenge Subsetting {.challenge}
+>
+> - Subset the gapminder data to only Oceania countries post-1980.
+> - Remove the continent column
+> - Make a scatter plot of gdpPercap vs. population colored by country
+>
+> 
+> ~~~{.r}
+> oc1980 = filter(gapminder, continent == "Oceania" & year > 1980)
+> oc1980less = select(oc1980, -continent)
+> library('ggplot2')
+> ggplot(oc1980less, aes(x = gdpPercap, y = lifeExp, color = country)) +
+>   geom_point()
+> ~~~
+> 
+> <img src="fig/challenge subsetting a-1.png" title="plot of chunk challenge subsetting a" alt="plot of chunk challenge subsetting a" style="display: block; margin: auto;" />
+>
+> **Advanced** How would you determine the median population for the North American countries between 1970 and 1980?
+>
+> 
+> ~~~{.r}
+> noAm = filter(gapminder, country == "United States" | 
+>                 country == "Canada" | country == "Mexico" | 
+>                 country == "Puerto Rico" & (year > 1970 & year < 1980)
+>               )
+> noAmPop = select(noAm, pop)
+> median(noAmPop)
+> ~~~
+> 
+> 
+> 
+> ~~~{.output}
+> Error in median.default(noAmPop): need numeric data
+> 
+> ~~~
+> 
+> 
+> 
+> ~~~{.r}
+> noAmPop
+> ~~~
+> 
+> 
+> 
+> ~~~{.output}
+> # A tibble: 38 × 1
+>         pop
+>       <dbl>
+> 1  14785584
+> 2  17010154
+> 3  18985849
+> 4  20819767
+> 5  22284500
+> 6  23796400
+> 7  25201900
+> 8  26549700
+> 9  28523502
+> 10 30305843
+> # ... with 28 more rows
+> 
+> ~~~
+> 
+> 
+> 
+> ~~~{.r}
+> as.integer(noAmPop)
+> ~~~
+> 
+> 
+> 
+> ~~~{.output}
+> Error in eval(expr, envir, enclos): (list) object cannot be coerced to type 'integer'
+> 
+> ~~~
+> 
+> 
+> 
+> ~~~{.r}
+> median(unlist(noAmPop))
+> ~~~
+> 
+> 
+> 
+> ~~~{.output}
+> [1] 59872135
+> 
+> ~~~
+>
+> **Bonus** This can be done using base R's subsetting, but this class doesn't teach how. Do the original challenge without the `filter` and `select` functions. Feel free to consult Google, helpfiles, etc. to figure out how.
+> 
+> 
+> ~~~{.r}
+> noAm2 = gapminder[(gapminder$country == "United States") |
+>                     (gapminder$country == "Mexico") |
+>                     (gapminder$country == "Canada") |
+>                     (gapminder$country == "Puerto Rico") &
+>                     ((gapminder$year > 1970) &
+>                     (gapminder$year < 1980)),]
+> median(noAm2$pop)
+> ~~~
+> 
+> 
+> 
+> ~~~{.output}
+> [1] 59872135
+> 
+> ~~~
+>
+
+> #### Solution to challenge MCQ: Data Reduction {.challenge}
+>
+> Produce a data.frame with only the names, years, and per-capita GDP of countries where per capita gdp is less than a dollar a day sorted from most- to least-recent.
+>
+> - Tip: The `gdpPercap` variable is annual gdp. You'll need to adjust.
+> - Tip: For complex tasks, it often helps to use pencil and paper to write/draw/map the various steps needed and how they fit together before writing any code.
+> 
+> What is the annual per-capita gdp, rounded to the nearest dollar, of the first row in the data.frame?
+>
+> a. $278
+> b. $312
+> c. $331
+> d. $339
+> 
+> 
+> ~~~{.r}
+> dailyGDP = mutate(gapminder, onedayGDP = gdpPercap / 365)
+> dailyGDP = filter(dailyGDP, onedayGDP < 1)
+> dailyGDP = select(dailyGDP, country, year, gdpPercap)
+> dailyGDP[1,]
+> ~~~
+> 
+> 
+> 
+> ~~~{.output}
+> # A tibble: 1 × 3
+>   country  year gdpPercap
+>     <chr> <int>     <dbl>
+> 1 Burundi  1952  339.2965
+> 
+> ~~~
+>
+> **Advanced**: Use dplyr functions and ggplot to plot per-capita GDP versus population for North American countries after 1970.
+> - Once you've made the graph, transform both axes to a log10 scale. There are two ways to do this, one by creating new columns in the data frame, and another using functions provided by ggplot to transform the axes. Implement both, in that order. Which do you prefer and why?
+>
+> 
+> ~~~{.r}
+> noAm = filter(gapminder, country == "United States" | 
+>                 country == "Canada" | country == "Mexico" | 
+>                 country == "Puerto Rico" & year > 1970
+>               )
+> ggplot(noAm, aes(x = gdpPercap, y = pop, color = country)) +
+>   geom_point() + 
+>   scale_x_log10() +
+>   scale_y_log10()
+> ~~~
+> 
+> <img src="fig/data reduction B-1.png" title="plot of chunk data reduction B" alt="plot of chunk data reduction B" style="display: block; margin: auto;" />
+> 
+> ~~~{.r}
+> # OR
+> noAmlog10 = mutate(noAm, log10pop = log10(pop),
+>                    log10gdp = log10(gdpPercap))
+> ggplot(noAmlog10, aes(x = log10gdp, y = log10pop, color = country)) +
+>   geom_point()
+> ~~~
+> 
+> <img src="fig/data reduction B-2.png" title="plot of chunk data reduction B" alt="plot of chunk data reduction B" style="display: block; margin: auto;" />
+>
+
+> #### Challenge: Data Reduction with Pipes {.challenge}
+>
+> Copy the code you (or the instructor) wrote to solve the previous MCQ Data Reduction challenge. Rewrite it using pipes (i.e. no assignment and no nested functions)
+>
+> 
+> ~~~{.r}
+> # previous challenge with pipes
+> dailyGDP = mutate(gapminder, onedayGDP = gdpPercap / 365)
+> dailyGDP = filter(dailyGDP, onedayGDP < 1)
+> dailyGDP = select(dailyGDP, country, year, gdpPercap)
+> # BECOMES
+> smallGDP = gapminder %>%
+>   mutate(onedayGDP = gdpPercap / 365) %>%
+>   filter(onedayGDP < 1) %>%
+>   select(country, year, gdpPercap)
+> smallGDP[1,]
+> ~~~
+> 
+> 
+> 
+> ~~~{.output}
+> # A tibble: 1 × 3
+>   country  year gdpPercap
+>     <chr> <int>     <dbl>
+> 1 Burundi  1952  339.2965
+> 
+> ~~~
+> 
+> 
+> 
+> ~~~{.r}
+> # OR, more fancy (without an intermediate temp variable)
+> (gapminder %>%
+>   mutate(onedayGDP = gdpPercap / 365) %>%
+>   filter(onedayGDP < 1) %>%
+>   select(country, year, gdpPercap))[1,]
+> ~~~
+> 
+> 
+> 
+> ~~~{.output}
+> # A tibble: 1 × 3
+>   country  year gdpPercap
+>     <chr> <int>     <dbl>
+> 1 Burundi  1952  339.2965
+> 
+> ~~~
+>
+
+> #### Challenge -- Part 1 {.challenge}
+>
+> - Calculate a new column: the total GDP of each country in each year. 
+> - Calculate the variance -- `var()` of countries' gdps in each year.
+> - Is country-level GDP getting more or less equal over time?
+> - Plot your findings.
+> 
+> 
+> ~~~{.r}
+> varGDP = gapminder %>%
+>   mutate(totalGDP = gdpPercap * pop) %>%
+>   group_by(year) %>%
+>   summarize(varTotGDP = var(totalGDP))
+> ggplot(varGDP, aes(x = year, y = varTotGDP)) +
+>   geom_point()
+> ~~~
+> 
+> <img src="fig/challenge LessonEnd part1-1.png" title="plot of chunk challenge LessonEnd part1" alt="plot of chunk challenge LessonEnd part1" style="display: block; margin: auto;" />
+>
+
+> #### Challenge -- Part 2 {.challenge}
+> 
+> - Modify the code you just wrote to calculate the variance in both country-level GDP and per-capita GDP.
+> - Do both measures support the conclusion you arrived at above?
+> 
+> 
+> ~~~{.r}
+> varGDP = gapminder %>%
+>   mutate(totalGDP = gdpPercap * pop) %>%
+>   group_by(year) %>%
+>   summarize(varTotGDP = var(totalGDP),
+>             varPerCapGDP = var(gdpPercap)
+>             )
+> ggplot(varGDP) +
+>   geom_point(color = "red", aes(x = year, y = varTotGDP)) +
+>   geom_point(color = "blue", aes(x = year, y = varPerCapGDP))
+> ~~~
+> 
+> <img src="fig/challenge LessonEnd part2-1.png" title="plot of chunk challenge LessonEnd part2" alt="plot of chunk challenge LessonEnd part2" style="display: block; margin: auto;" />
+
+> #### Challenge -- Part 3 (Advanced) {.challenge}
+> 
+> The above plotting exercise asked you to plot summarized information, but it is generally preferable to avoid summarizing before plotting. Can you generate a plot that shows the information you calculated in Part 1 without summarizing?  
+>
+> - Hint: `ggplot` interprets the `gapminder$year` as a numeric variable, which may be okay, but there are some plot types for which you need `ggplot` to see `gapminder$year` as a category. You can accomplish this by wrapping it in `factor` -- e.g. `ggplot(gapminder, aes(x = factor(year) ...`
+>
+>
+> 
+> ~~~{.r}
+> gapminder %>%
+>   mutate(totalGDP = gdpPercap * pop) %>%
+> ggplot(aes(x = factor(year), y = totalGDP)) +
+>   geom_violin() +
+>   scale_y_log10() 
+> ~~~
+> 
+> <img src="fig/challenge LessonEnd part3-1.png" title="plot of chunk challenge LessonEnd part3" alt="plot of chunk challenge LessonEnd part3" style="display: block; margin: auto;" />
+>

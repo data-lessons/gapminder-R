@@ -19,9 +19,11 @@ It is an often bemoaned fact that a data scientist spends much, and often most, 
 
 Enter `dplyr`, a package for making data manipulation easier. More on `dplyr` later. `dplyr` is part of `tidyverse`, so it is already installed on your machine. You can load it individually, or with the other tidyverse packages like this:
 
-```{r}
+```{r, warning=FALSE}
 library(tidyverse)
 ```
+
+Those messages and conflicts are normal. The conflicts are R telling you that there are two packages with functions named "filter" and "lag". When R gives you red text, it's not always a bad thing, but it does mean you should pay attention and try to understand what it's trying to tell you.
 
 Remember that you only have to install each package once (per computer), but you have to load them for each R session in which you want to use them.
 
@@ -271,8 +273,7 @@ There are several different summary statistics that can be generated from our da
 
 ```{r isna, purl = FALSE, eval=FALSE}
 gapminder %>%
-  filter(!is.na(someColumn)) %>%
-  head
+  filter(!is.na(someColumn)) 
 ```
 
 The `!` symbol negates it, so we're asking for everything that is not an `NA`. 
@@ -487,6 +488,12 @@ That is the core of `dplyr`'s functionality, but it does more. RStudio makes a g
 >
 > - Hint: `ggplot` interprets the `gapminder$year` as a numeric variable, which may be okay, but there are some plot types for which you need `ggplot` to see `gapminder$year` as a category. You can accomplish this by wrapping it in `factor` -- e.g. `ggplot(gapminder, aes(x = factor(year) ...`
 >
-
-
-
+>
+> ```{r challenge LessonEnd part3, fig.width=8}
+> gapminder %>%
+>   mutate(totalGDP = gdpPercap * pop) %>%
+> ggplot(aes(x = factor(year), y = totalGDP)) +
+>   geom_violin() +
+>   scale_y_log10() 
+>  ```
+>

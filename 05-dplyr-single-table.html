@@ -54,6 +54,7 @@ Loading tidyverse: dplyr
 <pre class="output"><code>filter(): dplyr, stats
 lag():    dplyr, stats
 </code></pre>
+<p>Those messages and conflicts are normal. The conflicts are R telling you that there are two packages with functions named “filter” and “lag”. When R gives you red text, it’s not always a bad thing, but it does mean you should pay attention and try to understand what it’s trying to tell you.</p>
 <p>Remember that you only have to install each package once (per computer), but you have to load them for each R session in which you want to use them.</p>
 <p>You also have to load any data you want to use each time you start a new R session. So, if it’s not already loaded, read in the gapminder data. We’re going to use tidyverse’s <code>read_csv</code> instead of base R’s <code>read.csv</code> here. It has a few nice features; the most obvious is that it makes a special kind of data.frame that only prints the first ten rows instead of all 1704.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapminder &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&#39;data/gapminder-FiveYearData.csv&#39;</span>)
@@ -468,11 +469,10 @@ USdata</code></pre></div>
 <p>Making your code easier for humans to read will save you lots of time. The human reading it is usually future-you, and operations that seem simple when you’re writing them will look like gibberish when you’re three weeks removed from them, let alone three months or three years or another person. Make your code as easy to read as possible by using the pipe where appropriate, leaving white space, using descriptive variable names, being consistent with spacing and naming, and liberally commenting code.</p>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
-<h4 id="challenge-data-reduction"><span class="glyphicon glyphicon-pencil"></span>Challenge: Data Reduction</h4>
+<h4 id="challenge-data-reduction-with-pipes"><span class="glyphicon glyphicon-pencil"></span>Challenge: Data Reduction with Pipes</h4>
 </div>
 <div class="panel-body">
-<p>Copy the code you (or the instructor) wrote to solve the previous MCQ Data Reduction challenge<br />
-Rewrite it using pipes (i.e. no assignment and no nested functions)</p>
+<p>Copy the code you (or the instructor) wrote to solve the previous MCQ Data Reduction challenge. Rewrite it using pipes (i.e. no assignment and no nested functions)</p>
 </div>
 </section>
 <h4 id="summarize"><code>summarize()</code></h4>
@@ -499,8 +499,7 @@ Rewrite it using pipes (i.e. no assignment and no nested functions)</p>
 <p><strong>Shoutout Q: Note that <code>summarize</code> eliminates any other columns. Why? What else can it do? E.g. What country should it list for the year 1952!?</strong></p>
 <p>There are several different summary statistics that can be generated from our data. The R base package provides many built-in functions such as <code>mean</code>, <code>median</code>, <code>min</code>, <code>max</code>, and <code>range</code>. By default, all <strong>R functions operating on vectors that contains missing data will return NA</strong>. It’s a way to make sure that users know they have missing data, and make a conscious decision on how to deal with it. When dealing with simple statistics like the mean, the easiest way to ignore <code>NA</code> (the missing data) is to use <code>na.rm=TRUE</code> (<code>rm</code> stands for remove). An alternate option is to use the function <code>is.na()</code>, which evaluates to true if the value passed to it is not a number. This function is more useful as a part of a filter, where you can filter out everything that is not a number. For that purpose you would do something like</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapminder %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(!<span class="kw">is.na</span>(someColumn)) %&gt;%
-<span class="st">  </span>head</code></pre></div>
+<span class="st">  </span><span class="kw">filter</span>(!<span class="kw">is.na</span>(someColumn)) </code></pre></div>
 <p>The <code>!</code> symbol negates it, so we’re asking for everything that is not an <code>NA</code>.</p>
 <p>We often want to calculate the number of entries within a group. E.g. we might wonder if our dataset is balanced by country. We can do this with the <code>n()</code> function, or <code>dplyr</code> provides a <code>count</code> function as a convenience:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapminder %&gt;%
@@ -623,6 +622,201 @@ Groups: continent [?]
 </section>
 <h4 id="resources">Resources</h4>
 <p>That is the core of <code>dplyr</code>’s functionality, but it does more. RStudio makes a great <a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">cheatsheet</a> that covers all the <code>dplyr</code> functions we just learned, plus what we will learn in the next lesson: keeping data tidy.</p>
+<h2 id="challenge-solutions">Challenge solutions</h2>
+<section class="challenge panel panel-success">
+<div class="panel-heading">
+<h4 id="solution-to-challenge-subsetting"><span class="glyphicon glyphicon-pencil"></span>Solution to challenge Subsetting</h4>
+</div>
+<div class="panel-body">
+<ul>
+<li>Subset the gapminder data to only Oceania countries post-1980.</li>
+<li>Remove the continent column</li>
+<li>Make a scatter plot of gdpPercap vs. population colored by country</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">oc1980 =<span class="st"> </span><span class="kw">filter</span>(gapminder, continent ==<span class="st"> &quot;Oceania&quot;</span> &amp;<span class="st"> </span>year &gt;<span class="st"> </span><span class="dv">1980</span>)
+oc1980less =<span class="st"> </span><span class="kw">select</span>(oc1980, -continent)
+<span class="kw">library</span>(<span class="st">&#39;ggplot2&#39;</span>)
+<span class="kw">ggplot</span>(oc1980less, <span class="kw">aes</span>(<span class="dt">x =</span> gdpPercap, <span class="dt">y =</span> lifeExp, <span class="dt">color =</span> country)) +
+<span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
+<p><img src="fig/challenge subsetting a-1.png" title="plot of chunk challenge subsetting a" alt="plot of chunk challenge subsetting a" style="display: block; margin: auto;" /></p>
+<p><strong>Advanced</strong> How would you determine the median population for the North American countries between 1970 and 1980?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">noAm =<span class="st"> </span><span class="kw">filter</span>(gapminder, country ==<span class="st"> &quot;United States&quot;</span> |<span class="st"> </span>
+<span class="st">                </span>country ==<span class="st"> &quot;Canada&quot;</span> |<span class="st"> </span>country ==<span class="st"> &quot;Mexico&quot;</span> |<span class="st"> </span>
+<span class="st">                </span>country ==<span class="st"> &quot;Puerto Rico&quot;</span> &amp;<span class="st"> </span>(year &gt;<span class="st"> </span><span class="dv">1970</span> &amp;<span class="st"> </span>year &lt;<span class="st"> </span><span class="dv">1980</span>)
+              )
+noAmPop =<span class="st"> </span><span class="kw">select</span>(noAm, pop)
+<span class="kw">median</span>(noAmPop)</code></pre></div>
+<pre class="output"><code>Error in median.default(noAmPop): need numeric data
+</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">noAmPop</code></pre></div>
+<pre class="output"><code># A tibble: 38 × 1
+        pop
+      &lt;dbl&gt;
+1  14785584
+2  17010154
+3  18985849
+4  20819767
+5  22284500
+6  23796400
+7  25201900
+8  26549700
+9  28523502
+10 30305843
+# ... with 28 more rows
+</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.integer</span>(noAmPop)</code></pre></div>
+<pre class="output"><code>Error in eval(expr, envir, enclos): (list) object cannot be coerced to type &#39;integer&#39;
+</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">median</span>(<span class="kw">unlist</span>(noAmPop))</code></pre></div>
+<pre class="output"><code>[1] 59872135
+</code></pre>
+<p><strong>Bonus</strong> This can be done using base R’s subsetting, but this class doesn’t teach how. Do the original challenge without the <code>filter</code> and <code>select</code> functions. Feel free to consult Google, helpfiles, etc. to figure out how.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">noAm2 =<span class="st"> </span>gapminder[(gapminder$country ==<span class="st"> &quot;United States&quot;</span>) |
+<span class="st">                    </span>(gapminder$country ==<span class="st"> &quot;Mexico&quot;</span>) |
+<span class="st">                    </span>(gapminder$country ==<span class="st"> &quot;Canada&quot;</span>) |
+<span class="st">                    </span>(gapminder$country ==<span class="st"> &quot;Puerto Rico&quot;</span>) &amp;
+<span class="st">                    </span>((gapminder$year &gt;<span class="st"> </span><span class="dv">1970</span>) &amp;
+<span class="st">                    </span>(gapminder$year &lt;<span class="st"> </span><span class="dv">1980</span>)),]
+<span class="kw">median</span>(noAm2$pop)</code></pre></div>
+<pre class="output"><code>[1] 59872135
+</code></pre>
+</div>
+</section>
+<section class="challenge panel panel-success">
+<div class="panel-heading">
+<h4 id="solution-to-challenge-mcq-data-reduction"><span class="glyphicon glyphicon-pencil"></span>Solution to challenge MCQ: Data Reduction</h4>
+</div>
+<div class="panel-body">
+<p>Produce a data.frame with only the names, years, and per-capita GDP of countries where per capita gdp is less than a dollar a day sorted from most- to least-recent.</p>
+<ul>
+<li>Tip: The <code>gdpPercap</code> variable is annual gdp. You’ll need to adjust.</li>
+<li>Tip: For complex tasks, it often helps to use pencil and paper to write/draw/map the various steps needed and how they fit together before writing any code.</li>
+</ul>
+<p>What is the annual per-capita gdp, rounded to the nearest dollar, of the first row in the data.frame?</p>
+<ol style="list-style-type: lower-alpha">
+<li>$278</li>
+<li>$312</li>
+<li>$331</li>
+<li>$339</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dailyGDP =<span class="st"> </span><span class="kw">mutate</span>(gapminder, <span class="dt">onedayGDP =</span> gdpPercap /<span class="st"> </span><span class="dv">365</span>)
+dailyGDP =<span class="st"> </span><span class="kw">filter</span>(dailyGDP, onedayGDP &lt;<span class="st"> </span><span class="dv">1</span>)
+dailyGDP =<span class="st"> </span><span class="kw">select</span>(dailyGDP, country, year, gdpPercap)
+dailyGDP[<span class="dv">1</span>,]</code></pre></div>
+<pre class="output"><code># A tibble: 1 × 3
+  country  year gdpPercap
+    &lt;chr&gt; &lt;int&gt;     &lt;dbl&gt;
+1 Burundi  1952  339.2965
+</code></pre>
+<p><strong>Advanced</strong>: Use dplyr functions and ggplot to plot per-capita GDP versus population for North American countries after 1970. - Once you’ve made the graph, transform both axes to a log10 scale. There are two ways to do this, one by creating new columns in the data frame, and another using functions provided by ggplot to transform the axes. Implement both, in that order. Which do you prefer and why?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">noAm =<span class="st"> </span><span class="kw">filter</span>(gapminder, country ==<span class="st"> &quot;United States&quot;</span> |<span class="st"> </span>
+<span class="st">                </span>country ==<span class="st"> &quot;Canada&quot;</span> |<span class="st"> </span>country ==<span class="st"> &quot;Mexico&quot;</span> |<span class="st"> </span>
+<span class="st">                </span>country ==<span class="st"> &quot;Puerto Rico&quot;</span> &amp;<span class="st"> </span>year &gt;<span class="st"> </span><span class="dv">1970</span>
+              )
+<span class="kw">ggplot</span>(noAm, <span class="kw">aes</span>(<span class="dt">x =</span> gdpPercap, <span class="dt">y =</span> pop, <span class="dt">color =</span> country)) +
+<span class="st">  </span><span class="kw">geom_point</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_log10</span>() +
+<span class="st">  </span><span class="kw">scale_y_log10</span>()</code></pre></div>
+<p><img src="fig/data reduction B-1.png" title="plot of chunk data reduction B" alt="plot of chunk data reduction B" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># OR</span>
+noAmlog10 =<span class="st"> </span><span class="kw">mutate</span>(noAm, <span class="dt">log10pop =</span> <span class="kw">log10</span>(pop),
+                   <span class="dt">log10gdp =</span> <span class="kw">log10</span>(gdpPercap))
+<span class="kw">ggplot</span>(noAmlog10, <span class="kw">aes</span>(<span class="dt">x =</span> log10gdp, <span class="dt">y =</span> log10pop, <span class="dt">color =</span> country)) +
+<span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
+<p><img src="fig/data reduction B-2.png" title="plot of chunk data reduction B" alt="plot of chunk data reduction B" style="display: block; margin: auto;" /></p>
+</div>
+</section>
+<section class="challenge panel panel-success">
+<div class="panel-heading">
+<h4 id="challenge-data-reduction-with-pipes-1"><span class="glyphicon glyphicon-pencil"></span>Challenge: Data Reduction with Pipes</h4>
+</div>
+<div class="panel-body">
+<p>Copy the code you (or the instructor) wrote to solve the previous MCQ Data Reduction challenge. Rewrite it using pipes (i.e. no assignment and no nested functions)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># previous challenge with pipes</span>
+dailyGDP =<span class="st"> </span><span class="kw">mutate</span>(gapminder, <span class="dt">onedayGDP =</span> gdpPercap /<span class="st"> </span><span class="dv">365</span>)
+dailyGDP =<span class="st"> </span><span class="kw">filter</span>(dailyGDP, onedayGDP &lt;<span class="st"> </span><span class="dv">1</span>)
+dailyGDP =<span class="st"> </span><span class="kw">select</span>(dailyGDP, country, year, gdpPercap)
+<span class="co"># BECOMES</span>
+smallGDP =<span class="st"> </span>gapminder %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">onedayGDP =</span> gdpPercap /<span class="st"> </span><span class="dv">365</span>) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(onedayGDP &lt;<span class="st"> </span><span class="dv">1</span>) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(country, year, gdpPercap)
+smallGDP[<span class="dv">1</span>,]</code></pre></div>
+<pre class="output"><code># A tibble: 1 × 3
+  country  year gdpPercap
+    &lt;chr&gt; &lt;int&gt;     &lt;dbl&gt;
+1 Burundi  1952  339.2965
+</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># OR, more fancy (without an intermediate temp variable)</span>
+(gapminder %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">onedayGDP =</span> gdpPercap /<span class="st"> </span><span class="dv">365</span>) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(onedayGDP &lt;<span class="st"> </span><span class="dv">1</span>) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(country, year, gdpPercap))[<span class="dv">1</span>,]</code></pre></div>
+<pre class="output"><code># A tibble: 1 × 3
+  country  year gdpPercap
+    &lt;chr&gt; &lt;int&gt;     &lt;dbl&gt;
+1 Burundi  1952  339.2965
+</code></pre>
+</div>
+</section>
+<section class="challenge panel panel-success">
+<div class="panel-heading">
+<h4 id="challenge-part-1-1"><span class="glyphicon glyphicon-pencil"></span>Challenge – Part 1</h4>
+</div>
+<div class="panel-body">
+<ul>
+<li>Calculate a new column: the total GDP of each country in each year.</li>
+<li>Calculate the variance – <code>var()</code> of countries’ gdps in each year.</li>
+<li>Is country-level GDP getting more or less equal over time?</li>
+<li>Plot your findings.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">varGDP =<span class="st"> </span>gapminder %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">totalGDP =</span> gdpPercap *<span class="st"> </span>pop) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(year) %&gt;%
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">varTotGDP =</span> <span class="kw">var</span>(totalGDP))
+<span class="kw">ggplot</span>(varGDP, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> varTotGDP)) +
+<span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
+<p><img src="fig/challenge LessonEnd part1-1.png" title="plot of chunk challenge LessonEnd part1" alt="plot of chunk challenge LessonEnd part1" style="display: block; margin: auto;" /></p>
+</div>
+</section>
+<section class="challenge panel panel-success">
+<div class="panel-heading">
+<h4 id="challenge-part-2-1"><span class="glyphicon glyphicon-pencil"></span>Challenge – Part 2</h4>
+</div>
+<div class="panel-body">
+<ul>
+<li>Modify the code you just wrote to calculate the variance in both country-level GDP and per-capita GDP.</li>
+<li>Do both measures support the conclusion you arrived at above?</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">varGDP =<span class="st"> </span>gapminder %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">totalGDP =</span> gdpPercap *<span class="st"> </span>pop) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(year) %&gt;%
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">varTotGDP =</span> <span class="kw">var</span>(totalGDP),
+            <span class="dt">varPerCapGDP =</span> <span class="kw">var</span>(gdpPercap)
+            )
+<span class="kw">ggplot</span>(varGDP) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> varTotGDP)) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">y =</span> varPerCapGDP))</code></pre></div>
+<p><img src="fig/challenge LessonEnd part2-1.png" title="plot of chunk challenge LessonEnd part2" alt="plot of chunk challenge LessonEnd part2" style="display: block; margin: auto;" /></p>
+</div>
+</section>
+<section class="challenge panel panel-success">
+<div class="panel-heading">
+<h4 id="challenge-part-3-advanced-1"><span class="glyphicon glyphicon-pencil"></span>Challenge – Part 3 (Advanced)</h4>
+</div>
+<div class="panel-body">
+<p>The above plotting exercise asked you to plot summarized information, but it is generally preferable to avoid summarizing before plotting. Can you generate a plot that shows the information you calculated in Part 1 without summarizing?</p>
+<ul>
+<li>Hint: <code>ggplot</code> interprets the <code>gapminder$year</code> as a numeric variable, which may be okay, but there are some plot types for which you need <code>ggplot</code> to see <code>gapminder$year</code> as a category. You can accomplish this by wrapping it in <code>factor</code> – e.g. <code>ggplot(gapminder, aes(x = factor(year) ...</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gapminder %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">totalGDP =</span> gdpPercap *<span class="st"> </span>pop) %&gt;%
+<span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(year), <span class="dt">y =</span> totalGDP)) +
+<span class="st">  </span><span class="kw">geom_violin</span>() +
+<span class="st">  </span><span class="kw">scale_y_log10</span>() </code></pre></div>
+<p><img src="fig/challenge LessonEnd part3-1.png" title="plot of chunk challenge LessonEnd part3" alt="plot of chunk challenge LessonEnd part3" style="display: block; margin: auto;" /></p>
+</div>
+</section>
         </div>
       </div>
       </article>
