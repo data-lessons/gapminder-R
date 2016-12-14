@@ -6,21 +6,21 @@ output: html_document
 ---
 
 ```{r setup-silent, include=FALSE}
-knitr::opts_chunk$set(cache = FALSE, fig.path = "fig/capstoneSolutions/", 
+knitr::opts_chunk$set(cache = TRUE, fig.path = "fig/capstoneSolutions/", 
                       fig.height = 4.5, fig.width = 5, warning = FALSE)
 ```
 
+This webpage is the product of an RMarkdown document. Most of the R code used to produce it is viewable here, but if you would like to see the raw .Rmd file to see the use of inline code, RMarkdown options, etc., you can view or download the source [here](https://raw.githubusercontent.com/data-lessons/gapminder-R/gh-pages/11-capstone_solutions.Rmd). 
 
 # Setup
 
 Set some global document properties and load the data and some useful packages.
 
 ```{r setup, warning = FALSE, message = FALSE}
+library(tidyverse)
 library(Lahman)
 data('Batting')
 data('Salaries')
-library(dplyr)
-library(ggplot2)
 ```
 
 #### Getting acquanited

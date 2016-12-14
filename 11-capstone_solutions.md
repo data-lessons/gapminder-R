@@ -1,12 +1,13 @@
 ---
 title: "Capstone Project"
 author: "Data Carpentry"
-date: "2016-11-30"
+date: "2016-12-14"
 output: html_document
 ---
 
 
 
+This webpage is the product of an RMarkdown document. Most of the R code used to produce it is viewable here, but if you would like to see the raw .Rmd file to see the use of inline code, RMarkdown options, etc., you can view or download the source [here](https://raw.githubusercontent.com/data-lessons/gapminder-R/gh-pages/11-capstone_solutions.Rmd). 
 
 # Setup
 
@@ -14,11 +15,10 @@ Set some global document properties and load the data and some useful packages.
 
 
 ```r
+library(tidyverse)
 library(Lahman)
 data('Batting')
 data('Salaries')
-library(dplyr)
-library(ggplot2)
 ```
 
 #### Getting acquanited
@@ -131,8 +131,8 @@ group_by(Batting, playerID) %>%
 ## 1 bondsba01      762      22
 ## 2 aaronha01      755      23
 ## 3  ruthba01      714      22
-## 4 rodrial01      687      21
-## 5  mayswi01      660      22
+## 4  mayswi01      660      22
+## 5 rodrial01      654      20
 ```
 
 
@@ -271,21 +271,21 @@ lm(salary ~ HR + BA + RBI, data = battingSalaries) %>%
 ## 
 ## Residuals:
 ##       Min        1Q    Median        3Q       Max 
-## -10081343  -1883915  -1362903    659325  31108185 
+## -10039137  -1864384  -1344822    653037  31130406 
 ## 
 ## Coefficients:
 ##               Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)  2171217.5    15989.1 135.794  < 2e-16 ***
-## HR            121082.2     2043.3  59.258  < 2e-16 ***
-## BA          -1338866.6    71271.7 -18.785  < 2e-16 ***
-## RBI            -3136.7      620.3  -5.057 4.27e-07 ***
+## (Intercept)  2146809.8    15994.8 134.219  < 2e-16 ***
+## HR            120590.2     2041.3  59.076  < 2e-16 ***
+## BA          -1329219.2    71245.6 -18.657  < 2e-16 ***
+## RBI            -3027.5      619.2  -4.889 1.01e-06 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 3716000 on 235277 degrees of freedom
-##   (63861 observations deleted due to missingness)
-## Multiple R-squared:  0.07336,	Adjusted R-squared:  0.07335 
-## F-statistic:  6208 on 3 and 235277 DF,  p-value: < 2.2e-16
+## Residual standard error: 3684000 on 231466 degrees of freedom
+##   (62525 observations deleted due to missingness)
+## Multiple R-squared:  0.07447,	Adjusted R-squared:  0.07446 
+## F-statistic:  6208 on 3 and 231466 DF,  p-value: < 2.2e-16
 ```
 
 
