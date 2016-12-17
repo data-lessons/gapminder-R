@@ -34,93 +34,95 @@
 </div>
 <div class="panel-body">
 <ul>
-<li>Appreciate why write code and why R specifically</li>
-<li>Gain familiarity with the various panes in the RStudio IDE</li>
+<li>Appreciate why a social scientist might want to write code and why R specifically</li>
+<li>Gain familiarity the RStudio IDE</li>
 <li>Use basic math functions in R, with calculator and fun() notation</li>
 <li>Understand variables and how to assign to them</li>
 <li>Use comparison operations</li>
 <li>Manage your workspace in an interactive R session</li>
-<li>Understand errors and warnings</li>
+<li>Understand errors, warnings, and messages</li>
 <li>To be able to seek help via <code>?</code> and Google</li>
 </ul>
 </div>
 </section>
 <p>Welcome to the R portion of the workshop.</p>
-<p>In this lesson, you’ll become familiar with the R language, the RStudio environment, and some best practices that will make your life easier and your science more reliable.</p>
+<p>In this lesson, you’ll become familiar with the R language, the RStudio environment, and some best practices that will make your life easier and your science more reliable. You’ll also write a bit of R code.</p>
 <h4 id="why-r">Why R?</h4>
-<p>R is a free, open-source programming language. It can do most things that any programming language can do, but it was designed for data analysis and statistics, which is why we teach it. It has a huge user-community and is highly extensible, with over 7,000 packages that build extra functionality at the official Comprehensive R Archive Network. For almost anything you want to do, there is an R package to help.</p>
+<p>R is a free, open-source programming language that is designed for data analysis and statistics. It has a huge user-community and is highly extensible, with thousands of packages that add extra functionality at the official Comprehensive R Archive Network. For almost anything you want to do, there is an R package to help. In short, for most social scientists, it is the best tool to organize, visualize, and analyze data.</p>
 <h4 id="why-rstudio">Why RStudio?</h4>
-<p>RStudio is an IDE (integrated development environment) which we use to manage and execute R code. It is also free and open-source, it works on all platforms (e.g. you can interface to Amazon Web Services using RStudio), and it integrates version control and project management.</p>
-<h4 id="why-script">Why script?</h4>
+<p>RStudio is an IDE (integrated development environment) which we use to manage and execute R code. It is also free and open-source, it works on all platforms (e.g. you can use an Amazon Web Services cluster using RStudio), and it integrates version control and project management.</p>
+<p>You write the same R code in RStudio as you would elsewhere, and it executes the same way. RStudio helps by keeping things nicely organized.</p>
+<h4 id="why-code">Why Code?</h4>
 <ul>
 <li>Power</li>
 <li>Flexibility</li>
 <li>Editability: Error fixing, tweaks</li>
 <li>Traceability: Return and know what was done</li>
 <li>Reproducability: Cornerstone of science</li>
-<li>Communication: No ambiguity
-<ul>
-<li>Literate programming, <code>knitr</code></li>
-</ul></li>
+<li>Communication: No ambiguity</li>
 </ul>
 <h3 id="introduction-to-rstudio">Introduction to RStudio</h3>
-<p>Open RStudio: 3 panels:</p>
-<ul>
+<p>When you open RStudio you should see three panels:</p>
+<ol style="list-style-type: decimal">
 <li>The interactive R console (entire left)</li>
 <li>Workspace/History (tabbed in upper right)</li>
 <li>Files/Plots/Packages/Help (tabbed in lower right)</li>
-</ul>
+</ol>
 <h4 id="workflow-within-rstudio">Workflow within Rstudio</h4>
 <p>Console vs. script</p>
-<ol style="list-style-type: decimal">
+<ul>
 <li>Console
 <ul>
-<li>The R console is where all of your code gets run. This console in RStudio is the same as the one you would get if you just typed in <code>R</code> in your command line.</li>
-<li>When you start RStudio, you’ll see a bunch of information, followed by a “&gt;” and a blinking cursor. This is a “Read, evaluate, print loop”: you type in commands, R executes them and returns a result.</li>
-<li><em>Demo R-as-calculator in console</em></li>
-<li>History is saved, but this is laborsome</li>
+<li>The R console is where code is run
+<ul>
+<li>The console in RStudio is the same as if typed in <code>R</code> in your command line</li>
+</ul></li>
+<li>When you start RStudio, you’ll see a bunch of information, followed by a “&gt;” and a blinking cursor. This is a “Read, evaluate, print loop”. It’s highly interactive: You can type in commands and R will execute them and print the result.</li>
+<li>You can work here, and your history is saved, but that is a laborious way to work</li>
 </ul></li>
 <li>Script
 <ul>
 <li>Preserve work in a plain-text file (with .R extension)</li>
-<li><em>Create new R script</em></li>
-<li>Fourth RStudio panel.</li>
-<li>Command/ctrl-enter to push current line</li>
-<li>Mixes interactivity and preservation</li>
-<li>Save just text and get same results</li>
-<li>Building preservable flow of operations</li>
+<li>Create new R script with <code>File -&gt; New File -&gt; R Script</code> or ctrl/cmd-shift-N</li>
+<li>There’s now a fourth RStudio panel, which is your plain-text script
+<ul>
+<li>Do your work here, and save this to be able to reproduce or edit it at a later date</li>
+<li>For now your script is unsaved and called “untitled1” or something. We’ll fix that shortly</li>
 </ul></li>
-</ol>
+<li>cmd/ctrl-enter executes the line the cursor is on by copying that line and sending it to the Console
+<ul>
+<li>You can run multiple lines at once by highlighting them and pressing cmd/ctrl-enter</li>
+</ul></li>
+<li>Benefits of working in a script:
+<ul>
+<li>Mixes interactivity and preservation</li>
+<li>Save just text and can get same results at another time or on another machine</li>
+<li>Building preservable pipeline of operations</li>
+</ul></li>
+</ul></li>
+</ul>
 <aside class="callout panel panel-info">
 <div class="panel-heading">
 <h4 id="tip-pushing-to-the-interactive-r-console"><span class="glyphicon glyphicon-pushpin"></span>Tip: Pushing to the interactive R console</h4>
 </div>
 <div class="panel-body">
-<p>To run the current line click on the <code>Run</code> button just above the file pane. Or use the short cut which can be seen by hovering the mouse over the button.</p>
-<p>To run a block of code, select it and then <code>Run</code>.</p>
-<p>Select-all and <code>Run</code> – moving toward a model where we run whole script.</p>
+<p>To run the line of your script where the cursor is, you can click on the <code>Run</code> button at the top-right of the script pane or use the keyboard short cut: cmd/ctrl-enter.</p>
+<p>To run a block of code, select (highlight) it and click <code>Run</code> or cmd/ctrl-enter.</p>
+<p>You are working toward selecting a whole script and running it.<br />
+- You’ll write your script interactively, running each line to make sure it works, and at the end, you’ll be able to run the whole analysis by selecting all and running the script. This way you can later rerun the analysis on new or modified data or change part of the analysis and everything will work with the click of a button.</p>
 </div>
 </aside>
 <h3 id="introduction-to-r">Introduction to R</h3>
-<p>The simplest thing you could do with R is do arithmetic:</p>
+<p>The simplest thing you can do with R is do arithmetic:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> +<span class="st"> </span><span class="dv">100</span></code></pre></div>
 <pre class="output"><code>[1] 101
 </code></pre>
-<p>And R will print out the answer, with a preceding “[1]”. Don’t worry about this for now, we’ll explain that later. For now think of it as indicating output.</p>
+<p>And R will print out the answer, with a preceding “[1]”, which indicates the first item of output.</p>
 <p>If you type in an incomplete command, R will wait for you to complete it:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="dv">1</span> -</code></pre></div>
 <pre class="output"><code>+</code></pre>
-<p>Any time you hit return and the R session shows a “+” instead of a “&gt;”, it means it’s waiting for you to complete the command. If you want to cancel a command you can simply hit “Esc” and RStudio will give you back the “&gt;” prompt.</p>
-<aside class="callout panel panel-info">
-<div class="panel-heading">
-<h4 id="tip-cancelling-commands"><span class="glyphicon glyphicon-pushpin"></span>Tip: Cancelling commands</h4>
-</div>
-<div class="panel-body">
-<p>If you’re using R from the commandline instead of from within RStudio, you need to use <code>Ctrl+C</code> instead of <code>Esc</code> to cancel the command. This applies to Mac users as well!</p>
-<p>Cancelling a command isn’t just useful for killing incomplete commands: you can also use it to tell R to stop running code (for example if its taking much longer than you expect), or to get rid of the code you’re currently writing.</p>
-</div>
-</aside>
-<p>Order of operations, same as in algebra class. From highest to lowest precedence:</p>
+<p>Any time you execute code and the R session shows a “+” instead of a “&gt;”, it means it’s waiting for you to complete the command. If you want to cancel a command you can simply hit “Esc” and RStudio will give you back the “&gt;” prompt. You can also cancel commands with “Esc” if R is taking too long to finish a calculation.</p>
+<p>Order of operations works in R just like it did in algebra class. From highest to lowest precedence:</p>
 <ul>
 <li>Parentheses: <code>(</code>, <code>)</code></li>
 <li>Exponents: <code>^</code></li>
@@ -136,60 +138,69 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(<span class="dv">3</span> +<span class="st"> </span><span class="dv">5</span>) *<span class="st"> </span><span class="dv">2</span></code></pre></div>
 <pre class="output"><code>[1] 16
 </code></pre>
-<p>Speaking of being easy to read: - Whitespace is ignored by R. Use it consistently to make code readable. - Spaces around operators - Comment liberally</p>
+<h4 id="whitespace">Whitespace</h4>
+<p>Speaking of being easy to read, whitespace is ignored by R. Use it consistently to make code readable. For example, putting a single space on either side of an operator makes code easy to read.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(<span class="dv">3</span> +<span class="st"> </span>(<span class="dv">5</span> *<span class="st"> </span>(<span class="dv">2</span> ^<span class="st"> </span><span class="dv">2</span>))) <span class="co"># hard to read</span>
 <span class="dv">3</span> +<span class="st"> </span><span class="dv">5</span> *<span class="st"> </span><span class="dv">2</span> ^<span class="st"> </span><span class="dv">2</span>       <span class="co"># easier to read, once you know rules</span>
 <span class="dv">3+5</span>*<span class="dv">2</span>^<span class="dv">2</span>             <span class="co"># very hard to read</span>
-<span class="dv">3</span> +<span class="st"> </span><span class="dv">5</span> *<span class="st"> </span>(<span class="dv">2</span> ^<span class="st"> </span><span class="dv">2</span>)     <span class="co"># if you forget some rules, this might help</span></code></pre></div>
-<p>The text I’ve typed after each line of code is called a comment. Anything that follows the hash symbol <code>#</code> is ignored by R.</p>
+<span class="dv">3</span> +<span class="st"> </span><span class="dv">5</span> *<span class="st"> </span>(<span class="dv">2</span> ^<span class="st"> </span><span class="dv">2</span>)     <span class="co"># to make order of operations clear, use parentheses</span></code></pre></div>
+<h4 id="comments">Comments</h4>
+<p>The text that appears to the right of each line of code above is called a comment. Anything that follows the hash symbol – <code>#</code> – is ignored by R.</p>
+<p>Liberally add comments to your code as you write. Things that are clear as you write them will be mysterious to others, including your-future-self! Commenting takes little time and will save you time and headaches in the long run.</p>
+<h4 id="scientific-notation">Scientific Notation</h4>
 <p>Really small or large numbers get a scientific notation:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">2</span>/<span class="dv">10000</span></code></pre></div>
 <pre class="output"><code>[1] 2e-04
 </code></pre>
 <p>Which is shorthand for “multiplied by <code>10^XX</code>”. So <code>2e-4</code> is shorthand for <code>2 * 10^(-4)</code>.</p>
 <p>You can write numbers in scientific notation too:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="fl">5e3</span>  <span class="co"># Note the lack of minus here</span></code></pre></div>
-<pre class="output"><code>[1] 5000
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="fl">1e9</span>  <span class="co"># One billion</span></code></pre></div>
+<pre class="output"><code>[1] 1e+09
 </code></pre>
 <h4 id="mathematical-functions">Mathematical functions</h4>
-<p>R has many built in mathematical functions. To call a function, we simply type its name, follow by and open and closing parentheses. Anything we type inside those parentheses is called the function’s arguments:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sin</span>(<span class="fl">3.14159</span>)  <span class="co"># trigonometry functions</span></code></pre></div>
-<pre class="output"><code>[1] 2.65359e-06
+<p>R has many built in mathematical functions. To call a function, type its name, follow by open and closing parentheses. Anything we type inside those parentheses is an “argument” to that function.</p>
+<p>Here we call the <code>sin</code> function and provide it the argument 3.14, or approximately <span class="math inline"><em>π</em></span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sin</span>(<span class="fl">3.14</span>)  <span class="co"># trigonometry functions</span></code></pre></div>
+<pre class="output"><code>[1] 0.001592653
 </code></pre>
+<p>We can take a logarith:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">log</span>(<span class="dv">3</span>)  <span class="co"># natural logarithm</span></code></pre></div>
 <pre class="output"><code>[1] 1.098612
 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">log10</span>(<span class="dv">100</span>)  <span class="co"># base-10 logarithm</span></code></pre></div>
-<pre class="output"><code>[1] 2
-</code></pre>
+<p>Or exponentiate:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">exp</span>(<span class="fl">0.5</span>) <span class="co"># e^(1/2)</span></code></pre></div>
 <pre class="output"><code>[1] 1.648721
 </code></pre>
-<p>Don’t need to remember function names. There are many ways to discover or rediscover them when you need them. We will discuss soon.</p>
-<h4 id="comparing-things">Comparing things</h4>
-<p>We can also do comparison in R:</p>
+<h4 id="nested-functions">Nested Functions</h4>
+<p>You can even put functions inside each other. <code>exp(0.5)</code> raised <code>e</code> to the <code>1/2</code> power. Equivalently we could take the square-root of <code>e</code>. Expressions are interpretted from the inside-out: In the following line, R first takes <code>e^1</code> (which is <code>e</code>), and then takes the square-root (that’s what the <code>sqrt</code> function does) of the result.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sqrt</span>(<span class="kw">exp</span>(<span class="dv">1</span>))</code></pre></div>
+<pre class="output"><code>[1] 1.648721
+</code></pre>
+<p>You don’t need to remember function names. There are many ways to discover or rediscover them when you need them. Google is your friend, but we will discuss other ways soon.</p>
+<h4 id="comparison">Comparison</h4>
+<p>We can do logical comparison in R. This will be important later, for example, when we want to filter a dataset based on a logical condition.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> ==<span class="st"> </span><span class="dv">1</span>  <span class="co"># equality (note two equals signs, read as &quot;is equal to&quot;)</span></code></pre></div>
 <pre class="output"><code>[1] TRUE
 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> !=<span class="st"> </span><span class="dv">2</span>  <span class="co"># inequality (read as &quot;is not equal to&quot;)</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> !=<span class="st"> </span><span class="dv">2</span>  <span class="co"># not-equal (read, &quot;is not equal to&quot;)</span></code></pre></div>
 <pre class="output"><code>[1] TRUE
 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> &lt;<span class="st">  </span><span class="dv">2</span>  <span class="co"># less than</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> &lt;<span class="st"> </span><span class="dv">2</span>  <span class="co"># less than</span></code></pre></div>
 <pre class="output"><code>[1] TRUE
 </code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> &gt;=<span class="st"> </span>-<span class="dv">9</span> <span class="co"># greater than or equal to</span></code></pre></div>
 <pre class="output"><code>[1] TRUE
 </code></pre>
 <h4 id="variables-and-assignment">Variables and assignment</h4>
-<p>We can store values in variables using the assignment operator <code>&lt;-</code> or equals sign <code>=</code>, like this:</p>
+<p>We can store values in variables using the assignment operator <code>&lt;-</code>. You can also use a single equals sign, <code>=</code>, for assignment.</p>
+<p>Note that unlike every other expression we have run so far, R doesn’t print anything when we run this next line. Instead, it is stored for later in a <strong>variable</strong>, <code>x</code>. <code>x</code> now contains the <strong>value</strong> <code>0.25</code>. Read this as “Assign 1/4 to x.”</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">1</span>/<span class="dv">4</span></code></pre></div>
-<p>Notice that nothing was printed. Instead, we stored it for later in a <strong>variable</strong>, <code>x</code>. <code>x</code> now contains the <strong>value</strong> <code>0.25</code>:</p>
+<p>Look for the <code>Environment</code> tab in one of the panes of RStudio, and you will see that <code>x</code> and its value have appeared. Our variable <code>x</code> can be used in place of a number in any calculation that expects a number:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x</code></pre></div>
 <pre class="output"><code>[1] 0.25
 </code></pre>
-<p>Look for the <code>Environment</code> tab in one of the panes of RStudio, and you will see that <code>x</code> and its value have appeared. Our variable <code>x</code> can be used in place of a number in any calculation that expects a number:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x +<span class="st"> </span><span class="dv">1</span></code></pre></div>
-<pre class="output"><code>[1] 1.25
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">log</span>(x)</code></pre></div>
+<pre class="output"><code>[1] -1.386294
 </code></pre>
 <p>This doesn’t change the value of <code>x</code> or store the result anywhere, it simply prints the answer to the console.</p>
 <p>Variables can be reassigned:</p>
@@ -219,16 +230,16 @@ c </code></pre>
 </div>
 </section>
 <h4 id="variable-name-conventions">Variable name conventions</h4>
-<p>Variable names can contain letters, numbers, underscores and periods. They cannot start with a number nor contain spaces at all. Different people use different conventions for long variable names, these include</p>
+<p>Variable names can contain letters, numbers, underscores and periods. They cannot start with a number nor contain spaces at all. Different people use different conventions for long variable names, especially:</p>
 <ul>
-<li>periods.between.words</li>
 <li>underscores_between_words</li>
 <li>camelCaseToSeparateWords</li>
 </ul>
 <p>What you use is up to you, but <strong>be consistent</strong>.</p>
-<h5 id="tab-completion">Tab completion</h5>
-<p>Use descriptive variable names, as they make your code easier to understand. It doesn’t take any extra time because you can use tab-completion to avoid typing long names.</p>
-<p><em>Demo tab completion for variable names, function names, and arguments.</em></p>
+<h4 id="tab-completion">Tab completion</h4>
+<p>Use descriptive variable names, as they make your code easier to understand. It will save time because you’ll remember what each variable is: It’s easier to remember what <code>domesticPopulation</code> is than <code>dp</code> or <code>x</code>. A silly example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">theNumberNine &lt;-<span class="st"> </span><span class="dv">9</span></code></pre></div>
+<p>Tab-completion is a really nice feature of RStudio that saves typing and avoid typos. After you assign 9 to <code>theNumberNine</code>, if you start typing <code>t...</code>, <code>th...</code>, etc., and then pressing <code>tab</code>, RStudio will pull up a box of all the valid ways to finish that word. You can scroll through them using the up- and down-arrows and press enter to choose the one you want. If you press tab when there is only one valid way to complete something, RStudio will automatically complete it.</p>
 <h3 id="understanding-functions-getting-help">Understanding functions &amp; getting help</h3>
 <h4 id="r-help-files">R help files</h4>
 <p>Once you figure out what function you want, you need to figure out how to use it. Every function has an associated help-file. They can be hard to read, especially at first, but it is important to learn how to make sense of them.</p>
@@ -298,27 +309,40 @@ c. log(base = 10, x = 1000)
 d. log(10, 1000)</code></pre>
 </div>
 </section>
-<h3 id="errors-and-warnings">Errors and warnings</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">aNegativeNumber &lt;-<span class="st"> </span>-<span class="dv">1</span>
-<span class="kw">log</span>(aNegativeNumber)
-<span class="kw">log</span>(negativeNumber)</code></pre></div>
-<aside class="callout panel panel-info">
-<div class="panel-heading">
-<h4 id="tip-warnings-vs.errors"><span class="glyphicon glyphicon-pushpin"></span>Tip: Warnings vs. Errors</h4>
-</div>
-<div class="panel-body">
-<p>Pay attention when R does something unexpected! Errors, like above, are thrown when R cannot proceed with a calculation. Warnings on the other hand usually mean that the function has run, but it probably hasn’t worked as expected.</p>
-<p>In both cases, the message that R prints out usually give you clues how to fix a problem.</p>
-</div>
-</aside>
+<h3 id="when-r-wants-to-tell-you-something">When R Wants to Tell You Something</h3>
+<p>Besides the value of an expression R has executed, there are a few other kinds of responses you might get from R, including errors, warnings, and messages.</p>
+<h4 id="errors">Errors</h4>
+<p>R returns an error when it cannot proceed. It stops you in your tracks. The error message will provide some information on what the problem was, but it is often cryptic. Learning to understand these messages is important but takes practice. Here’s an example of an error:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">log_of_a_word &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="st">&quot;a_word&quot;</span>)</code></pre></div>
+<pre class="output"><code>Error in log(&quot;a_word&quot;): non-numeric argument to mathematical function
+</code></pre>
+<p>R tell us that something has gone wrong: It got a non-number for a function that needs a number. Note that errors prevent execution of the line, so nothing got assigned to <code>log_of_a_word</code> there. If we ask R what it thinks <code>log_of_a_word</code> is, it will return another error. Practice understanding R’s communication style: Do you understand how R is telling you what the problem is?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">log_of_a_word</code></pre></div>
+<pre class="output"><code>Error in eval(expr, envir, enclos): object &#39;log_of_a_word&#39; not found
+</code></pre>
+<h4 id="warnings">Warnings</h4>
+<p>Warnings appear in the same red font in the console, but they start with “Warning” instead of “Error”. Warnings are R’s way of telling you that it did something, but it suspects it may not have been what you wanted. <em>Warnings can be more insidious than errors</em> because you can keep going, but keep going with a mistake in your pipeline. Here’s an example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">log_of_a_negative &lt;-<span class="st"> </span><span class="kw">log</span>(-<span class="dv">2</span>)</code></pre></div>
+<pre class="output"><code>Warning in log(-2): NaNs produced
+</code></pre>
+<p><code>NaN</code> means “not a number”, and R has kindly told us, “Hey, I think you probably wanted a number here – taking a log of a negative is kind of a weird thing to do. I can do it if you really want, I just want to be make sure it’s what you want.”</p>
+<p>Note that it did work, so if we ask R what <code>log_of_a_negative</code> is, we won’t get an error. Note that we don’t get a warning either, so you need to pay attention when warnings first appear.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">log_of_a_negative</code></pre></div>
+<pre class="output"><code>[1] NaN
+</code></pre>
+<h4 id="messages">Messages</h4>
+<p>There’s a third source of red text in R: messages. These are R’s way of telling you that something happened, but it’s probably nothing to worry about. These don’t start with “Message”; they just print the red text. We can make R print one like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">message</span>(<span class="st">&quot;Hey buddy!&quot;</span>)</code></pre></div>
+<pre class="output"><code>Hey buddy!
+</code></pre>
 <section class="challenge panel panel-success">
 <div class="panel-heading">
-<h4 id="challenge-assignment-comparison"><span class="glyphicon glyphicon-pencil"></span>Challenge – Assignment &amp; Comparison</h4>
+<h4 id="challenge-extra-practice-assignment-comparison"><span class="glyphicon glyphicon-pencil"></span>Challenge – Extra practice: Assignment &amp; Comparison</h4>
 </div>
 <div class="panel-body">
-<p>Which elephant weighs more? Convert one’s weight to the units of the other, and store the result in an appropriately-named new variable. Write a command to test whether elephant1 or elephant2 weights more (1 kg ≈ 2.2 lb).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">elephant1_kg =<span class="st"> </span><span class="dv">3492</span>
-elephant2_lb =<span class="st"> </span><span class="dv">7757</span></code></pre></div>
+<p>Which elephant weighs more? Convert one’s weight to the units of the other, and store the result in an appropriately-named new variable. Write a command to test whether elephant1 weights more than elephant2 (1 kg ≈ 2.2 lb).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">elephant1_kg &lt;-<span class="st"> </span><span class="dv">3492</span>
+elephant2_lb &lt;-<span class="st"> </span><span class="dv">7757</span></code></pre></div>
 </div>
 </section>
         </div>
